@@ -21,7 +21,6 @@ You've completed all instructional content for PCAP certification preparation. N
 
 - ✅ Advanced Exception Handling
 - ✅ Advanced File I/O
-- ✅ String Methods Mastery
 
 This comprehensive assessment section includes:
 
@@ -95,32 +94,6 @@ Test your understanding of key terminology:
    :feedback_d: It's a stream, not an exception.
 
    What is ``sys.stderr``?
-
-.. mchoice:: pcap_vocab_strip
-   :answer_a: Removes characters from the middle
-   :answer_b: Removes characters from both ends
-   :answer_c: Removes all whitespace
-   :answer_d: Converts to lowercase
-   :correct: b
-   :feedback_a: strip() only works on the ends, not the middle.
-   :feedback_b: Correct! strip() removes specified characters from the beginning and end.
-   :feedback_c: It removes from the ends only, not the entire string.
-   :feedback_d: strip() doesn't change case.
-
-   What does the ``strip()`` method do?
-
-.. mchoice:: pcap_vocab_partition
-   :answer_a: Splits string into list of parts
-   :answer_b: Splits string at first occurrence into 3-tuple
-   :answer_c: Divides string in half
-   :answer_d: Removes a separator
-   :correct: b
-   :feedback_a: That's split(), not partition().
-   :feedback_b: Correct! partition() returns (before, separator, after) as a 3-tuple.
-   :feedback_c: It splits at the separator, not necessarily in half.
-   :feedback_d: It splits at the separator, doesn't remove it.
-
-   What does the ``partition()`` method return?
 
 .. mchoice:: pcap_vocab_finally
    :answer_a: Runs only if an exception occurs
@@ -196,19 +169,6 @@ Test your conceptual understanding:
 
    What's the main benefit of using context managers (``with`` statement)?
 
-.. mchoice:: pcap_concept_string_immutable
-   :answer_a: String methods modify the original string
-   :answer_b: String methods return new strings
-   :answer_c: Strings can be changed in place
-   :answer_d: String methods don't return anything
-   :correct: b
-   :feedback_a: Strings are immutable—they can't be modified!
-   :feedback_b: Correct! String methods always return NEW strings; the original is unchanged.
-   :feedback_c: Strings are immutable and cannot be changed in place.
-   :feedback_d: String methods return new strings.
-
-   How do string methods work with immutable strings?
-
 .. mchoice:: pcap_concept_else_clause
    :answer_a: Runs if an exception occurs
    :answer_b: Runs if NO exception occurs
@@ -234,32 +194,6 @@ Test your conceptual understanding:
    :feedback_d: They have very different memory characteristics!
 
    What's the best way to process a very large file?
-
-.. mchoice:: pcap_concept_find_vs_index
-   :answer_a: They are identical
-   :answer_b: find() returns -1, index() raises ValueError
-   :answer_c: index() returns -1, find() raises ValueError
-   :answer_d: find() is always better
-   :correct: b
-   :feedback_a: They handle "not found" differently!
-   :feedback_b: Correct! find() returns -1 when not found; index() raises ValueError.
-   :feedback_c: You have it backwards!
-   :feedback_d: Each has appropriate use cases.
-
-   What happens when a substring is not found in ``find()`` vs ``index()``?
-
-.. mchoice:: pcap_concept_casefold
-   :answer_a: Same as lower() for all strings
-   :answer_b: More aggressive than lower() for Unicode
-   :answer_c: Only works with ASCII
-   :answer_d: Slower than lower()
-   :correct: b
-   :feedback_a: They differ for Unicode characters like German ß.
-   :feedback_b: Correct! casefold() is more aggressive and better for case-insensitive comparisons.
-   :feedback_c: casefold() is specifically better for Unicode!
-   :feedback_d: Performance is similar; the difference is Unicode handling.
-
-   How does ``casefold()`` differ from ``lower()``?
 
 ---
 
@@ -347,31 +281,6 @@ Arrange the code blocks in the correct order:
    =====
        return bytes(data) #distractor
 
-**Problem 4: String Processing Pipeline**
-
-.. parsonsprob:: pcap_parsons_string_pipeline
-   :language: python
-   :adaptive:
-   :numbered: left
-
-   Arrange blocks to clean and validate input string.
-   -----
-   def clean_input(text):
-   =====
-       cleaned = text.strip()
-   =====
-       cleaned = text.strip #distractor
-   =====
-       cleaned = cleaned.lower()
-   =====
-       if not cleaned.isalnum():
-   =====
-       if not cleaned.isalpha(): #distractor
-   =====
-           raise ValueError("Invalid input")
-   =====
-       return cleaned
-
 **Problem 5: CSV Parsing**
 
 .. parsonsprob:: pcap_parsons_csv
@@ -408,7 +317,7 @@ Part 4: Coding Challenges
 
 Build complete solutions from scratch!
 
-**Challenge 1: Safe File Reader**
+**Safe File Reader**
 
 .. activecode:: pcap_code_safe_file_reader
    :language: python
@@ -461,7 +370,7 @@ Build complete solutions from scratch!
 
 ---
 
-**Challenge 2: Exception Logger**
+**Exception Logger**
 
 .. activecode:: pcap_code_exception_logger
    :language: python
@@ -523,7 +432,7 @@ Build complete solutions from scratch!
 
 ---
 
-**Challenge 3: Binary Data Checker**
+**Binary Data Checker**
 
 .. activecode:: pcap_code_binary_checker
    :language: python
@@ -579,143 +488,7 @@ Build complete solutions from scratch!
 
 ---
 
-**Challenge 4: String Normalizer**
-
-.. activecode:: pcap_code_string_normalizer
-   :language: python
-   :autograde: unittest
-
-   Create a function ``normalize_string(text)`` that:
-   - Strips whitespace
-   - Converts to lowercase
-   - Removes non-alphanumeric characters (keep spaces)
-   - Normalizes multiple spaces to single space
-
-   Example::
-
-       normalize_string("  Hello,  World!  ")  # "hello world"
-       normalize_string("Test@123")            # "test123"
-
-   ~~~~
-   def normalize_string(text):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_strips_whitespace(self):
-           result = normalize_string("  hello  ")
-           self.assertEqual(result, "hello")
-
-       def test_lowercase(self):
-           result = normalize_string("HELLO")
-           self.assertEqual(result, "hello")
-
-       def test_removes_special_chars(self):
-           result = normalize_string("Hello, World!")
-           self.assertEqual(result, "hello world")
-
-       def test_normalizes_spaces(self):
-           result = normalize_string("hello   world")
-           self.assertEqual(result, "hello world")
-
-   myTests().main()
-
-.. reveal:: pcap_code_string_normalizer_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def normalize_string(text):
-          # Strip and lowercase
-          text = text.strip().lower()
-
-          # Keep only alphanumeric and spaces
-          cleaned = ''.join(c if c.isalnum() or c == ' ' else '' for c in text)
-
-          # Normalize spaces
-          return ' '.join(cleaned.split())
-
----
-
-**Challenge 5: Email Validator**
-
-.. activecode:: pcap_code_email_validator
-   :language: python
-   :autograde: unittest
-
-   Create a function ``is_valid_email(email)`` that validates:
-   - Contains exactly one '@'
-   - Has content before and after '@'
-   - Domain has at least one '.'
-   - No spaces in email
-
-   Example::
-
-       is_valid_email("user@example.com")  # True
-       is_valid_email("invalid")           # False
-       is_valid_email("no@domain")         # False
-
-   ~~~~
-   def is_valid_email(email):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_valid_email(self):
-           self.assertTrue(is_valid_email("user@example.com"))
-
-       def test_no_at_sign(self):
-           self.assertFalse(is_valid_email("invalid"))
-
-       def test_multiple_at_signs(self):
-           self.assertFalse(is_valid_email("user@@example.com"))
-
-       def test_no_domain_dot(self):
-           self.assertFalse(is_valid_email("user@domain"))
-
-       def test_with_spaces(self):
-           self.assertFalse(is_valid_email("user @example.com"))
-
-   myTests().main()
-
-.. reveal:: pcap_code_email_validator_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def is_valid_email(email):
-          # Check for spaces
-          if ' ' in email:
-              return False
-
-          # Check for exactly one @
-          if email.count('@') != 1:
-              return False
-
-          # Split into parts
-          local, domain = email.split('@')
-
-          # Check for content
-          if not local or not domain:
-              return False
-
-          # Check for dot in domain
-          if '.' not in domain:
-              return False
-
-          return True
-
----
-
-**Challenge 6: CSV Parser**
+**CSV Parser**
 
 .. activecode:: pcap_code_csv_parser
    :language: python
@@ -774,180 +547,7 @@ Build complete solutions from scratch!
 
 ---
 
-**Challenge 7: File Extension Validator**
-
-.. activecode:: pcap_code_extension_validator
-   :language: python
-   :autograde: unittest
-
-   Create a function ``has_valid_extension(filename, extensions)`` that:
-   - Checks if filename ends with any of the given extensions
-   - Case-insensitive comparison
-   - extensions is a tuple of valid extensions
-
-   Example::
-
-       has_valid_extension("photo.jpg", ('.jpg', '.png'))  # True
-       has_valid_extension("doc.PDF", ('.pdf', '.doc'))    # True
-       has_valid_extension("file.txt", ('.jpg', '.png'))   # False
-
-   ~~~~
-   def has_valid_extension(filename, extensions):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_valid_extension(self):
-           result = has_valid_extension("file.txt", ('.txt', '.pdf'))
-           self.assertTrue(result)
-
-       def test_case_insensitive(self):
-           result = has_valid_extension("FILE.TXT", ('.txt', '.pdf'))
-           self.assertTrue(result)
-
-       def test_invalid_extension(self):
-           result = has_valid_extension("file.jpg", ('.txt', '.pdf'))
-           self.assertFalse(result)
-
-   myTests().main()
-
-.. reveal:: pcap_code_extension_validator_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def has_valid_extension(filename, extensions):
-          filename_lower = filename.lower()
-          extensions_lower = tuple(ext.lower() for ext in extensions)
-          return filename_lower.endswith(extensions_lower)
-
----
-
-**Challenge 8: Word Counter**
-
-.. activecode:: pcap_code_word_counter
-   :language: python
-   :autograde: unittest
-
-   Create a function ``count_words(text)`` that:
-   - Counts occurrences of each word (case-insensitive)
-   - Returns dictionary {word: count}
-   - Ignores punctuation (keep only alphanumeric)
-
-   Example::
-
-       text = "Hello world! Hello Python."
-       count_words(text)
-       # {'hello': 2, 'world': 1, 'python': 1}
-
-   ~~~~
-   def count_words(text):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_basic_count(self):
-           result = count_words("hello world hello")
-           self.assertEqual(result, {'hello': 2, 'world': 1})
-
-       def test_case_insensitive(self):
-           result = count_words("Hello HELLO hello")
-           self.assertEqual(result, {'hello': 3})
-
-       def test_ignores_punctuation(self):
-           result = count_words("hello, world!")
-           self.assertEqual(result, {'hello': 1, 'world': 1})
-
-   myTests().main()
-
-.. reveal:: pcap_code_word_counter_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def count_words(text):
-          # Remove non-alphanumeric except spaces
-          cleaned = ''.join(c if c.isalnum() or c == ' ' else '' for c in text)
-
-          # Split and lowercase
-          words = cleaned.lower().split()
-
-          # Count
-          counts = {}
-          for word in words:
-              counts[word] = counts.get(word, 0) + 1
-
-          return counts
-
----
-
-**Challenge 9: Data Sanitizer**
-
-.. activecode:: pcap_code_sanitizer
-   :language: python
-   :autograde: unittest
-
-   Create a function ``sanitize_input(text, max_length=100)`` that:
-   - Strips whitespace
-   - Removes control characters (char code < 32)
-   - Truncates to max_length if needed
-   - Returns sanitized string
-
-   Example::
-
-       sanitize_input("  hello\\n\\tworld  ", 5)  # "hello"
-       sanitize_input("test", 100)                 # "test"
-
-   ~~~~
-   def sanitize_input(text, max_length=100):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_strips_whitespace(self):
-           result = sanitize_input("  hello  ")
-           self.assertEqual(result, "hello")
-
-       def test_removes_control_chars(self):
-           result = sanitize_input("hello\nworld\t")
-           self.assertEqual(result, "helloworld")
-
-       def test_truncates(self):
-           result = sanitize_input("hello world", 5)
-           self.assertEqual(result, "hello")
-
-   myTests().main()
-
-.. reveal:: pcap_code_sanitizer_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def sanitize_input(text, max_length=100):
-          # Strip whitespace
-          text = text.strip()
-
-          # Remove control characters
-          cleaned = ''.join(c for c in text if ord(c) >= 32)
-
-          # Truncate
-          return cleaned[:max_length]
-
----
-
-**Challenge 10: Log Parser**
+**Log Parser**
 
 .. activecode:: pcap_code_log_parser
    :language: python
@@ -1018,7 +618,7 @@ Part 5: Debugging Challenges
 
 Find and fix the bugs!
 
-**Debug 1: Broken Exception Handling**
+**Debug: Broken Exception Handling**
 
 .. activecode:: pcap_debug_exception
    :language: python
@@ -1138,7 +738,7 @@ Find and fix the bugs!
 
 ---
 
-**Debug 2: File Not Closing**
+**Debug: File Not Closing**
 
 .. activecode:: pcap_debug_file_closing
    :language: python
@@ -1298,142 +898,8 @@ Find and fix the bugs!
 
 ---
 
-**Debug 3: String Modification Bug**
 
-.. activecode:: pcap_debug_string_modification
-   :language: python
-   :autograde: unittest
-
-   This code tries to modify a string but fails. Fix it!
-   ~~~~
-   def capitalize_words(text):
-       words = text.split()
-
-       for word in words:
-           word.capitalize()
-
-       return ' '.join(words)
-
-   result = capitalize_words("hello world")
-   print(f"Result: '{result}'")
-   print("Expected: 'Hello World'")
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_capitalizes_hello_world(self):
-           """Should capitalize 'hello world' to 'Hello World'"""
-           result = capitalize_words("hello world")
-           self.assertEqual(result, "Hello World",
-                          "Should capitalize each word")
-
-       def test_capitalizes_single_word(self):
-           """Should capitalize single word"""
-           result = capitalize_words("python")
-           self.assertEqual(result, "Python")
-
-       def test_capitalizes_multiple_words(self):
-           """Should capitalize multiple words"""
-           result = capitalize_words("the quick brown fox")
-           self.assertEqual(result, "The Quick Brown Fox")
-
-       def test_handles_already_capitalized(self):
-           """Should handle already capitalized words"""
-           result = capitalize_words("Hello World")
-           self.assertEqual(result, "Hello World")
-
-       def test_handles_mixed_case(self):
-           """Should handle mixed case input"""
-           result = capitalize_words("hELLo WoRLd")
-           self.assertEqual(result, "Hello World")
-
-       def test_captures_capitalize_result(self):
-           """Should capture the return value of capitalize()"""
-           source = self.getEditorText()
-           func_code = source.split('def capitalize_words(')[1].split('\n\n')[0]
-
-           # Should either use list comprehension, assignment, or build new list
-           has_capture = (
-               '[' in func_code and 'for' in func_code and ']' in func_code  # List comp
-               or 'append(' in func_code  # Building list
-               or '=' in func_code and 'capitalize()' in func_code  # Assignment
-               or '.title()' in func_code  # Using title() method
-           )
-           self.assertTrue(has_capture,
-                         "Should capture the result of capitalize() or use .title()")
-
-       def test_not_modifying_in_place(self):
-           """Should not try to modify strings in place"""
-           source = self.getEditorText()
-           func_code = source.split('def capitalize_words(')[1].split('\n\n')[0]
-
-           # Check if there's a standalone capitalize() call (not assigned)
-           lines = func_code.split('\n')
-           for line in lines:
-               line_stripped = line.strip()
-               # Look for capitalize() that's not being assigned or used
-               if 'capitalize()' in line_stripped:
-                   # Check if it's standalone (not assigned, not in list comp, not in return)
-                   if '=' not in line_stripped and '[' not in line_stripped and 'return' not in line_stripped:
-                       self.fail("Don't call capitalize() without capturing its return value")
-
-       def test_handles_empty_string(self):
-           """Should handle empty string"""
-           result = capitalize_words("")
-           self.assertEqual(result, "")
-
-       def test_handles_single_letter_words(self):
-           """Should handle single letter words"""
-           result = capitalize_words("a b c")
-           self.assertEqual(result, "A B C")
-
-       def test_preserves_spacing(self):
-           """Should preserve single space between words"""
-           result = capitalize_words("hello world")
-           self.assertEqual(result.count(' '), 1,
-                          "Should have single space between words")
-
-   myTests().main()
-
-.. reveal:: pcap_debug_string_modification_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** ``capitalize()`` returns a new string but doesn't modify the original. The returned value is ignored, so ``words`` list remains unchanged.
-
-   **Fix Option 1 (List Comprehension):**
-
-   .. code-block:: python
-
-      def capitalize_words(text):
-          words = text.split()
-          capitalized = [word.capitalize() for word in words]
-          return ' '.join(capitalized)
-
-   **Fix Option 2 (Append to New List):**
-
-   .. code-block:: python
-
-      def capitalize_words(text):
-          words = text.split()
-          capitalized = []
-          for word in words:
-              capitalized.append(word.capitalize())  # Capture result
-          return ' '.join(capitalized)
-
-   **Fix Option 3 (Built-in Method):**
-
-   .. code-block:: python
-
-      def capitalize_words(text):
-          return text.title()  # Simpler!
-
-   **Key insight:** Strings are **immutable** in Python. String methods like ``capitalize()``, ``upper()``, ``lower()`` return **new strings** and don't modify the original. Always capture the return value.
-
----
-
-**Debug 4: Binary Mode Mistake**
+**Debug: Binary Mode Mistake**
 
 .. activecode:: pcap_debug_binary_mode
    :language: python
@@ -1572,139 +1038,6 @@ Find and fix the bugs!
 
 ---
 
-**Debug 5: Strip Misunderstanding**
-
-.. activecode:: pcap_debug_strip
-   :language: python
-   :autograde: unittest
-
-   This code doesn't remove all intended characters. Fix it!
-   ~~~~
-   def clean_string(text):
-       cleaned = text.strip('*')
-       return cleaned
-
-   test = "**hello*world**"
-   result = clean_string(test)
-   print(f"Result: '{result}'")
-   print("Expected: 'helloworld'")
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_removes_all_asterisks(self):
-           """Should remove ALL asterisks, not just from ends"""
-           result = clean_string("**hello*world**")
-           self.assertEqual(result, "helloworld",
-                          "Should remove asterisks from middle too, not just ends")
-
-       def test_asterisks_in_middle_only(self):
-           """Should remove asterisks from middle"""
-           result = clean_string("hello*world")
-           self.assertEqual(result, "helloworld",
-                          "Should remove asterisks from the middle")
-
-       def test_asterisks_at_ends_only(self):
-           """Should remove asterisks from ends"""
-           result = clean_string("**hello**")
-           self.assertEqual(result, "hello")
-
-       def test_multiple_asterisks_scattered(self):
-           """Should remove all asterisks regardless of position"""
-           result = clean_string("*a*b*c*")
-           self.assertEqual(result, "abc")
-
-       def test_no_asterisks(self):
-           """Should handle strings without asterisks"""
-           result = clean_string("hello")
-           self.assertEqual(result, "hello")
-
-       def test_only_asterisks(self):
-           """Should return empty string for only asterisks"""
-           result = clean_string("***")
-           self.assertEqual(result, "")
-
-       def test_uses_replace_or_alternative(self):
-           """Should use replace() or another method to remove all occurrences"""
-           source = self.getEditorText()
-           func_code = source.split('def clean_string(')[1].split('\n\n')[0]
-
-           # Should use replace, or translate, or list comprehension, etc.
-           has_solution = (
-               '.replace(' in func_code or
-               '.translate(' in func_code or
-               '[' in func_code and 'for' in func_code and 'if' in func_code or  # List comp with filter
-               ''.join' in func_code
-           )
-           self.assertTrue(has_solution,
-                         "Should use replace() or another method to remove ALL asterisks")
-
-       def test_not_relying_only_on_strip(self):
-           """Strip alone is not sufficient for this task"""
-           result = clean_string("**hello*world**")
-           # The key test: if there's an asterisk in the middle, strip() alone won't work
-           self.assertNotIn('*', result,
-                          "Result should not contain any asterisks (strip() alone won't work)")
-
-       def test_consecutive_asterisks(self):
-           """Should handle consecutive asterisks"""
-           result = clean_string("hello***world")
-           self.assertEqual(result, "helloworld")
-
-       def test_empty_string(self):
-           """Should handle empty string"""
-           result = clean_string("")
-           self.assertEqual(result, "")
-
-       def test_mixed_content(self):
-           """Should only remove asterisks, keep other characters"""
-           result = clean_string("*hello!@#world*")
-           self.assertEqual(result, "hello!@#world",
-                          "Should keep other special characters")
-
-       def test_spaces_preserved(self):
-           """Should preserve spaces while removing asterisks"""
-           result = clean_string("*hello * world*")
-           self.assertEqual(result, "hello  world",
-                          "Should preserve spaces")
-
-   myTests().main()
-
-.. reveal:: pcap_debug_strip_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** ``strip()`` only removes characters from the **beginning and end** of a string, not from the middle.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      def clean_string(text):
-          return text.replace('*', '')  # Removes ALL occurrences
-
-   **Alternative solutions:**
-
-   .. code-block:: python
-
-      # Using filter and join
-      def clean_string(text):
-          return ''.join(char for char in text if char != '*')
-
-      # Using translate (for multiple characters)
-      def clean_string(text):
-          return text.translate(str.maketrans('', '', '*'))
-
-   **Key insight:**
-
-   - ``strip('*')`` → Removes '*' from **start and end only**
-   - ``replace('*', '')`` → Removes '*' from **everywhere**
-   - ``lstrip('*')`` → Removes from **start only**
-   - ``rstrip('*')`` → Removes from **end only**
-
----
-
 Part 6: Self-Assessment Checklist
 ----------------------------------
 
@@ -1738,21 +1071,6 @@ Check off the skills you've mastered:
    □ I always use context managers (with statement)
    □ I handle file errors appropriately
 
-**String Methods**
-
-.. code-block:: text
-
-   □ I know strings are immutable
-   □ I can use case methods (upper, lower, capitalize, title, casefold)
-   □ I can search strings (find, rfind, index, count)
-   □ I can validate strings (isalpha, isdigit, isalnum, etc.)
-   □ I can modify strings (strip, replace)
-   □ I can split and join strings
-   □ I can align strings (center, ljust, rjust, zfill)
-   □ I can test patterns (startswith, endswith)
-   □ I use casefold() for case-insensitive comparisons
-   □ I know the difference between find() and index()
-
 **Best Practices**
 
 .. code-block:: text
@@ -1763,8 +1081,6 @@ Check off the skills you've mastered:
    □ I specify encoding when opening text files
    □ I use binary mode for binary data
    □ I process large files line by line
-   □ I remember strings are immutable
-   □ I use appropriate string methods for the task
 
 ---
 
@@ -1832,54 +1148,6 @@ Part 7: Quick Reference Guide
    sys.stdout.write("output\n")
    sys.stderr.write("error\n")
 
----
-
-**String Methods**
-
-.. code-block:: python
-
-   # Case
-   s.upper()       # UPPERCASE
-   s.lower()       # lowercase
-   s.capitalize()  # First char upper
-   s.title()       # Title Case
-   s.casefold()    # Aggressive lowercase (use for comparisons)
-
-   # Search
-   s.find(sub)     # Index or -1
-   s.index(sub)    # Index or ValueError
-   s.count(sub)    # Number of occurrences
-
-   # Validation
-   s.isalpha()     # All letters?
-   s.isdigit()     # All digits?
-   s.isalnum()     # Letters or digits?
-   s.isspace()     # All whitespace?
-   s.isupper()     # All uppercase?
-   s.islower()     # All lowercase?
-
-   # Modification
-   s.strip()       # Remove from both ends
-   s.lstrip()      # Remove from left
-   s.rstrip()      # Remove from right
-   s.replace(old, new)  # Replace substring
-
-   # Split/Join
-   s.split(sep)    # Split into list
-   sep.join(list)  # Join list with separator
-   s.partition(sep)  # Split at first sep (3-tuple)
-   s.splitlines()  # Split on line breaks
-
-   # Alignment
-   s.center(width)   # Center
-   s.ljust(width)    # Left justify
-   s.rjust(width)    # Right justify
-   s.zfill(width)    # Pad with zeros
-
-   # Testing
-   s.startswith(prefix)  # Starts with?
-   s.endswith(suffix)    # Ends with?
-   sub in s              # Contains?
 
 ---
 
@@ -1910,18 +1178,6 @@ Part 7: Quick Reference Guide
    Use context managers when:
    ✓ Opening files (ALWAYS!)
    ✓ Any resource that needs cleanup
-
-   Use casefold() when:
-   ✓ Case-insensitive comparisons
-   ✓ Working with Unicode
-
-   Use find() when:
-   ✓ -1 is acceptable return value
-   ✓ You'll check the result
-
-   Use index() when:
-   ✓ You want exceptions on not found
-   ✓ Substring must exist
 
 ---
 
@@ -1997,7 +1253,6 @@ Part 7: Quick Reference Guide
    You've learned:
    - [✓] Advanced exception handling
    - [✓] Advanced file I/O
-   - [✓] String methods mastery
    - [✓] 40+ coding challenges across all chapters
    - [✓] Complete PCAP exam preparation
 

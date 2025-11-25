@@ -13,6 +13,23 @@ The ``math`` Module
 
 Python's ``math`` module provides access to mathematical functions and constants that go beyond basic arithmetic operators. While you can add, subtract, multiply, and divide with built-in operators, the ``math`` module gives you access to more specialized mathematical operations.
 
+.. note::
+
+   **Import Syntax Quick Reference**
+
+   As a PCEP graduate, you already know these import patterns:
+
+   .. code-block:: python
+
+      import math                    # Import entire module
+      from math import sqrt          # Import specific function
+      from math import sqrt, ceil    # Import multiple functions
+      import math as m               # Import with alias
+      from math import sqrt as sq    # Import function with alias
+
+   This chapter focuses on advanced module topics including the math and platform
+   modules, creating your own packages, and module introspection.
+
 Why Use the ``math`` Module?
 -----------------------------
 

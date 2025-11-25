@@ -6,8 +6,8 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Section 3: String Methods Mastery
-==================================
+Complete String Methods
+========================
 
 .. index:: string methods, string manipulation, text processing
 

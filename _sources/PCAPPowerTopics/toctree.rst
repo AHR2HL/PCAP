@@ -9,5 +9,4 @@ PCAP Power Topics
 
    powerTopics-ExceptionHandling.rst
    powerTopics-FileIO.rst
-   powerTopics-StringMethods.rst
    powerTopics-PracticeAndMastery.rst

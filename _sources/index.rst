@@ -1,24 +1,17 @@
-.. How to Think Like a Computer Scientist: Interactive Edition
+.. Advanced Python Programming for PCAP Certification
 
 .. meta::
-   :description: An interactive version of the How to Think Like a Computer Scientist book, updated for PCEP / PCAP
-   :keywords: python, python3, introduction, computer science
-
-.. toc_version: 2
-
-.. _t_o_c:
+   :description: Interactive Python course aligned with PCAP-31-03 (Certified Associate Python Programmer) certification exam. Master OOP, modules, exceptions, file I/O, and professional Python development.
+   :keywords: python, python3, PCAP, PCAP-31-03, python certification, advanced python, object-oriented programming, python institute
 
 .. raw:: html
 
    <div style="text-align:center" class="center-block">
-   <h1>Foundations of Python Programming</h1>
-   <h2>PCEP / PCAP Enhanced Edition</h2>
-   <style>
-   button.reveal_button {
-       margin-left: auto;
-       margin-right: auto;
-   }
-   </style>
+   <h1>Advanced Python Programming</h1>
+   <h2>PCAP Certification Edition</h2>
+   <p style="font-size: 1.1em; color: #666; margin-top: 10px;">
+   Aligned with PCAP-31-03 Exam Requirements
+   </p>
    </div>
 
 .. reveal:: about
@@ -26,17 +19,61 @@
    :modal:
    :modalTitle: About this Course
 
-   This interactive book is a product of Alpha School.
+   This interactive book prepares you for the **PCAP-31-03 (Certified Associate in Python Programming)** certification exam from the Python Institute.
 
-   * This book is based on the `Original work <http://www.openbookproject.net/thinkcs/python/english2e/>`_ by:  Jeffrey Elkner, Allen B. Downey, and Chris Meyers, the Interactive edition of `How to Think Like a Computer Scientist <https://runestone.academy/runestone/static/thinkcspy/index.html>`_ by Brad Miller, David Ranum and many more and `Programs Information and People <https://runestone.academy/runestone/static/pip2/index.html>`_ by Paul Resnick
-   * Adapted by Adam Roush to fit the PCEP and PCAP certification exams.
-   * Activecode based on `Skulpt <http://skulpt.org>`_
-   * Codelens based on `Online Python Tutor <http://www.pythontutor.com>`_
+   **Prerequisites:**
 
+   This course assumes you have passed the PCEP-30-02 certification or have equivalent entry-level Python knowledge including:
 
+   * Python fundamentals, data types, and operators
+   * Control flow (if/elif/else, for/while loops)
+   * Basic data structures (strings, lists, tuples, dictionaries)
+   * Functions and basic exception handling
 
+   If you need to build these foundational skills, start with our **Python Fundamentals (PCEP Edition)** course first.
 
+   **What you'll learn:**
 
+   * **Modules and Packages (12% of exam)** - Advanced module usage, creating packages, standard library (math, platform, random)
+   * **Exceptions (14% of exam)** - Advanced exception handling, custom exceptions, assert statements
+   * **Strings (18% of exam)** - Complete string method mastery, encoding, text processing
+   * **Object-Oriented Programming (34% of exam)** - Classes, inheritance, polymorphism, encapsulation, introspection
+   * **Advanced Functions & Data Processing (22% of exam)** - Closures, decorators, map/filter/zip, file I/O, sorting algorithms
+
+   **Course Features:**
+
+   * 34 comprehensive chapters covering 100% of PCAP exam topics
+   * Advanced coding exercises with instant feedback
+   * Object-oriented programming projects
+   * Real-world applications and best practices
+   * Practice assessments aligned with PCAP exam format
+
+   **About the Content:**
+
+   This course is adapted for PCAP certification by Alpha Schools, based on:
+
+   * Original work by Jeffrey Elkner, Allen B. Downey, and Chris Meyers: `How to Think Like a Computer Scientist <http://www.openbookproject.net/thinkcs/python/english2e/>`_
+   * Interactive edition by Brad Miller and David Ranum: `thinkcspy <https://runestone.academy/runestone/static/thinkcspy/index.html>`_
+   * `Programs, Information, and People <https://runestone.academy/runestone/static/pip2/index.html>`_ by Paul Resnick
+   * PCAP alignment, advanced topics, and OOP content adapted by Adam Roush, Alpha Schools
+
+   **Technical Credits:**
+
+   * Activecode powered by `Skulpt <http://skulpt.org>`_
+   * Codelens powered by `Online Python Tutor <http://www.pythontutor.com>`_
+
+   **Career Advancement:**
+
+   The PCAP certification demonstrates professional-level Python programming skills to employers and is recognized globally by the Python Institute. Upon completion, you'll be equipped to:
+
+   * Design and implement object-oriented Python applications
+   * Work with advanced Python libraries and modules
+   * Write production-quality, maintainable code
+   * Continue to PCPP (Professional) level certifications
+
+   ---
+
+   © Alpha Schools. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 
 
 Table of Contents
@@ -46,20 +83,9 @@ Table of Contents
    :numbered:
    :maxdepth: 4
 
-   GeneralIntro/toctree.rst
-   SimplePythonData/toctree.rst
-   Debugging/toctree.rst
-   PythonModules/toctree.rst
-   PythonTurtle/toctree.rst
-   Sequences/toctree.rst
-   Iteration/toctree.rst
-   Conditionals/toctree.rst
    TransformingSequences/toctree.rst
    Files/toctree.rst
-   Dictionaries/toctree.rst
    Functions/toctree.rst
-   Tuples/toctree.rst
-   MoreAboutIteration/toctree.rst
    AdvancedFunctions/toctree.rst
    Sorting/toctree.rst
    NestedData/toctree.rst
@@ -69,17 +95,11 @@ Table of Contents
    BuildingPrograms/toctree.rst
    Inheritance/toctree.rst
    AdvancedAccumulation/toctree.rst
-   Recursion/toctree.rst
-   Generators/toctree.rst
    AdvancedModules/toctree.rst
    Closures/toctree.rst
    AdvancedOOP/toctree.rst
    PCAPPowerTopics/toctree.rst
 
-.. toctree::
-    :hidden:
-
-    Projects/toctree.rst
 
 Appendices
 ::::::::::
@@ -90,112 +110,6 @@ Appendices
 
    Appendices/errorsAndDebug.rst
    Appendices/PrecedenceTable.rst
-
-Project List
-============
-
-This book includes many projects.  These projects are not meant to *test* your knowledge they are here to give you an opportunity to *challenge yourself* and your teammates to learn new programming and problem solving skills.  Each project builds on the skills learned in the previous projects.  If you are brand new to programming you will want to start at the beginning, if you have some prior experience, you can dive in with any project that looks interesting to you.
-
-.. list-table::
-    :header-rows: 1
-    :widths: 4,32,32,32
-    :stub-columns: 1
-
-    * -
-      - Project
-      - Skills Required
-      - Learning Goal
-    * - 1
-      - :ref:`A Preview of the End Goal <scaffolded_code>`
-      - An Open Mind
-      - What is programming?
-    * - 2
-      - :ref:`Driving the Turtle <turtle_driving>`
-      - Turtle Graphics Basics
-      - Your First Program
-    * - 3
-      - :ref:`How Many Handshakes? <input_compute_output>`
-      - `Statements and Expressions </runestone/books/published/fopp/SimplePythonData/toctree.html>`_
-      - Breaking down a problem
-    * - 4
-      - :ref:`Drawing a Circle with a Turtle <drawing_a_circle>`
-      - `🐢 Turtle Graphics </runestone/books/published/fopp/PythonTurtle/toctree.html>`_ | `Repetition </runestone/books/published/fopp/PythonTurtle/RepetitionwithaForLoop.html>`_
-      -
-    * - 5
-      - :ref:`Generating a Password XKCD Style <xkcd_pass>`
-      - `Sequences </runestone/books/published/fopp/Sequences/toctree.html>`_ |
-        `Repetition </runestone/books/published/fopp/PythonTurtle/RepetitionwithaForLoop.html>`_
-      - Working with Strings
-    * - 6
-      - :ref:`Computing statistics with Kiva <kiva_statistics>`
-      - `Iteration </runestone/books/published/fopp/Iteration/toctree.html>`_ |
-        `[Optional] Functions 12.1-12.5 </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Computing statistics on tabular data
-    * - 7
-      - :ref:`Graphing Kiva Data with a Turtle <kiva_graphs>`
-      - `Conditionals </runestone/books/published/fopp/Conditionals/toctree.html>`_ |
-        `[Optional] Functions 12.1-12.5 </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Practice with Turtle Graphics, Graphing Basics
-    * - 8
-      - :ref:`Graphing Kiva Data with Altair <graphing_with_altair>`
-      - `Conditionals </runestone/books/published/fopp/Conditionals/toctree.html>`_ |
-        `[Optional] Functions 12.1-12.5 </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Transforming Data, Declarative Graphing
-    * - 9
-      - :ref:`Substitution Cipher <encryption>`
-      - `Transforming Sequences </runestone/books/published/fopp/TransformingSequences/toctree.html>`_ |
-        `[Optional] Functions 12.1-12.5 </runestone/books/published/fopp/Functions/toctree.html>`_
-      - String manipulation
-    * - 10
-      - :ref:`Image Processing <image_processing>`
-      - `Nested Iteration </runestone/books/published/fopp/Iteration/NestedIterationImageProcessing.html>`_ |
-        `[Optional] 12.1-12.5 </runestone/books/published/fopp/index.html>`_
-      - Nested Iteration, Function Practice
-    * - 11
-      - :ref:`Exploring Common Words and SETI <common_words>`
-      - `Files </runestone/books/published/fopp/Files/toctree.html>`_
-      - Reading data from files
-    * - 12
-      - :ref:`Monte Carlo Simulation <monte_carlo_simulations>`
-      - `Files </runestone/books/published/fopp/Files/toctree.html>`_
-      - Working with CSV files
-    * - 13
-      - :ref:`Converting Roman Numerals <roman_numerals>`
-      - `Dictionaries </runestone/books/published/fopp/Dictionaries/toctree.html>`_
-      - Practice with dictionary operations
-    * - 14
-      - :ref:`Stack Overflow Developer Survey <split_apply_combine>`
-      - `Dictionaries </runestone/books/published/fopp/Dictionaries/toctree.html>`_
-      - Learn the split-apply-combine pattern
-    * - 15
-      - :ref:`Image Processing Revisited <image_processing_revisited>`
-      - `Functions </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Using Functions
-    * - 16
-      - :ref:`Turtles and Strings and L-Systems <l_systems>`
-      - `Functions </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Using Functions
-    * - 17
-      - :ref:`Predicting Pizza Prices - Linear Regression <regression_analysis>`
-      - `Functions </runestone/books/published/fopp/Functions/toctree.html>`_
-      - Functions and Statistics
-    * - 18
-      - :ref:`Build your own Google <diy_google>`
-      - `Functions </runestone/books/published/fopp/Functions/toctree.html>`_
-      -  Functions, Dictionary, HTML, Web API's
-    * - 19
-      - :ref:`Better Pizza Predictions <better_pizza_predictions>`
-      - `More Iteration </runestone/books/published/fopp/MoreAboutIteration/toctree.html>`_
-      - Multiple Regression
-    * - 20
-      - :ref:`K-means clustering <clustering>`
-      - `Advanced Functions </runestone/books/published/fopp/AdvancedFunctions/toctree.html>`_
-      - Clustering, Data Science
-    * - 21
-      - :ref:`Sentiment Analysis of Climate Change Tweets <sentiment_analysis>`
-      - `Advanced Functions </runestone/books/published/fopp/AdvancedFunctions/toctree.html>`_
-      - Text Processing, Bayes, Functions
-
 
 
 

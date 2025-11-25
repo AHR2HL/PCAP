@@ -1,170 +1,280 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
-
-:skipreading:`True`
+..  Copyright (C)  Alpha Schools
 
 .. qnum::
-   :prefix: seqmut-13-
+   :prefix: AdvStrings-Ex-
    :start: 1
 
-Exercises
-=========
+Exercises: Advanced String Operations
+======================================
 
-#.
+.. activecode:: advstrings_ex_01
+   :nocolab:
+   :practice: T
 
-   .. tabbed:: q1
+   **Exercise 1:** Write a function ``title_case(text)`` that converts text to title case, but ensures that small words like "a", "an", "the", "in", "on", "at" remain lowercase unless they're the first word.
 
-        .. tab:: Question
+   Example:
 
-           .. actex:: ac8_11_1
+   * ``title_case("the lord of the rings")`` → ``"The Lord of the Rings"``
+   * ``title_case("a tale of two cities")`` → ``"A Tale of Two Cities"``
 
-              For each word in the list ``verbs``, add an -ing ending. Overwrite the old list so that ``verbs`` has the same words with ``ing`` at the end of each one.
-              ~~~~
-              verbs = ["kayak", "cry", "walk", "eat", "drink", "fly"]
+   ~~~~
+   def title_case(text):
+       # Your code here
+       pass
 
-              ====
+   ====
+   from unittest.gui import TestCaseGui
 
-              from unittest.gui import TestCaseGui
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(title_case("the lord of the rings"), "The Lord of the Rings", "Test 1")
+           self.assertEqual(title_case("a tale of two cities"), "A Tale of Two Cities", "Test 2")
+           self.assertEqual(title_case("gone with the wind"), "Gone with the Wind", "Test 3")
+           self.assertEqual(title_case("the catcher in the rye"), "The Catcher in the Rye", "Test 4")
 
-              class myTests(TestCaseGui):
-
-                  def testSeven(self):
-                      self.assertEqual(verbs, ['kayaking', 'crying', 'walking', 'eating', 'drinking', 'flying'], "Testing that verbs is assigned to correct values.")
-
-              myTests().main()
-
-
-#.
-
-   .. tabbed:: q2
-
-        .. tab:: Question
-
-           .. actex:: ac8_11_2
-
-              In XYZ University, upper level math classes are numbered 300 and up. Upper level English classes are numbered 200 and up. Upper level Psychology classes are 400 and up. Create two lists, ``upper`` and ``lower``. Assign each course in ``classes`` to the correct list, ``upper`` or ``lower``. HINT: remember, you can convert some strings to different types!
-              ~~~~
-              classes = ["MATH 150", "PSYCH 111", "PSYCH 313", "PSYCH 412", "MATH 300", "MATH 404", "MATH 206", "ENG 100", "ENG 103", "ENG 201", "PSYCH 508", "ENG 220", "ENG 125", "ENG 124"]
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testEightA(self):
-                      self.assertEqual(upper, ['PSYCH 412', 'MATH 300', 'MATH 404', 'ENG 201', 'PSYCH 508', 'ENG 220'], "Testing that the upper list exists and contains the correct elements.")
-              def testEightB(self):
-                      self.assertEqual(lower, ['MATH 150', 'PSYCH 111', 'PSYCH 313', 'MATH 206', 'ENG 100', 'ENG 103', 'ENG 125', 'ENG 124'], "Testing that the lower list exists and contains the correct elements.")
-
-              myTests().main()
-
-#.
-
-   .. tabbed:: q3
-
-        .. tab:: Question
-
-           .. actex:: ac8_11_3
-
-              Starting with the list myList = [76, 92.3, 'hello', True, 4, 76], write Python statements to do the following:
-
-              a. Append "apple" and 76 to the list.
-              #. Insert the value "cat" at position 3.
-              #. Insert the value 99 at the start of the list.
-              #. Find the index of "hello".
-              #. Count the number of 76s in the list.
-              #. Remove the first occurrence of 76 from the list.
-              #. Remove True from the list using ``pop`` and ``index``.
-              ~~~~
-              myList = [76, 92.3, 'hello', True, 4, 76]
-
-              # Your code here
-
-        .. tab:: Answer
-
-           .. activecode:: answer8_11_3
-
-              myList = [76, 92.3, 'hello', True, 4, 76]
-
-              myList.append("apple")         # a
-              myList.append(76)              # a
-              myList.insert(3, "cat")        # b
-              myList.insert(0, 99)           # c
-
-              print(myList.index("hello"))   # d
-              print(myList.count(76))        # e
-              myList.remove(76)              # f
-              myList.pop(myList.index(True)) # g
-
-              print (myList)
-
-        .. tab:: Discussion
-
-            .. disqus::
-                :shortname: interactivepython
-                :identifier: disqus_b9034b274ebe4c55a58c44315ee681a4
+   myTests().main()
 
 
-#.  .. tabbed:: q4
+.. activecode:: advstrings_ex_02
+   :nocolab:
+   :practice: T
 
-        .. tab:: Question
+   **Exercise 2:** Write a function ``is_valid_variable_name(name)`` that returns ``True`` if the string is a valid Python variable name, ``False`` otherwise.
 
-           .. activecode:: ac13_5_3
+   Remember: A valid variable name:
 
-              The module ``keyword`` determines if a string is a keyword. e.g. ``keyword.iskeyword(s)`` where ``s`` is a string will return either ``True`` or ``False``, depending on whether or not the string is a Python keyword. Import the ``keyword`` module and test to see whether each of the words in list ``test`` are keywords. Save the respective answers in a list, ``keyword_test``.
-              ~~~~
-              test = ["else", "integer", "except", "elif"]
-              keyword_test = []
+   * Starts with a letter or underscore
+   * Contains only letters, numbers, and underscores
+   * Is not a Python keyword
 
-              ====
+   Use the ``.isidentifier()`` method to help!
 
-              from unittest.gui import TestCaseGui
+   ~~~~
+   import keyword
 
-              class myTests(TestCaseGui):
+   def is_valid_variable_name(name):
+       # Your code here
+       pass
 
-                 def testOneA(self):
-                    self.assertEqual(keyword_test, [True, False, True, True], "Testing that keyword_test is correct and p1 assigned to correct values")
+   ====
+   from unittest.gui import TestCaseGui
 
-              myTests().main()
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(is_valid_variable_name("my_var"), True, "Test 1")
+           self.assertEqual(is_valid_variable_name("_private"), True, "Test 2")
+           self.assertEqual(is_valid_variable_name("var123"), True, "Test 3")
+           self.assertEqual(is_valid_variable_name("123var"), False, "Test 4")
+           self.assertEqual(is_valid_variable_name("my-var"), False, "Test 5")
+           self.assertEqual(is_valid_variable_name("class"), False, "Test 6: keyword")
+           self.assertEqual(is_valid_variable_name("for"), False, "Test 7: keyword")
 
-
-
-#.  .. tabbed:: q5
-
-        .. tab:: Question
-
-           .. activecode:: ac13_5_4
-
-              The ``string`` module provides sequences of various types of Python characters. It has an attribute called ``digits`` that produces the string '0123456789'. Import the module and assign this string to the variable ``nums``. Below, we have provided a list of characters called ``chars``. Using ``nums`` and ``chars``, produce a list called ``is_num`` that consists of tuples. The first element of each tuple should be the character from ``chars``, and the second element should be a Boolean that reflects whether or not it is a Python digit.
-              ~~~~
-              chars = ['h', '1', 'C', 'i', '9', 'True', '3.1', '8', 'F', '4', 'j']
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                 def testOneA(self):
-                    self.assertEqual(is_num, [('h', False), ('1', True), ('C', False), ('i', False), ('9', True), ('True', False), ('3.1', False), ('8', True), ('F', False), ('4', True), ('j', False)], "Testing that is_num was created correctly.")
-
-              myTests().main()
+   myTests().main()
 
 
-Contributed Exercises
-~~~~~~~~~~~~~~~~~~~~~
+.. activecode:: advstrings_ex_03
+   :nocolab:
+   :practice: T
 
-.. raw:: html
+   **Exercise 3:** Write a function ``clean_whitespace(text)`` that:
 
-    {% for q in questions: %}
-        <div class='oneq full-width'>
-            {{ q['htmlsrc']|safe }}
-        </div>
-    {% endfor %}
+   * Removes leading and trailing whitespace
+   * Replaces multiple consecutive spaces with a single space
+   * Returns the cleaned string
+
+   Example: ``clean_whitespace("  Hello    world  ")`` → ``"Hello world"``
+
+   ~~~~
+   def clean_whitespace(text):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(clean_whitespace("  Hello    world  "), "Hello world", "Test 1")
+           self.assertEqual(clean_whitespace("Python   is    awesome"), "Python is awesome", "Test 2")
+           self.assertEqual(clean_whitespace("   spaces   everywhere   "), "spaces everywhere", "Test 3")
+           self.assertEqual(clean_whitespace("NoExtraSpaces"), "NoExtraSpaces", "Test 4")
+
+   myTests().main()
+
+
+.. activecode:: advstrings_ex_04
+   :nocolab:
+   :practice: T
+
+   **Exercise 4:** Write a function ``format_table_row(items, width=15)`` that takes a list of strings and formats them into a table row where each item is centered in a field of the given width.
+
+   Example:
+
+   * ``format_table_row(["Name", "Age", "City"], 15)`` → ``"     Name      |      Age      |     City      "``
+
+   Use the ``.center()`` method!
+
+   ~~~~
+   def format_table_row(items, width=15):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           result1 = format_table_row(["Name", "Age", "City"], 15)
+           self.assertEqual(result1, "     Name      |      Age      |     City      ", "Test 1")
+
+           result2 = format_table_row(["ID", "Product"], 10)
+           self.assertEqual(result2, "    ID    |  Product  ", "Test 2")
+
+           result3 = format_table_row(["A", "B", "C"], 5)
+           self.assertEqual(result3, "  A  |  B  |  C  ", "Test 3")
+
+   myTests().main()
+
+
+.. activecode:: advstrings_ex_05
+   :nocolab:
+   :practice: T
+
+   **Exercise 5:** Write a function ``parse_name_email(text)`` that extracts a name and email from a string formatted as "Name <email@domain.com>".
+
+   Use ``.rindex()`` or ``.partition()`` to help split the string!
+
+   Return a tuple: ``(name, email)``
+
+   Example:
+
+   * ``parse_name_email("John Doe <john@example.com>")`` → ``("John Doe", "john@example.com")``
+
+   ~~~~
+   def parse_name_email(text):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(parse_name_email("John Doe <john@example.com>"), ("John Doe", "john@example.com"), "Test 1")
+           self.assertEqual(parse_name_email("Alice Smith <alice@test.org>"), ("Alice Smith", "alice@test.org"), "Test 2")
+           self.assertEqual(parse_name_email("Bob <bob@site.net>"), ("Bob", "bob@site.net"), "Test 3")
+
+   myTests().main()
+
+
+.. activecode:: advstrings_ex_06
+   :nocolab:
+   :practice: T
+
+   **Exercise 6:** Write a function ``is_strong_password(password)`` that returns ``True`` if a password meets these criteria:
+
+   * At least 8 characters long
+   * Contains at least one uppercase letter
+   * Contains at least one lowercase letter
+   * Contains at least one digit
+   * Contains at least one special character (not alphanumeric)
+
+   Use multiple ``.isXXX()`` methods and combine them!
+
+   ~~~~
+   def is_strong_password(password):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(is_strong_password("Abc123!@"), True, "Test 1: valid password")
+           self.assertEqual(is_strong_password("weak"), False, "Test 2: too short")
+           self.assertEqual(is_strong_password("alllowercase123!"), False, "Test 3: no uppercase")
+           self.assertEqual(is_strong_password("ALLUPPERCASE123!"), False, "Test 4: no lowercase")
+           self.assertEqual(is_strong_password("NoDigits!@#"), False, "Test 5: no digits")
+           self.assertEqual(is_strong_password("NoSpecial123Abc"), False, "Test 6: no special chars")
+           self.assertEqual(is_strong_password("Perfect1!Pass"), True, "Test 7: valid password")
+
+   myTests().main()
+
+
+.. activecode:: advstrings_ex_07
+   :nocolab:
+   :practice: T
+
+   **Exercise 7:** Write a function ``extract_domain(url)`` that extracts the domain name from a URL.
+
+   Examples:
+
+   * ``extract_domain("https://www.example.com/path")`` → ``"example.com"``
+   * ``extract_domain("http://subdomain.site.org/page.html")`` → ``"site.org"``
+
+   Hints:
+
+   * Remove the protocol (http:// or https://) first
+   * Use ``.partition()`` to split on "/" to get just the domain part
+   * Get the last two parts of the domain (handle subdomains)
+
+   ~~~~
+   def extract_domain(url):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(extract_domain("https://www.example.com/path"), "example.com", "Test 1")
+           self.assertEqual(extract_domain("http://subdomain.site.org/page.html"), "site.org", "Test 2")
+           self.assertEqual(extract_domain("https://github.com/user/repo"), "github.com", "Test 3")
+           self.assertEqual(extract_domain("http://docs.python.org/3/"), "python.org", "Test 4")
+
+   myTests().main()
+
+
+.. activecode:: advstrings_ex_08
+   :nocolab:
+   :practice: T
+
+   **Exercise 8 (Challenge):** Write a function ``normalize_phone(phone)`` that takes a phone number in various formats and returns it in the standard format: ``(XXX) XXX-XXXX``
+
+   Your function should:
+
+   * Remove all non-digit characters
+   * Handle 10-digit and 11-digit numbers (if 11 digits, remove leading 1)
+   * Return ``None`` if the number is invalid (not 10 or 11 digits)
+   * Format the valid 10-digit number as ``(XXX) XXX-XXXX``
+
+   Examples:
+
+   * ``normalize_phone("555-123-4567")`` → ``"(555) 123-4567"``
+   * ``normalize_phone("(555) 123-4567")`` → ``"(555) 123-4567"``
+   * ``normalize_phone("1-555-123-4567")`` → ``"(555) 123-4567"``
+   * ``normalize_phone("5551234567")`` → ``"(555) 123-4567"``
+   * ``normalize_phone("123")`` → ``None``
+
+   ~~~~
+   def normalize_phone(phone):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(normalize_phone("555-123-4567"), "(555) 123-4567", "Test 1")
+           self.assertEqual(normalize_phone("(555) 123-4567"), "(555) 123-4567", "Test 2")
+           self.assertEqual(normalize_phone("1-555-123-4567"), "(555) 123-4567", "Test 3")
+           self.assertEqual(normalize_phone("5551234567"), "(555) 123-4567", "Test 4")
+           self.assertEqual(normalize_phone("1 (555) 123-4567"), "(555) 123-4567", "Test 5")
+           self.assertEqual(normalize_phone("123"), None, "Test 6: too short")
+           self.assertEqual(normalize_phone("12345678901234"), None, "Test 7: too long")
+
+   myTests().main()
