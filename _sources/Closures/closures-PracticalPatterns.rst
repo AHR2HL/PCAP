@@ -178,11 +178,8 @@ This pattern is used everywhere! For example, in web frameworks:
 
    def log_calls(func):
        """Decorator to log function calls with arguments"""
-       call_count = 0  # Closure variable to track calls
 
        def wrapper(*args, **kwargs):
-           nonlocal call_count
-           call_count += 1
 
            # Format arguments nicely
            args_str = ', '.join(repr(arg) for arg in args)
@@ -336,79 +333,6 @@ Callbacks are functions that are passed as arguments to other functions. Closure
    Average: 20.0
    Exam Score: 84.33 ✅ PASS
    Temperature: 18.33 ❌ FAIL
-
----
-
-**GUI Event Handlers (Simulated)**
-
-.. activecode:: closure_gui_handlers
-   :language: python
-   :caption: GUI Event Handlers with Closures
-
-   class Button:
-       """Simplified button class"""
-       def __init__(self, label):
-           self.label = label
-           self.click_handler = None
-
-       def on_click(self, handler):
-           """Register click handler"""
-           self.click_handler = handler
-
-       def click(self):
-           """Simulate button click"""
-           print(f"🖱️  Clicked: {self.label}")
-           if self.click_handler:
-               self.click_handler()
-
-   # Without closures: handlers can't have context
-   def generic_handler():
-       print("Button was clicked!")
-
-   # With closures: each button can have custom behavior with context
-   def make_counter_button(button_label):
-       count = 0  # Private state!
-
-       def handle_click():
-           nonlocal count
-           count += 1
-           print(f"  → {button_label} clicked {count} time(s)")
-
-       return handle_click
-
-   # Create buttons with independent handlers
-   btn1 = Button("Like")
-   btn1.on_click(make_counter_button("Like"))
-
-   btn2 = Button("Share")
-   btn2.on_click(make_counter_button("Share"))
-
-   # Simulate clicks
-   btn1.click()
-   btn1.click()
-   btn2.click()
-   btn1.click()
-   btn2.click()
-   btn2.click()
-
-**Output:**
-
-::
-
-   🖱️  Clicked: Like
-     → Like clicked 1 time(s)
-   🖱️  Clicked: Like
-     → Like clicked 2 time(s)
-   🖱️  Clicked: Share
-     → Share clicked 1 time(s)
-   🖱️  Clicked: Like
-     → Like clicked 3 time(s)
-   🖱️  Clicked: Share
-     → Share clicked 2 time(s)
-   🖱️  Clicked: Share
-     → Share clicked 3 time(s)
-
-Each button has **its own independent counter** thanks to closures!
 
 ---
 
@@ -727,81 +651,6 @@ Without memoization, ``fibonacci(6)`` would make **25 function calls**. With mem
 
 ---
 
-**Memoization with Statistics**
-
-.. activecode:: closure_memoization_stats
-   :language: python
-   :caption: Memoization with Cache Statistics
-
-   def memoize_with_stats(func):
-       """Memoization decorator that tracks cache statistics"""
-       cache = {}
-       hits = 0
-       misses = 0
-
-       def wrapper(*args):
-           nonlocal hits, misses
-
-           if args in cache:
-               hits += 1
-               return cache[args]
-
-           misses += 1
-           result = func(*args)
-           cache[args] = result
-           return result
-
-       def get_stats():
-           total = hits + misses
-           hit_rate = (hits / total * 100) if total > 0 else 0
-           return {
-               'hits': hits,
-               'misses': misses,
-               'total_calls': total,
-               'hit_rate': f"{hit_rate:.1f}%",
-               'cache_size': len(cache)
-           }
-
-       wrapper.stats = get_stats
-       wrapper.clear_cache = lambda: cache.clear()
-       return wrapper
-
-   @memoize_with_stats
-   def expensive_operation(x, y):
-       """Simulate an expensive calculation"""
-       return x ** y
-
-   # Use the function
-   print(expensive_operation(2, 10))
-   print(expensive_operation(3, 5))
-   print(expensive_operation(2, 10))  # Cache hit
-   print(expensive_operation(3, 5))   # Cache hit
-   print(expensive_operation(4, 3))
-
-   # Check statistics
-   print("\n📊 Cache Statistics:")
-   for key, value in expensive_operation.stats().items():
-       print(f"  {key}: {value}")
-
-**Output:**
-
-::
-
-   1024
-   243
-   1024
-   243
-   64
-
-   📊 Cache Statistics:
-     hits: 2
-     misses: 3
-     total_calls: 5
-     hit_rate: 40.0%
-     cache_size: 3
-
----
-
 Pattern 5: Partial Application
 -------------------------------
 
@@ -1003,6 +852,7 @@ Practice Challenges
 
 .. activecode:: closure_practice_rate_limiter_2
    :language: python
+   :autograde: unittest
    :caption: Challenge - Rate Limiter Decorator
 
    import time
@@ -1015,24 +865,103 @@ Practice Challenges
            max_calls: Maximum number of calls allowed
            period: Time period in seconds
 
+       Returns:
+           None if rate limit exceeded, otherwise function result
+
        Example: @rate_limit(3, 5) allows 3 calls per 5 seconds
        """
        # TODO: Your code here
        # Hint: Store timestamps of recent calls in a list
        pass
 
-   # Test your code (uncomment when ready):
-   # @rate_limit(3, 5)
-   # def api_call():
-   #     print("API called!")
-   #     return "Success"
-   #
-   # # Should succeed 3 times
-   # for i in range(3):
-   #     api_call()
-   #
-   # # Should fail (rate limit exceeded)
-   # api_call()
+   ====
+   from unittest.gui import TestCaseGui
+   import time
+
+   class myTests(TestCaseGui):
+       def test_decorator_returns_function(self):
+           @rate_limit(3, 5)
+           def dummy():
+               return "OK"
+
+           # Should be callable
+           self.assertTrue(callable(dummy))
+
+       def test_allows_calls_within_limit(self):
+           @rate_limit(3, 1)
+           def api_call():
+               return "Success"
+
+           # First 3 calls should succeed
+           result1 = api_call()
+           result2 = api_call()
+           result3 = api_call()
+
+           self.assertEqual(result1, "Success")
+           self.assertEqual(result2, "Success")
+           self.assertEqual(result3, "Success")
+
+       def test_blocks_calls_exceeding_limit(self):
+           @rate_limit(2, 10)
+           def api_call():
+               return "Success"
+
+           # First 2 calls succeed
+           api_call()
+           api_call()
+
+           # Third call should raise RateLimitExceeded
+           with self.assertRaises(Exception):
+               api_call()
+
+       def test_resets_after_period(self):
+           @rate_limit(2, 1)  # 2 calls per 1 second
+           def api_call():
+               return "Success"
+
+           # Use up the limit
+           api_call()
+           api_call()
+
+           # Wait for period to expire
+           time.sleep(1.1)
+
+           # Should work again
+           result = api_call()
+           self.assertEqual(result, "Success")
+
+       def test_preserves_function_args(self):
+           @rate_limit(3, 5)
+           def add(a, b):
+               return a + b
+
+           result = add(2, 3)
+           self.assertEqual(result, 5)
+
+       def test_independent_decorators(self):
+           @rate_limit(2, 10)
+           def func1():
+               return "A"
+
+           @rate_limit(2, 10)
+           def func2():
+               return "B"
+
+           # Each function has its own limit
+           func1()
+           func1()
+           func2()
+           func2()
+
+           # Both should be blocked (independent limits)
+           with self.assertRaises(Exception):
+               func1()
+
+           with self.assertRaises(Exception):
+               func2()
+
+   myTests().main()
+
 
 .. reveal:: closure_practice_rate_limiter_solution
    :showtitle: Show Solution
@@ -1061,13 +990,15 @@ Practice Challenges
               return wrapper
           return decorator
 
----
-
 **Challenge 2: Build a Retry Decorator**
 
 .. activecode:: closure_practice_retry_decorator
    :language: python
+   :autograde: unittest
    :caption: Challenge - Retry Decorator
+
+   from functools import wraps
+   import time
 
    def retry(max_attempts, delay=0):
        """
@@ -1075,24 +1006,111 @@ Practice Challenges
 
        Args:
            max_attempts: Maximum number of attempts
-           delay: Seconds to wait between attempts
+           delay: Seconds to wait between attempts (default: 0)
 
-       Should print attempt numbers and final success/failure.
+       Returns:
+           Function result if successful, or raises exception after all attempts fail
+
+       Example:
+           @retry(max_attempts=3, delay=0.1)
+           def flaky_function():
+               # Might fail, will retry up to 3 times
+               pass
        """
        # TODO: Your code here
+       # Hint: Use a loop for attempts
+       # Hint: Use try/except to catch exceptions
+       # Hint: Use @wraps to preserve function metadata
        pass
 
-   # Test your code (uncomment when ready):
-   # import random
-   #
-   # @retry(max_attempts=5, delay=0.1)
-   # def unreliable_function():
-   #     if random.random() < 0.7:  # 70% chance of failure
-   #         raise ValueError("Random failure!")
-   #     return "Success!"
-   #
-   # result = unreliable_function()
-   # print(f"Final result: {result}")
+   ====
+   from unittest.gui import TestCaseGui
+   import time
+
+   class myTests(TestCaseGui):
+       def test_succeeds_on_first_attempt(self):
+           """Test that decorator works with function that succeeds immediately"""
+           call_count = [0]
+
+           @retry(max_attempts=3)
+           def always_succeeds():
+               call_count[0] += 1
+               return "Success!"
+
+           result = always_succeeds()
+
+           self.assertEqual(result, "Success!")
+           self.assertEqual(call_count[0], 1, "Function should only be called once if it succeeds")
+
+       def test_retries_then_succeeds(self):
+           """Test that decorator retries and eventually succeeds"""
+           call_count = [0]
+
+           @retry(max_attempts=5)
+           def succeeds_on_third_try():
+               call_count[0] += 1
+               if call_count[0] < 3:
+                   raise ValueError(f"Attempt {call_count[0]} failed")
+               return "Success!"
+
+           result = succeeds_on_third_try()
+
+           self.assertEqual(result, "Success!")
+           self.assertEqual(call_count[0], 3, "Function should be called 3 times")
+
+       def test_fails_after_max_attempts(self):
+           """Test that decorator raises exception after all retries fail"""
+           call_count = [0]
+
+           @retry(max_attempts=3)
+           def always_fails():
+               call_count[0] += 1
+               raise RuntimeError("Always fails!")
+
+           with self.assertRaises(RuntimeError):
+               always_fails()
+
+           self.assertEqual(call_count[0], 3, "Function should be called max_attempts times")
+
+       def test_preserves_function_signature(self):
+           """Test that decorator preserves function name and docstring"""
+           @retry(max_attempts=2)
+           def my_function():
+               """This is my docstring"""
+               return 42
+
+           self.assertEqual(my_function.__name__, "my_function")
+           self.assertEqual(my_function.__doc__, "This is my docstring")
+
+       def test_passes_arguments_correctly(self):
+           """Test that decorator passes args and kwargs correctly"""
+           @retry(max_attempts=3)
+           def add_numbers(a, b, multiply=1):
+               return (a + b) * multiply
+
+           result = add_numbers(5, 3, multiply=2)
+           self.assertEqual(result, 16)
+
+       def test_uses_proper_exception_handling(self):
+           """Test that the implementation uses try/except blocks"""
+
+           # Get the source code of the retry function
+           source = self.getEditorText()
+
+           # Check for essential keywords
+           self.assertIn('try', source, "Implementation should use 'try' block")
+           self.assertIn('except', source, "Implementation should use 'except' block")
+
+       def test_uses_wraps_decorator(self):
+           """Test that implementation uses @wraps for metadata preservation"""
+
+           source = self.getEditorText()
+
+           # Check for wraps usage (either @wraps(func) or wraps(func))
+           has_wraps = 'wraps' in source or '@wraps' in source
+           self.assertTrue(has_wraps, "Implementation should use @wraps or wraps() to preserve function metadata")
+
+   myTests().main()
 
 .. reveal:: closure_practice_retry_decorator_solution
    :showtitle: Show Solution
@@ -1100,10 +1118,12 @@ Practice Challenges
 
    .. code-block:: python
 
+      from functools import wraps
       import time
 
       def retry(max_attempts, delay=0):
           def decorator(func):
+              @wraps(func)
               def wrapper(*args, **kwargs):
                   for attempt in range(1, max_attempts + 1):
                       try:
@@ -1127,6 +1147,7 @@ Practice Challenges
 
 .. activecode:: closure_practice_memo_expiry
    :language: python
+   :autograde: unittest
    :caption: Challenge - Memoization with Expiration
 
    import time
@@ -1136,23 +1157,144 @@ Practice Challenges
        Create a memoization decorator where cached values expire.
 
        Args:
-           ttl: Time-to-live in seconds
+           ttl: Time-to-live in seconds (how long cache entries are valid)
 
-       Cached values should be discarded after ttl seconds.
+       Behavior:
+           - First call: computes and caches result with timestamp
+           - Subsequent calls: returns cached result if within ttl
+           - After ttl seconds: recomputes and updates cache
+
+       Example:
+           @memoize_with_expiry(ttl=2)
+           def expensive():
+               return time.time()
+
+           result1 = expensive()  # Computes
+           result2 = expensive()  # Cache hit (same as result1)
+           time.sleep(3)
+           result3 = expensive()  # Cache expired, recomputes
        """
        # TODO: Your code here
-       # Hint: Store both the value AND timestamp
+       # Hint: Store both the value AND timestamp in cache
+       # Hint: cache format: {args: (result, timestamp)}
        pass
 
-   # Test your code (uncomment when ready):
-   # @memoize_with_expiry(ttl=2)
-   # def get_time():
-   #     return time.time()
-   #
-   # print(get_time())  # Compute
-   # print(get_time())  # Use cache (same value)
-   # time.sleep(3)      # Wait for expiry
-   # print(get_time())  # Compute again (different value)
+   ====
+   from unittest.gui import TestCaseGui
+   import time
+
+   class myTests(TestCaseGui):
+       def test_caches_results(self):
+           """Test that function result is cached"""
+           call_count = [0]
+
+           @memoize_with_expiry(ttl=10)
+           def counter():
+               call_count[0] += 1
+               return call_count[0]
+
+           result1 = counter()
+           result2 = counter()
+           result3 = counter()
+
+           # Should all return the same cached value
+           self.assertEqual(result1, 1)
+           self.assertEqual(result2, 1)
+           self.assertEqual(result3, 1)
+           self.assertEqual(call_count[0], 1, "Function should only be called once (cached)")
+
+       def test_cache_expires(self):
+           """Test that cache expires after TTL"""
+           call_count = [0]
+
+           @memoize_with_expiry(ttl=1)  # 1 second TTL
+           def counter():
+               call_count[0] += 1
+               return call_count[0]
+
+           result1 = counter()  # Call 1: compute
+           self.assertEqual(result1, 1)
+
+           result2 = counter()  # Call 2: use cache
+           self.assertEqual(result2, 1)
+           self.assertEqual(call_count[0], 1, "Should still be using cache")
+
+           time.sleep(1.2)  # Wait for cache to expire
+
+           result3 = counter()  # Call 3: recompute (cache expired)
+           self.assertEqual(result3, 2)
+           self.assertEqual(call_count[0], 2, "Should have recomputed after expiry")
+
+       def test_different_args_cached_separately(self):
+           """Test that different arguments get different cache entries"""
+           @memoize_with_expiry(ttl=10)
+           def add(a, b):
+               return a + b
+
+           result1 = add(2, 3)
+           result2 = add(5, 7)
+           result3 = add(2, 3)  # Same as first call
+
+           self.assertEqual(result1, 5)
+           self.assertEqual(result2, 12)
+           self.assertEqual(result3, 5)
+
+       def test_returns_correct_values(self):
+           """Test that decorator preserves function return values"""
+           @memoize_with_expiry(ttl=5)
+           def multiply(x, y):
+               return x * y
+
+           self.assertEqual(multiply(3, 4), 12)
+           self.assertEqual(multiply(5, 6), 30)
+           self.assertEqual(multiply(3, 4), 12)  # From cache
+
+       def test_handles_no_args(self):
+           """Test that decorator works with functions that take no arguments"""
+           value = [42]
+
+           @memoize_with_expiry(ttl=5)
+           def get_value():
+               return value[0]
+
+           result1 = get_value()
+           value[0] = 100  # Change the value
+           result2 = get_value()  # Should still return cached 42
+
+           self.assertEqual(result1, 42)
+           self.assertEqual(result2, 42, "Should return cached value, not new value")
+
+       def test_uses_cache_dict(self):
+           """Test that implementation uses a cache dictionary"""
+           source = self.getEditorText()
+
+           # Check for cache dictionary
+           has_cache = 'cache' in source and ('{}' in source or 'dict()' in source)
+           self.assertTrue(has_cache, "Implementation should use a cache dictionary")
+
+       def test_uses_time_module(self):
+           """Test that implementation uses time.time() for timestamps"""
+           source = self.getEditorText()
+
+           self.assertIn('time.time()', source, "Implementation should use time.time() to get current timestamp")
+
+       def test_stores_timestamps(self):
+           """Test that implementation stores timestamps with cached values"""
+           source = self.getEditorText()
+
+           # Look for tuple storage pattern or timestamp variable
+           has_timestamp = 'timestamp' in source or 'time.time()' in source
+           self.assertTrue(has_timestamp, "Implementation should store timestamps for cache entries")
+
+       def test_checks_expiration(self):
+           """Test that implementation checks if cache has expired"""
+           source = self.getEditorText()
+
+           # Should compare current time with stored time
+           has_comparison = ('-' in source and 'ttl' in source) or 'current' in source
+           self.assertTrue(has_comparison, "Implementation should check if cached entry has expired (current_time - timestamp < ttl)")
+
+   myTests().main()
 
 .. reveal:: closure_practice_memo_expiry_solution
    :showtitle: Show Solution

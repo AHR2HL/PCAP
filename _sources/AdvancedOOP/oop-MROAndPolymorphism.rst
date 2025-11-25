@@ -47,7 +47,7 @@ Let's explore how Python computes MRO step by step.
 
 **The C3 Linearization Algorithm:**
 
-Given a class C with parents (B₁, B₂, ..., Bₙ):
+Given a class C with parents (B1, B2, ..., Bn):
 
 1. Start with C itself
 2. Merge the parent MROs
@@ -78,7 +78,7 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
 
    def show_mro_chain(cls):
        """Visualize MRO with arrows."""
-       mro_chain = ' → '.join(c.__name__ for c in cls.__mro__)
+       mro_chain = ' -> '.join(c.__name__ for c in cls.__mro__)
        return mro_chain
 
    print("Complex Inheritance Structure:")
@@ -88,7 +88,7 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
    print("        \\ /")
    print("         F")
 
-   print(f"\nMRO Chains:")
+   print("\nMRO Chains:")
    print(f"  A: {show_mro_chain(A)}")
    print(f"  B: {show_mro_chain(B)}")
    print(f"  C: {show_mro_chain(C)}")
@@ -96,14 +96,14 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
    print(f"  E: {show_mro_chain(E)}")
    print(f"  F: {show_mro_chain(F)}")
 
-   print(f"\n💡 F's MRO explained:")
-   print(f"   1. F (the class itself)")
-   print(f"   2. D (first parent of F)")
-   print(f"   3. A (parent of D, comes before B)")
-   print(f"   4. E (second parent of F)")
-   print(f"   5. B (common ancestor, appears once)")
-   print(f"   6. C (from E)")
-   print(f"   7. object (ultimate base)")
+   print("\n💡 F's MRO explained:")
+   print("   1. F (the class itself)")
+   print("   2. D (first parent of F)")
+   print("   3. A (parent of D, comes before B)")
+   print("   4. E (second parent of F)")
+   print("   5. B (common ancestor, appears once)")
+   print("   6. C (from E)")
+   print("   7. object (ultimate base)")
 
 **Output:**
 
@@ -175,11 +175,11 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
 
    # Property 4: Consistent with subclass relationship
    print("\n4. Monotonic (preserves subclass ordering):")
-   print(f"   If A before B in one chain, A before B everywhere")
+   print("   If A before B in one chain, A before B everywhere")
 
    # Which method gets called?
    child = Child()
-   print(f"\n5. Method resolution:")
+   print("\n5. Method resolution:")
    print(f"   child.method(): '{child.method()}'")
    print(f"   Resolved to: {Child.__mro__[1].__name__}.method()")
 
@@ -222,12 +222,12 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
        print(f"{'='*60}")
 
        # Show MRO chain
-       print(f"\n📋 MRO Chain:")
+       print("\n📋 MRO Chain:")
        for i, c in enumerate(cls.__mro__):
            print(f"   {i}. {c.__name__} (from {c.__module__})")
 
        # Show which methods come from where
-       print(f"\n🔧 Method Sources:")
+       print("\n🔧 Method Sources:")
        methods = {}
        for attr in dir(cls):
            if not attr.startswith('_'):
@@ -240,7 +240,7 @@ Given a class C with parents (B₁, B₂, ..., Bₙ):
            print(f"   {method}() → {source}")
 
        # Show direct parents
-       print(f"\n👥 Direct Parents:")
+       print("\n👥 Direct Parents:")
        for base in cls.__bases__:
            print(f"   - {base.__name__}")
 
@@ -720,8 +720,7 @@ Abstract Base Classes (ABCs)
 
 **Abstract Base Classes** define interfaces that subclasses must implement.
 
-.. activecode:: oop_poly_abc_basic
-   :language: python
+.. code-block:: python
 
    from abc import ABC, abstractmethod
 
@@ -762,7 +761,7 @@ Abstract Base Classes (ABCs)
 
    # This works!
    rect = Rectangle(5, 10)
-   print(f"Rectangle created successfully!")
+   print("Rectangle created successfully!")
    print(f"  Area: {rect.area()}")
    print(f"  Perimeter: {rect.perimeter()}")
    print(f"  Description: {rect.describe()}")
@@ -778,12 +777,31 @@ Abstract Base Classes (ABCs)
      Perimeter: 30
      Description: I am a Rectangle
 
+**Try it yourself:**
+
+Save this code as ``abc_example.py`` and run it with: ``python abc_example.py``
+
+---
+
+**Why Abstract Base Classes?**
+
+.. important::
+
+   **ABCs provide:**
+
+   ✅ **Interface contracts** - Subclasses MUST implement abstract methods
+
+   ✅ **Clear documentation** - Shows what methods are required
+
+   ✅ **Early error detection** - Can't instantiate incomplete classes
+
+   ✅ **Design enforcement** - Ensures consistent API across implementations
+
 ---
 
 **ABC with Multiple Abstract Methods**
 
-.. activecode:: oop_poly_abc_multiple
-   :language: python
+.. code-block:: python
 
    from abc import ABC, abstractmethod
 
@@ -858,6 +876,30 @@ Abstract Base Classes (ABCs)
    GET request: /api/users
    Closing API connection
 
+**Try it yourself:**
+
+Save this code as ``data_source_abc.py`` and run it with: ``python data_source_abc.py``
+
+---
+
+**Pattern Insight:**
+
+.. important::
+
+   **This ABC defines a complete interface for data sources:**
+
+   ✅ **Three required methods** - ``connect()``, ``fetch()``, ``close()``
+
+   ✅ **Multiple implementations** - Database, API, File, Cache, etc.
+
+   ✅ **Polymorphic usage** - ``fetch_data()`` works with ANY DataSource
+
+   ✅ **Real-world pattern** - Common in data access layers, plugin systems
+
+**Why this matters:**
+
+Any new data source (Redis, MongoDB, S3, etc.) just needs to implement these three methods, and all existing code that uses ``DataSource`` will work automatically!
+
 ---
 
 Protocols (Python 3.8+)
@@ -867,8 +909,7 @@ Protocols (Python 3.8+)
 
 **Protocols** enable static duck typing — define expected methods without inheritance.
 
-.. activecode:: oop_poly_protocols
-   :language: python
+.. code-block:: python
 
    from typing import Protocol
 
@@ -920,6 +961,34 @@ Protocols (Python 3.8+)
       Square bases: (<class 'object'>,)
       Text bases: (<class 'object'>,)
 
+**Try it yourself:**
+
+Save this code as ``protocols_demo.py`` and run it with: ``python protocols_demo.py``
+
+**Note:** Protocols require Python 3.8+. Check your version with ``python --version``
+
+---
+
+**Why Protocols Are Powerful:**
+
+.. important::
+
+   **Protocols vs ABCs:**
+
+   ✅ **No inheritance required** - Classes don't need to inherit from the Protocol
+
+   ✅ **Structural typing** - "If it has draw(), it's Drawable"
+
+   ✅ **Zero coupling** - Protocol and implementers are completely independent
+
+   ✅ **Static type checking** - Type checkers (mypy, pyright) verify at dev time
+
+   ✅ **Retroactive compatibility** - Can make existing classes satisfy new Protocols
+
+**Real-world use:**
+
+Protocols are perfect for plugin systems, frameworks, and any situation where you want to define "what something can do" without forcing inheritance.
+
 ---
 
 **Protocols vs ABCs**
@@ -959,8 +1028,7 @@ Real-World Polymorphic Patterns
 
 **Pattern 1: Strategy Pattern**
 
-.. activecode:: oop_poly_pattern_strategy
-   :language: python
+.. code-block:: python
 
    from abc import ABC, abstractmethod
 
@@ -1034,12 +1102,113 @@ Real-World Polymorphic Patterns
      Paid $34.49 via PayPal (user@example.com)
      Paid $34.49 with crypto to 0x742d35Cc...
 
+**Try it yourself:**
+
+Save this code as ``strategy_pattern.py`` and run it with: ``python strategy_pattern.py``
+
+---
+
+**What is the Strategy Pattern?**
+
+.. important::
+
+   **Strategy Pattern enables:**
+
+   ✅ **Interchangeable algorithms** - Swap payment methods at runtime
+
+   ✅ **Open/Closed Principle** - Add new strategies without modifying existing code
+
+   ✅ **Single Responsibility** - Each payment method is isolated
+
+   ✅ **Eliminates conditionals** - No giant if/elif chains for different behaviors
+
+**Real-world examples:**
+
+- **Sorting algorithms** - Quicksort, Mergesort, Bubblesort
+- **Compression** - ZIP, GZIP, BZIP2
+- **Navigation** - Walking, Driving, Public Transit
+- **Validation** - Email, Phone, Credit Card validators
+
+---
+
+**Check Your Understanding:**
+
+.. mchoice:: strategy_pattern_purpose_mcq
+   :answer_a: To make code run faster
+   :answer_b: To reduce memory usage
+   :answer_c: To create multiple instances of a class
+   :answer_d: To define a family of interchangeable algorithms
+   :correct: d
+   :feedback_a: Strategy Pattern is about design flexibility, not performance.
+   :feedback_b: Strategy Pattern is about behavior flexibility, not memory optimization.
+   :feedback_c: That's not the purpose of Strategy Pattern - it's about algorithm selection.
+   :feedback_d: Correct! Strategy Pattern lets you define a family of algorithms and make them interchangeable.
+
+   What is the main purpose of the Strategy Pattern?
+
+.. mchoice:: strategy_pattern_benefit_mcq
+   :answer_a: You must rewrite ShoppingCart for each payment method
+   :answer_b: You can add new payment methods without changing ShoppingCart
+   :answer_c: ShoppingCart must know the details of each payment method
+   :answer_d: You can only use one payment method per application
+   :correct: b
+   :feedback_a: No! That's the problem Strategy Pattern solves - you DON'T need to modify ShoppingCart.
+   :feedback_b: Correct! Strategy Pattern follows the Open/Closed Principle - open for extension, closed for modification.
+   :feedback_c: No! ShoppingCart only knows about the PaymentStrategy interface, not specific implementations.
+   :feedback_d: Strategy Pattern allows switching between multiple strategies at runtime!
+
+   In the shopping cart example above, what's the main benefit of using Strategy Pattern?
+
+.. mchoice:: strategy_pattern_add_new_mcq
+   :answer_a: Create a new class inheriting from PaymentStrategy
+   :answer_b: Modify ShoppingCart.checkout() to add if/elif logic
+   :answer_c: Rewrite all existing payment classes
+   :answer_d: Change the PaymentStrategy abstract class
+   :correct: a
+   :feedback_a: Correct! Just create a new class (e.g., ApplePayPayment) that inherits from PaymentStrategy.
+   :feedback_b: No! Strategy Pattern eliminates the need for if/elif chains. Just add a new strategy class.
+   :feedback_c: Existing payment classes don't need to change when adding new ones!
+   :feedback_d: The base PaymentStrategy doesn't change - just add new implementations.
+
+   How would you add Apple Pay support to this system?
+
+.. mchoice:: strategy_pattern_comparison_mcq
+   :answer_a: Use a long if/elif/else chain in checkout()
+   :answer_b: Create separate classes for each payment type and switch between them
+   :answer_c: Hard-code one payment method
+   :answer_d: Store all payment logic in global functions
+   :correct: b
+   :feedback_a: That's the OLD way! Strategy Pattern replaces conditionals with polymorphism.
+   :feedback_b: Correct! Strategy Pattern uses separate classes (strategies) that can be swapped at runtime.
+   :feedback_c: That's too rigid - Strategy Pattern allows runtime flexibility.
+   :feedback_d: Global functions don't provide the encapsulation and flexibility of Strategy Pattern.
+
+   What's the difference between Strategy Pattern and using if/elif for payment types?
+
+---
+
+**Key Pattern Elements:**
+
+.. list-table:: Strategy Pattern Components
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Component
+     - Role in the Pattern
+   * - **Context** (ShoppingCart)
+     - Maintains a reference to a Strategy object
+   * - **Strategy Interface** (PaymentStrategy)
+     - Common interface for all algorithms
+   * - **Concrete Strategies** (CreditCard, PayPal, Crypto)
+     - Specific implementations of the algorithm
+   * - **Client Code**
+     - Chooses which strategy to use at runtime
+
 ---
 
 **Pattern 2: Template Method Pattern**
 
-.. activecode:: oop_poly_pattern_template
-   :language: python
+.. code-block:: python
 
    from abc import ABC, abstractmethod
 
@@ -1097,24 +1266,24 @@ Real-World Polymorphic Patterns
        def save(self, data):
            return f"Saved to file.csv: {data}"
 
-   class JSONProcessor(DataProcessor):
+   class XMLProcessor(DataProcessor):
        def load(self, data):
-           return f'{{"data": "{data}"}}'
+           return f'<data>{data}</data>'
 
        def transform(self, data):
            return data.replace('"', "'")
 
        def save(self, data):
-           return f"Saved to file.json: {data}"
+           return f"Saved to file.xml: {data}"
 
    # Use template method
    print("CSV Processing:")
    csv_proc = CSVProcessor()
    csv_proc.process("hello world")
 
-   print("\nJSON Processing:")
-   json_proc = JSONProcessor()
-   json_proc.process("hello world")
+   print("\nXML Processing:")
+   xml_proc = XMLProcessor()
+   xml_proc.process("hello world")
 
 **Output:**
 
@@ -1127,12 +1296,12 @@ Real-World Polymorphic Patterns
      3. Validated: CSV(HELLO WORLD)
      4. Saved: Saved to file.csv: CSV(HELLO WORLD)
 
-   JSON Processing:
-   Processing with JSONProcessor:
-     1. Loaded: {"data": "hello world"}
-     2. Transformed: {'data': 'hello world'}
-     3. Validated: {'data': 'hello world'}
-     4. Saved: Saved to file.json: {'data': 'hello world'}
+   XML Processing:
+   Processing with XMLProcessor:
+     1. Loaded: <data>hello world</data>
+     2. Transformed: <data>hello world</data>
+     3. Validated: <data>hello world</data>
+     4. Saved: Saved to file.xml: <data>hello world</data>
 
 ---
 

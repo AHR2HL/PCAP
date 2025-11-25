@@ -1,5 +1,5 @@
 Advanced Modules and Packages
-::::::::::::::::::::
+::::::::::::::::::::::::::::::::
 
 .. toctree::
    :maxdepth: 2

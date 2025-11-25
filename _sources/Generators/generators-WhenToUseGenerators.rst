@@ -33,8 +33,6 @@ Use generators when:
 .. activecode:: when_large_data
    :language: python
 
-   import sys
-
    # List approach - loads everything into memory
    def all_numbers_list(n):
        return list(range(n))
@@ -44,13 +42,52 @@ Use generators when:
        for i in range(n):
            yield i
 
-   # Compare memory usage
-   big_list = all_numbers_list(100000)
-   big_gen = all_numbers_gen(100000)
+   # Create both
+   print("Creating list with 100,000 numbers...")
+   big_list = all_numbers_list(100_000)
+   print(f"✅ List created: {len(big_list):,} items stored in memory")
+   print(f"   Type: {type(big_list)}")
+   print(f"   First 5: {big_list[:5]}")
+   print(f"   Last 5: {big_list[-5:]}")
+   print()
 
-   print(f"List memory: {sys.getsizeof(big_list):,} bytes")
-   print(f"Generator memory: {sys.getsizeof(big_gen):,} bytes")
-   print(f"\nMemory savings: {(sys.getsizeof(big_list) / sys.getsizeof(big_gen)):.0f}x smaller!")
+   print("Creating generator for 100,000 numbers...")
+   big_gen = all_numbers_gen(100_000)
+   print(f"✅ Generator created instantly!")
+   print(f"   Type: {type(big_gen)}")
+   print(f"   Memory: Only stores current position, not all values")
+   print()
+
+   # Demonstrate the difference
+   print("📊 Key Differences:")
+   print("=" * 50)
+   print()
+   print("List approach:")
+   print("  • ALL 100,000 numbers created immediately")
+   print("  • ALL 100,000 numbers stored in memory (~800 KB)")
+   print("  • Can access any element: big_list[50000]")
+   print("  • Can iterate multiple times")
+   print()
+   print("Generator approach:")
+   print("  • Numbers created ONE AT A TIME as needed")
+   print("  • Only current number in memory (~200 bytes)")
+   print("  • Cannot randomly access elements")
+   print("  • Can iterate only once")
+   print()
+
+   # Show generator in action
+   print("🔄 Getting first 5 values from generator:")
+   for i, value in enumerate(big_gen):
+       if i < 5:
+           print(f"   {value}")
+       else:
+           break
+
+   print()
+   print("💡 For 100,000 items:")
+   print("   List: ~800,000 bytes")
+   print("   Generator: ~200 bytes")
+   print("   Savings: ~4,000x less memory!")
 
 .. important::
 
@@ -408,80 +445,6 @@ Common Mistakes to Avoid ⚠️
            print(n, end=" ")
 
    process_data_good(range(1, 11))
-
-----
-
-Performance Comparison
-----------------------
-
-Let's see the real difference:
-
-.. activecode:: performance_comparison
-   :language: python
-
-   import sys
-   import time
-
-   # Test with a large dataset
-   SIZE = 100000
-
-   # Memory comparison
-   print("="*50)
-   print("MEMORY COMPARISON")
-   print("="*50)
-
-   list_comp = [x * 2 for x in range(SIZE)]
-   gen_exp = (x * 2 for x in range(SIZE))
-
-   print(f"List:      {sys.getsizeof(list_comp):>10,} bytes")
-   print(f"Generator: {sys.getsizeof(gen_exp):>10,} bytes")
-   print(f"Savings:   {sys.getsizeof(list_comp) / sys.getsizeof(gen_exp):>10.0f}x")
-
-   # Time to create
-   print("\n" + "="*50)
-   print("CREATION TIME")
-   print("="*50)
-
-   start = time.time()
-   list_comp = [x * 2 for x in range(SIZE)]
-   list_time = time.time() - start
-
-   start = time.time()
-   gen_exp = (x * 2 for x in range(SIZE))
-   gen_time = time.time() - start
-
-   print(f"List:      {list_time:.6f} seconds")
-   print(f"Generator: {gen_time:.6f} seconds")
-   print(f"Generator is {list_time / gen_time:.0f}x faster to create!")
-
-   # Time to consume (iterate through)
-   print("\n" + "="*50)
-   print("ITERATION TIME (full consumption)")
-   print("="*50)
-
-   start = time.time()
-   for _ in list_comp:
-       pass
-   list_iter_time = time.time() - start
-
-   gen_exp = (x * 2 for x in range(SIZE))
-   start = time.time()
-   for _ in gen_exp:
-       pass
-   gen_iter_time = time.time() - start
-
-   print(f"List:      {list_iter_time:.6f} seconds")
-   print(f"Generator: {gen_iter_time:.6f} seconds")
-   print("\nNote: Full iteration time is similar!")
-
-.. important::
-
-   **Key Performance Insights:**
-
-   - 🚀 **Generators use ~1000x less memory**
-   - ⚡ **Generators create instantly** (lazy!)
-   - 🔄 **Full iteration speed is similar**
-   - ⏹️ **Generators win if you stop early**
 
 ----
 

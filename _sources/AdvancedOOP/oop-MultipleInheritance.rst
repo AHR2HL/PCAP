@@ -153,7 +153,7 @@ The **diamond problem** occurs when a class inherits from two classes that share
    # Python's solution: Use MRO!
    print(f"\nDuck's MRO: {[c.__name__ for c in Duck.__mro__]}")
    print("↑ Python searches left-to-right, depth-first")
-   print(f"\nResult: Uses Flyer.move() because Flyer comes first in MRO")
+   print("\nResult: Uses Flyer.move() because Flyer comes first in MRO")
 
 **Output:**
 
@@ -204,7 +204,7 @@ Visualizing the Diamond Problem
    print("      \\ /")
    print("       D")
 
-   print(f"\nMRO (Method Resolution Order):")
+   print("\nMRO (Method Resolution Order):")
    for i, cls in enumerate(D.__mro__):
        has_method = 'method' in cls.__dict__
        marker = " ← method defined here" if has_method else ""
@@ -453,7 +453,7 @@ Using super() with Multiple Inheritance
 
    class Rectangle(Shape, Border):
        def __init__(self, color, width, length, height):
-           print(f"Rectangle.__init__")
+           print("Rectangle.__init__")
            self.length = length
            self.height = height
            # Pass appropriate args to each parent
@@ -462,7 +462,7 @@ Using super() with Multiple Inheritance
    print("Creating Rectangle:")
    rect = Rectangle(color="red", width=2, length=10, height=5)
 
-   print(f"\nAttributes:")
+   print("\nAttributes:")
    print(f"  Color: {rect.color}")
    print(f"  Width: {rect.width}")
    print(f"  Length: {rect.length}")
@@ -599,7 +599,7 @@ A **mixin** is a class designed to add specific functionality to other classes t
 
    # Deserialize from JSON
    user2 = User.from_json(json_data)
-   print(f"\nDeserialized:")
+   print("\nDeserialized:")
    print(f"  Username: {user2.username}")
    print(f"  Email: {user2.email}")
    print(f"  Age: {user2.age}")
@@ -624,8 +624,7 @@ A **mixin** is a class designed to add specific functionality to other classes t
 
 **Multiple Mixins Example**
 
-.. activecode:: oop_multi_multiple_mixins
-   :language: python
+.. code-block:: python
 
    class ReprMixin:
        """Provides a nice __repr__."""
@@ -658,11 +657,11 @@ A **mixin** is a class designed to add specific functionality to other classes t
    p3 = Point(5, 6)
 
    print(f"Repr: {repr(p1)}")
-   print(f"\nEquality:")
+   print("\nEquality:")
    print(f"  p1 == p2? {p1 == p2}")
    print(f"  p1 == p3? {p1 == p3}")
 
-   print(f"\nHashing (can use in sets):")
+   print("\nHashing (can use in sets):")
    points = {p1, p2, p3}  # p1 and p2 are equal, so only one is kept
    print(f"  Unique points: {len(points)}")
    print(f"  Set: {points}")
@@ -842,8 +841,8 @@ Common Pitfalls
 
    duck = Duck()
    print(f"duck.move(): {duck.move()}")
-   print(f"\n⚠️  Only gets Flyer's move()!")
-   print(f"   Swimmer's move() is hidden by MRO")
+   print("\n⚠️  Only gets Flyer's move()!")
+   print("   Swimmer's move() is hidden by MRO")
    print(f"   MRO: {[c.__name__ for c in Duck.__mro__]}")
 
    # Solution: Override and call both explicitly

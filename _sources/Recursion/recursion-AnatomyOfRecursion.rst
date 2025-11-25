@@ -307,7 +307,7 @@ Challenge: Write Your Own
    class myTests(TestCaseGui):
        def testRecursive(self):
            # Get the source code
-           import inspect
+           # import inspect
            try:
                code = inspect.getsource(is_palindrome)
            except:
@@ -316,7 +316,7 @@ Challenge: Write Your Own
                code = str(__main__.__dict__.get('is_palindrome', ''))
 
            # Check for recursion (function should call itself)
-           recursion_count = code.count('is_palindrome(')
+           recursion_count = self.getEditorText().count('is_palindrome(')
            self.assertGreaterEqual(recursion_count, 2,
                f"Your solution must use recursion (call is_palindrome from within itself). Found {recursion_count-1} recursive calls, need at least 1.")
 

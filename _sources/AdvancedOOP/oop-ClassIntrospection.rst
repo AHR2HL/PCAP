@@ -120,11 +120,11 @@ Every object (including classes) has a ``__dict__`` attribute — a dictionary c
    print(f"  c3.__dict__: {c3.__dict__}")
 
    # Accessing class attribute through instances
-   print(f"\nAccessing class attribute through instances:")
+   print("\nAccessing class attribute through instances:")
    print(f"  c1.count: {c1.count}")
    print(f"  c2.count: {c2.count}")
    print(f"  c3.count: {c3.count}")
-   print(f"  All see the same class attribute!")
+   print("  All see the same class attribute!")
 
 **Output:**
 
@@ -166,7 +166,7 @@ Every object (including classes) has a ``__dict__`` attribute — a dictionary c
    print(f"After modification: {alice.__dict__}")
 
    # Access normally
-   print(f"\nAccessing normally:")
+   print("\nAccessing normally:")
    print(f"  alice.name: {alice.name}")
    print(f"  alice.age: {alice.age}")
    print(f"  alice.city: {alice.city}")
@@ -204,15 +204,12 @@ Every object (including classes) has a ``__dict__`` attribute — a dictionary c
 
 ---
 
-The ``vars()`` Function
-------------------------
+The vars() Function
+~~~~~~~~~~~~~~~~~~~
 
-.. index:: vars function, attribute dictionary
+``vars([object])`` is a built-in function that returns ``__dict__``:
 
-**``vars([object])``** is a built-in function that returns ``__dict__``:
-
-.. activecode:: oop_class_vars_function
-   :language: python
+.. code-block:: python
 
    class Car:
        wheels = 4
@@ -244,13 +241,105 @@ The ``vars()`` Function
    vars(Car) has 'brand'? False
 
 .. important::
+   **What is vars()?**
+
    ``vars(obj)`` is just a cleaner way to access ``obj.__dict__``:
 
-   - ✅ More readable
-   - ✅ Shorter
-   - ✅ Pythonic
+   - ✅ More readable than ``obj.__dict__``
+   - ✅ Shorter and more Pythonic
+   - ✅ Returns the **exact same object**, not a copy!
 
-   They return the **exact same object**, not a copy!
+   **Key Point:** ``vars(my_car) is my_car.__dict__`` returns ``True`` - they're the same dictionary object!
+
+**Why use vars()?**
+
+.. code-block:: python
+
+   # Both do the same thing:
+   print(my_car.__dict__)    # Works, but verbose
+   print(vars(my_car))       # Cleaner, more readable
+
+**Try it yourself:**
+
+Save this code as ``test_vars.py`` and run it with: ``python test_vars.py``
+
+---
+
+**Practice: Understanding vars()**
+
+.. mchoice:: vars_function_q1
+   :answer_a: A copy of the object's __dict__
+   :answer_b: The exact same object as __dict__
+   :answer_c: A list of all attributes
+   :answer_d: A tuple of (name, value) pairs
+   :correct: b
+   :feedback_a: No, it's not a copy - it's the exact same dictionary object!
+   :feedback_b: Correct! vars(obj) IS obj.__dict__ - they're the same object in memory.
+   :feedback_c: vars() returns a dictionary, not a list.
+   :feedback_d: vars() returns a dictionary, not a tuple.
+
+   What does ``vars(my_car)`` return?
+
+.. mchoice:: vars_function_q2
+   :answer_a: True
+   :answer_b: False
+   :answer_c: It raises an error
+   :answer_d: It depends on the object
+   :correct: a
+   :feedback_a: Correct! vars(obj) and obj.__dict__ are the exact same object, so 'is' returns True.
+   :feedback_b: They are the same object in memory, so 'is' returns True.
+   :feedback_c: No error - this is valid Python code.
+   :feedback_d: For any object, vars(obj) is obj.__dict__ is always True.
+
+   What does ``vars(my_car) is my_car.__dict__`` evaluate to?
+
+.. mchoice:: vars_function_q3
+   :answer_a: Instance attributes only
+   :answer_b: Class attributes only
+   :answer_c: Both instance and class attributes
+   :answer_d: It depends on the class
+   :correct: a
+   :feedback_a: Correct! vars(instance) shows only instance attributes stored in the instance's __dict__.
+   :feedback_b: Class attributes are in vars(ClassName), not vars(instance).
+   :feedback_c: Class attributes like 'wheels' are not in the instance's __dict__.
+   :feedback_d: For all instances, vars() shows only instance attributes.
+
+   Given the Car class above, what does ``vars(my_car)`` show?
+
+   .. code-block:: python
+
+      class Car:
+          wheels = 4  # Class attribute
+
+          def __init__(self, brand, model):
+              self.brand = brand    # Instance attribute
+              self.model = model    # Instance attribute
+
+.. mchoice:: vars_function_q4
+   :answer_a: my_car.__dict__['wheels'] = 3
+   :answer_b: vars(my_car)['wheels'] = 3
+   :answer_c: Both A and B
+   :answer_d: Neither A nor B
+   :correct: c
+   :feedback_a: This works, and since vars(my_car) IS my_car.__dict__...
+   :feedback_b: This works, and since vars(my_car) IS my_car.__dict__...
+   :feedback_c: Correct! Both work because vars(my_car) and my_car.__dict__ are the same dictionary object!
+   :feedback_d: Both actually work since they reference the same dictionary.
+
+   How can you add a 'wheels' instance attribute to ``my_car``?
+
+.. mchoice:: vars_function_q5
+   :answer_a: vars() is more readable and Pythonic
+   :answer_b: vars() is faster than accessing __dict__
+   :answer_c: vars() makes a copy, so it's safer
+   :answer_d: vars() includes class attributes, __dict__ doesn't
+   :correct: a
+   :feedback_a: Correct! vars() is just syntactic sugar for __dict__ - more readable but same functionality.
+   :feedback_b: They're the same speed - vars(obj) literally returns obj.__dict__!
+   :feedback_c: No, vars() doesn't copy - it returns the exact same dictionary.
+   :feedback_d: Both show only the same attributes - vars() IS __dict__.
+
+   Why might you prefer ``vars(obj)`` over ``obj.__dict__``?
 
 ---
 
@@ -271,17 +360,10 @@ Every class has a ``__module__`` attribute that tells you which module it's defi
    print(f"MyClass.__module__: {MyClass.__module__}")
 
    # Built-in types
-   print(f"\nBuilt-in types:")
+   print("\nBuilt-in types:")
    print(f"  str.__module__: {str.__module__}")
    print(f"  list.__module__: {list.__module__}")
    print(f"  dict.__module__: {dict.__module__}")
-
-   # Classes from standard library
-   from collections import namedtuple
-   from pathlib import Path
-
-   print(f"\nStandard library:")
-   print(f"  Path.__module__: {Path.__module__}")
 
 **Output:**
 
@@ -293,9 +375,6 @@ Every class has a ``__module__`` attribute that tells you which module it's defi
      str.__module__: builtins
      list.__module__: builtins
      dict.__module__: builtins
-
-   Standard library:
-     Path.__module__: pathlib
 
 .. note::
    - ``__main__`` means the class is defined in the script you're running
@@ -394,7 +473,7 @@ The ``__bases__`` Attribute
    print(f"Bat.__bases__: {Bat.__bases__}")  # Multiple parents!
 
    # Access parent class attributes
-   print(f"\nParent class names:")
+   print("\nParent class names:")
    for base in Bat.__bases__:
        print(f"  {base.__name__}")
 
@@ -506,16 +585,16 @@ The ``__mro__`` Attribute
 
    # Examine MRO
    print("Method Resolution Order:")
-   print(f"\nA.__mro__:")
+   print("\nA.__mro__:")
    for i, cls in enumerate(A.__mro__):
        print(f"  {i}. {cls.__name__}")
 
-   print(f"\nD.__mro__:")
+   print("\nD.__mro__:")
    for i, cls in enumerate(D.__mro__):
        print(f"  {i}. {cls.__name__}")
 
    # Alternative: use .mro() method
-   print(f"\nD.mro() (same as __mro__):")
+   print("\nD.mro() (same as __mro__):")
    for i, cls in enumerate(D.mro()):
        print(f"  {i}. {cls.__name__}")
 
@@ -586,13 +665,13 @@ The ``__mro__`` Attribute
    for cls in Puppy.__mro__:
        print(f"  - {cls.__name__}", end="")
        if hasattr(cls, 'speak') and 'speak' in cls.__dict__:
-           print(f" (has speak method)")
+           print(" (has speak method)")
        else:
            print()
 
    # Call speak - which one gets called?
    print(f"\npuppy.speak(): {puppy.speak()}")
-   print(f"↑ This is from Dog class (first in MRO with speak method)")
+   print("↑ This is from Dog class (first in MRO with speak method)")
 
 **Output:**
 
@@ -644,7 +723,7 @@ The ``__mro__`` Attribute
    print("      \\ /")
    print("       D")
 
-   print(f"\nD's MRO:")
+   print("\nD's MRO:")
    for cls in D.__mro__:
        print(f"  → {cls.__name__}")
 
@@ -702,12 +781,12 @@ Combining Introspection Tools
        print(f"{'='*60}")
 
        # Basic info
-       print(f"\n📋 Basic Info:")
+       print("\n📋 Basic Info:")
        print(f"   Module: {cls.__module__}")
        print(f"   Full name: {cls.__module__}.{cls.__name__}")
 
        # Inheritance
-       print(f"\n🏗️  Inheritance:")
+       print("\n🏗️  Inheritance:")
        print(f"   Direct parents: {', '.join(c.__name__ for c in cls.__bases__)}")
        print(f"   MRO: {' → '.join(c.__name__ for c in cls.__mro__)}")
 
@@ -715,16 +794,16 @@ Combining Introspection Tools
        class_attrs = {k: v for k, v in cls.__dict__.items()
                       if not k.startswith('_')}
 
-       print(f"\n📦 Class Attributes:")
+       print("\n📦 Class Attributes:")
        if class_attrs:
            for name, value in class_attrs.items():
                attr_type = "method" if callable(value) else "attribute"
                print(f"   • {name}: {attr_type}")
        else:
-           print(f"   (none)")
+           print("   (none)")
 
        # Methods (including inherited)
-       print(f"\n🔧 All Methods (including inherited):")
+       print("\n🔧 All Methods (including inherited):")
        methods = [m for m in dir(cls) if callable(getattr(cls, m))
                   and not m.startswith('_')]
        for method in methods[:5]:  # Show first 5
@@ -791,8 +870,7 @@ Practical Use Cases
 
 **Use Case 1: Object Serialization**
 
-.. activecode:: oop_class_use_serialization
-   :language: python
+.. code-block:: python
 
    def serialize_object(obj):
        """Convert object to dictionary (simple serialization)."""
@@ -844,8 +922,7 @@ Practical Use Cases
 
 **Use Case 2: Debugging Helper**
 
-.. activecode:: oop_class_use_debugging
-   :language: python
+.. code-block:: python
 
    def debug_object(obj, show_methods=False):
        """Print detailed object information for debugging."""

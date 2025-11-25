@@ -1,6 +1,6 @@
 .. _closures_toctree:
 
-Chapter 28: Closures and Advanced Functions
+Closures and Advanced Functions
 ============================================
 
 .. toctree::

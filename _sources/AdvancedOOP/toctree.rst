@@ -1,6 +1,6 @@
 .. _advanced_oop_toctree:
 
-Chapter 28: Advanced OOP Mastery
+Advanced OOP Mastery
 =================================
 
 .. toctree::

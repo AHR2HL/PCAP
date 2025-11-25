@@ -346,13 +346,16 @@ Generators can split data into chunks (batches):
                yield f"Fetched users: {batch_list}"
                batch_list = []
 
+       # Don't forget remaining items!
        if batch_list:
            yield f"Fetched users: {batch_list}"
 
    # Process 13 users in batches of 5
    user_ids = range(1001, 1014)
 
-   for result in batch_api_calls(user_ids, batch_size=5):
+   print("Batching 13 users (IDs 1001-1013) into groups of 5:")
+   print()
+   for result in batch_api_calls(user_ids, 5):  # Use positional argument
        print(result)
 
 .. important::

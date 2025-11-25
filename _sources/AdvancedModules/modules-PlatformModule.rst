@@ -46,8 +46,13 @@ System Information Functions
 
 The ``platform()`` function returns a single string with detailed information about your system. This is useful for logging or diagnostic reports.
 
-.. activecode:: platform_function_demo
-   :nocodelens:
+.. note::
+
+   **Browser Limitation:** The ``platform`` module is not available in the browser environment. The code below shows how it works in regular Python.
+
+**How to use it:**
+
+.. code-block:: python
 
    import platform
 
@@ -55,10 +60,35 @@ The ``platform()`` function returns a single string with detailed information ab
    info = platform.platform()
    print(info)
 
-   # Example outputs (varies by system):
-   # Windows: 'Windows-10-10.0.19041-SP0'
-   # macOS: 'macOS-11.2.3-x86_64-i386-64bit'
-   # Linux: 'Linux-5.4.0-42-generic-x86_64-with-glibc2.29'
+**Example outputs (varies by system):**
+
+::
+
+   Windows: 'Windows-10-10.0.19041-SP0'
+   macOS: 'macOS-11.2.3-x86_64-i386-64bit'
+   Linux: 'Linux-5.4.0-42-generic-x86_64-with-glibc2.29'
+
+**Try it yourself in real Python:**
+
+.. activecode:: platform_function_demo
+   :nocodelens:
+
+   # The platform module is not available in the browser.
+   # To see it work, copy this code and run it in your local Python:
+
+   # import platform
+   # info = platform.platform()
+   # print(info)
+
+   # Instead, here's what you'd typically see:
+   print("Example output:")
+   print("  Windows: 'Windows-10-10.0.19041-SP0'")
+   print("  macOS: 'macOS-11.2.3-x86_64-i386-64bit'")
+   print("  Linux: 'Linux-5.4.0-42-generic-x86_64-with-glibc2.29'")
+   print()
+   print("💡 To try this yourself:")
+   print("   1. Open a Python file or terminal on your computer")
+   print("   2. Run: import platform; print(platform.platform())")
 
 ``system()`` — Operating System Name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -187,20 +217,71 @@ The ``python_version_tuple()`` function returns the Python version as a tuple of
 .. activecode:: platform_python_version_tuple_demo
    :nocodelens:
 
-   import platform
+   import sys
 
-   version_tuple = platform.python_version_tuple()
-   print(f"Version tuple: {version_tuple}")
-   # Example output: ('3', '10', '4')
+   # In browser Python, we can check the version like this:
+   print("Browser Python version:", sys.version)
+   print()
 
-   major, minor, micro = version_tuple
-   print(f"Major: {major}, Minor: {minor}, Micro: {micro}")
+   # Let's simulate platform.python_version_tuple() behavior
+   def explain_version_tuple():
+       """Show how version tuples work"""
 
-   # Practical use: version checking
-   if int(major) >= 3 and int(minor) >= 8:
-       print("Python 3.8 or newer - modern features available!")
+       print("=== Understanding Version Tuples ===")
+       print()
+
+       # Example versions
+       versions = [
+           ('3', '8', '10'),
+           ('3', '10', '4'),
+           ('3', '11', '2')
+       ]
+
+       for version_tuple in versions:
+           major, minor, micro = version_tuple
+           print(f"Version: {'.'.join(version_tuple)}")
+           print(f"  Major: {major} (Python 3.x)")
+           print(f"  Minor: {minor} (feature version)")
+           print(f"  Micro: {micro} (bug fix version)")
+
+           # Check features available
+           if int(major) >= 3 and int(minor) >= 10:
+               print(f"  ✅ Has match/case (Python 3.10+)")
+           if int(major) >= 3 and int(minor) >= 9:
+               print(f"  ✅ Has dict merge operator | (Python 3.9+)")
+
+           print()
+
+   explain_version_tuple()
+
+   print("="*50)
+   print("Practical Version Checking:")
+   print("="*50)
+
+   # Simulate checking for Python 3.8+
+   current_version = ('3', '10', '4')  # Example
+   major, minor, _ = current_version
+
+   required_major, required_minor = 3, 8
+
+   if (int(major), int(minor)) >= (required_major, required_minor):
+       print(f"✅ Python {major}.{minor} meets requirement (>= 3.8)")
+       print("   Modern features available!")
    else:
-       print("Older Python version detected")
+       print(f"⚠️  Python {major}.{minor} is too old")
+       print("   Please upgrade to Python 3.8 or newer")
+
+.. tip::
+
+   **To check YOUR Python version:**
+
+   In a terminal or Python file:
+
+   .. code-block:: python
+
+      import platform
+      version = platform.python_version_tuple()
+      print(f"You're running Python {'.'.join(version)}")
 
 ``python_implementation()`` — Python Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,7 +357,7 @@ Combining multiple ``platform`` functions for a complete system report:
 .. activecode:: platform_diagnostic_report
    :nocodelens:
 
-   import platform
+   import sys
 
    def system_report():
        """Generate a comprehensive system information report."""
@@ -284,21 +365,101 @@ Combining multiple ``platform`` functions for a complete system report:
        print("SYSTEM DIAGNOSTIC REPORT")
        print("=" * 50)
 
-       print(f"\nOperating System: {platform.system()}")
-       print(f"OS Version: {platform.version()}")
-       print(f"Platform: {platform.platform()}")
+       # What we CAN check in browser Python:
+       print("\n📱 Browser Environment:")
+       print(f"Python Version: {sys.version}")
+       print(f"Platform: Browser (Skulpt)")
 
-       print(f"\nMachine Type: {platform.machine()}")
-       processor = platform.processor()
-       if processor:
-           print(f"Processor: {processor}")
+       print("\n" + "=" * 50)
+       print("EXAMPLE: Real Python Output")
+       print("=" * 50)
 
-       print(f"\nPython Version: {platform.python_version()}")
-       print(f"Python Implementation: {platform.python_implementation()}")
+       # Show what it would look like on different systems
+       examples = [
+           {
+               "name": "Windows 10 Laptop",
+               "os": "Windows",
+               "version": "10.0.19041",
+               "platform": "Windows-10-10.0.19041-SP0",
+               "machine": "AMD64",
+               "processor": "Intel64 Family 6 Model 142 Stepping 12, GenuineIntel",
+               "python_version": "3.11.2",
+               "implementation": "CPython"
+           },
+           {
+               "name": "macOS MacBook",
+               "os": "Darwin",
+               "version": "Darwin Kernel Version 21.3.0",
+               "platform": "macOS-12.2-arm64-arm-64bit",
+               "machine": "arm64",
+               "processor": "arm",
+               "python_version": "3.10.4",
+               "implementation": "CPython"
+           },
+           {
+               "name": "Ubuntu Linux Server",
+               "os": "Linux",
+               "version": "#46-Ubuntu SMP",
+               "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.29",
+               "machine": "x86_64",
+               "processor": "x86_64",
+               "python_version": "3.9.7",
+               "implementation": "CPython"
+           }
+       ]
 
+       for example in examples:
+           print(f"\n{'='*50}")
+           print(f"Example: {example['name']}")
+           print(f"{'='*50}")
+           print(f"\nOperating System: {example['os']}")
+           print(f"OS Version: {example['version']}")
+           print(f"Platform: {example['platform']}")
+           print(f"\nMachine Type: {example['machine']}")
+           print(f"Processor: {example['processor']}")
+           print(f"\nPython Version: {example['python_version']}")
+           print(f"Python Implementation: {example['implementation']}")
+
+       print("\n" + "=" * 50)
+       print("\n💡 To get YOUR system info:")
+       print("   Copy the code below and run it in local Python!")
        print("=" * 50)
 
    system_report()
+
+.. note::
+
+   **To run this on YOUR computer:**
+
+   Copy and paste this code into a Python file or terminal:
+
+   .. code-block:: python
+
+      import platform
+
+      def system_report():
+          """Generate a comprehensive system information report."""
+          print("=" * 50)
+          print("SYSTEM DIAGNOSTIC REPORT")
+          print("=" * 50)
+
+          print(f"\nOperating System: {platform.system()}")
+          print(f"OS Version: {platform.version()}")
+          print(f"Platform: {platform.platform()}")
+
+          print(f"\nMachine Type: {platform.machine()}")
+          processor = platform.processor()
+          if processor:
+              print(f"Processor: {processor}")
+
+          print(f"\nPython Version: {platform.python_version()}")
+          print(f"Python Implementation: {platform.python_implementation()}")
+
+          print("=" * 50)
+
+      system_report()
+
+   Save as ``my_system_report.py`` and run: ``python my_system_report.py``
 
 .. mchoice:: platform_practical_understanding
    :answer_a: To display fancy graphics
@@ -316,31 +477,44 @@ Combining multiple ``platform`` functions for a complete system report:
 Practice Problems
 -----------------
 
-.. activecode:: platform_challenge_1
-   :nocodelens:
+.. mchoice:: platform_challenge_1
+   :answer_a: ('3', '10', '4')
+   :answer_b: (3, 10, 4)
+   :answer_c: "3.10.4"
+   :answer_d: [3, 10, 4]
+   :correct: a
+   :feedback_a: Correct! python_version_tuple() returns a tuple of STRINGS, not integers.
+   :feedback_b: Close, but the values are strings ('3', '10', '4'), not integers (3, 10, 4).
+   :feedback_c: No, it returns a tuple, not a single string.
+   :feedback_d: No, it returns a tuple (immutable), not a list (mutable).
 
-   Write a function ``minimum_python_version(major, minor)`` that checks if the current Python version meets the minimum requirement. Return ``True`` if it meets or exceeds the requirement, ``False`` otherwise.
+   What does ``platform.python_version_tuple()`` return for Python version 3.10.4?
 
-   Hint: Use ``platform.python_version_tuple()`` and convert strings to integers for comparison.
-   ~~~~
-   import platform
+.. mchoice:: platform_challenge_1b
+   :answer_a: if python_version_tuple()[0] >= '3'
+   :answer_b: if int(python_version_tuple()[0]) >= 3
+   :answer_c: if python_version_tuple() >= (3, 8)
+   :answer_d: if tuple(python_version_tuple()) >= ('3', '8', '0')
+   :correct: b
+   :feedback_a: String comparison doesn't work correctly for numbers. '3' >= '3' works, but what about '10' vs '9'?
+   :feedback_b: Correct! Convert to int for proper numeric comparison.
+   :feedback_c: This compares strings to integers, which will cause a TypeError.
+   :feedback_d: python_version_tuple() already returns a tuple, no need to convert. Also mixing string and int comparison.
 
-   def minimum_python_version(major, minor):
-       # Your code here
-       pass
+   How should you check if the current Python version is at least 3.8?
 
-   ====
-   from unittest.gui import TestCaseGui
+.. mchoice:: platform_challenge_1c
+   :answer_a: '10' < '9' evaluates to True
+   :answer_b: String comparison is lexicographic (dictionary order)
+   :answer_c: '1' comes before '9' alphabetically
+   :answer_d: All of the above
+   :correct: d
+   :feedback_a: Correct! '10' < '9' is True because '1' < '9' in string comparison.
+   :feedback_b: Correct! Strings are compared character by character, not as numbers.
+   :feedback_c: Correct! This is why '10' < '9' (compares '1' vs '9' first).
+   :feedback_d: Correct! This is why you MUST convert version strings to integers before comparing.
 
-   class MyTests(TestCaseGui):
-       def test_minimum_python_version(self):
-           # These tests assume Python 3.x (which is standard)
-           self.assertTrue(minimum_python_version(3, 0))
-           self.assertTrue(minimum_python_version(2, 7))
-           self.assertFalse(minimum_python_version(4, 0))
-           self.assertFalse(minimum_python_version(3, 99))
-
-   MyTests().main()
+   Why do we need to convert version tuple strings to integers before comparing?
 
 .. activecode:: platform_challenge_2
    :nocodelens:

@@ -319,8 +319,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(product(0), 1, "product(0) should be 1 (by convention)")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(product)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -347,8 +346,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(count_char("banana", "a"), 3, "count_char('banana', 'a') should be 3")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(count_char)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -376,8 +374,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(gcd(17, 5), 1, "gcd(17, 5) should be 1")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(gcd)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -405,8 +402,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(power(5, 2), 25, "power(5, 2) should be 25")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(power)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -433,8 +429,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(list_sum([1, 2, 3, 4]), 10, "list_sum([1,2,3,4]) should be 10")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(list_sum)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -488,8 +483,7 @@ Now write your own recursive functions from scratch!
            self.assertEqual(binary_search(lst, 4, 0, 6), -1, "Should return -1 for missing element")
 
            # Enforce recursion
-           import inspect
-           source = inspect.getsource(binary_search)
+           source = self.getEditorText()
            self.assertNotIn('for', source, "Do not use 'for' loops")
            self.assertNotIn('while', source, "Do not use 'while' loops")
 
@@ -500,29 +494,19 @@ Now write your own recursive functions from scratch!
 Part 6: Reflection
 ------------------
 
-.. mchoice:: reflection_difficulty
-   :answer_a: Very easy — I got it right away
-   :answer_b: Manageable — took some thinking but made sense
-   :answer_c: Challenging — I had to work hard to understand
-   :answer_d: Very difficult — I'm still confused
-   :correct: a
-   :feedback_a: Great! You're ready for advanced recursion topics.
-   :feedback_b: That's normal! Recursion takes practice.
-   :feedback_c: Keep practicing — it will click!
-   :feedback_d: Review the earlier lessons and try the problems again. Don't give up!
+.. poll:: reflection_difficulty
+   :option_1: Very easy — I got it right away
+   :option_2: Manageable — took some thinking but made sense
+   :option_3: Challenging — I had to work hard to understand
+   :option_4: Very difficult — I'm still confused
 
    How did you find this practice session?
 
-.. mchoice:: reflection_most_helpful
-   :answer_a: Parsons problems (dragging blocks)
-   :answer_b: Debug challenges
-   :answer_c: Writing functions from scratch
-   :answer_d: Conceptual MCQs
-   :correct: a
-   :feedback_a: Parsons problems are great for understanding structure!
-   :feedback_b: Debugging helps you see common mistakes.
-   :feedback_c: Coding from scratch is where real learning happens!
-   :feedback_d: Concepts are the foundation!
+.. poll:: reflection_most_helpful
+   :option_1: Parsons problems (dragging blocks)
+   :option_2: Debug challenges
+   :option_3: Writing functions from scratch
+   :option_4: Conceptual MCQs
 
    Which type of practice was MOST helpful for you?
 

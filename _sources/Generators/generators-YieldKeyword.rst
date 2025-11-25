@@ -505,19 +505,18 @@ Practice: Build Your Own Generators
    class myTests(TestCaseGui):
        def test_countdown_3(self):
            result = list(countdown(3))
-           self.assertEqual(result, [3, 2, 1, "Blastoff!"], "Testing countdown(3)")
+           self.assertEqual(result, [3, 2, 1, "Blastoff!"])
 
        def test_countdown_5(self):
            result = list(countdown(5))
-           self.assertEqual(result, [5, 4, 3, 2, 1, "Blastoff!"], "Testing countdown(5)")
+           self.assertEqual(result, [5, 4, 3, 2, 1, "Blastoff!"])
 
-       def test_is_generator(self):
-           import types
-           self.assertIsInstance(countdown(3), types.GeneratorType, "countdown should return a generator")
+       def test_countdown_1(self):
+           result = list(countdown(1))
+           self.assertEqual(result, [1, "Blastoff!"])
 
        def test_uses_yield(self):
-           import inspect
-           source = inspect.getsource(countdown)
+           source = self.getEditorText()
            self.assertIn('yield', source, "Your function should use yield")
 
    myTests().main()

@@ -304,8 +304,7 @@ The ``else`` clause in a ``try``/``except`` block runs **only if no exception wa
 
 **Practical Example: File Processing**
 
-.. activecode:: exception_else_file_example
-   :language: python
+.. code-block:: python
 
    def read_config(filename):
        """Read and parse configuration file."""
@@ -348,6 +347,30 @@ The ``else`` clause in a ``try``/``except`` block runs **only if no exception wa
    Reading missing config:
    ❌ Error: File not found: missing.txt
    Config: {}
+
+**Try it yourself:**
+
+Save this code as ``config_reader.py`` and run it with: ``python config_reader.py``
+
+**Key Points:**
+
+.. important::
+
+   **The `else` clause:**
+
+   ✅ Only executes if NO exception was raised
+
+   ✅ Runs AFTER the `try` block completes successfully
+
+   ✅ Runs BEFORE the `finally` block (if present)
+
+   ✅ Useful for code that should only run on success
+
+   **Why use `else`?**
+
+   - Separates success logic from the `try` block
+   - Makes the code's intent clearer
+   - Avoids catching exceptions from success-handling code
 
 ---
 

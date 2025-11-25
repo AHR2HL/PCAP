@@ -214,17 +214,39 @@ Using ``dir()`` to Explore Modules
    for item in sorted(public_items):
        print(f"  - {item}")
 
-.. activecode:: dir_without_arguments
-   :nocodelens:
+**Understanding dir() Without Arguments**
 
-   # dir() without arguments shows names in current scope
+In regular Python, ``dir()`` without arguments shows all names in the current scope:
+
+.. code-block:: python
+
    x = 10
    y = 20
    name = "Python"
 
-   print("Variables in current scope:")
+   print(dir())
+   # Shows: ['__builtins__', '__doc__', ..., 'name', 'x', 'y']
+
+   # Filter out system names (starting with _):
    current_scope = [item for item in dir() if not item.startswith('_')]
    print(current_scope)
+   # Shows: ['name', 'x', 'y']
+
+**Output example:**
+
+::
+
+   Variables in current scope:
+   ['name', 'x', 'y']
+
+
+.. note::
+
+   **Browser Limitation:** ``dir()`` without arguments doesn't work in browser Python.
+
+   **Workaround:** Use ``dir(object)`` to explore specific objects instead.
+
+   **To try the full feature:** Run this code in a local Python file or terminal.
 
 .. mchoice:: dir_function_understanding
    :answer_a: It shows the directory path of a module
@@ -450,62 +472,15 @@ Circular Imports
 
    Which could cause a ``ModuleNotFoundError``?
 
-Practical Debugging Workflow
------------------------------
-
-Here's a complete debugging workflow for import issues:
-
-.. activecode:: import_debugging_workflow
-   :nocodelens:
-
-   import sys
-   import os
-
-   def diagnose_import_problem(module_name):
-       """Complete diagnostic for import issues."""
-       print(f"🔍 DIAGNOSING: import {module_name}")
-       print("=" * 60)
-
-       # Step 1: Check sys.path
-       print("\n1️⃣ PYTHON'S SEARCH PATHS (sys.path):")
-       for i, path in enumerate(sys.path[:5], 1):
-           display_path = path if path else "(current directory)"
-           print(f"   {i}. {display_path}")
-
-       # Step 2: Check if it's a built-in module
-       print(f"\n2️⃣ IS '{module_name}' A BUILT-IN MODULE?")
-       try:
-           import sys
-           if module_name in sys.builtin_module_names:
-               print(f"   ✓ Yes, {module_name} is built-in")
-           else:
-               print(f"   ✗ No, {module_name} is not built-in")
-       except:
-           print("   ? Cannot determine")
-
-       # Step 3: Recommendations
-       print("\n3️⃣ TROUBLESHOOTING STEPS:")
-       print("   a) Check spelling of module name")
-       print("   b) Verify module is installed (pip list)")
-       print("   c) Check if file exists in sys.path directories")
-       print("   d) Ensure package has __init__.py")
-       print("   e) Try: pip install <module_name>")
-
-       print("\n" + "=" * 60)
-
-   # Try it out
-   diagnose_import_problem('mymodule')
-
 Practice Problems
 -----------------
 
 .. activecode:: sys_path_challenge
    :nocodelens:
 
-   Write a function ``module_search_paths()`` that returns a list of all directories in ``sys.path`` that actually exist on the file system. (Hint: Use ``os.path.exists()`` to check if a path exists.)
+   Write a function ``module_search_paths()`` that returns a list of all directories in ``sys.path``.
    ~~~~
    import sys
-   import os
 
    def module_search_paths():
        # Your code here

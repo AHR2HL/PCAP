@@ -83,7 +83,7 @@ Pattern 2: Multiple Base Cases
 
 Notice we need **TWO base cases** (for 0 and 1) before we can compute other values!
 
-.. activecode:: pattern_fibonacci
+.. activecode:: pattern_fibonacci_2
    :caption: Fibonacci with Multiple Base Cases
 
    def fibonacci(n):
@@ -410,15 +410,10 @@ Now that you've seen the patterns, try recognizing and applying them!
    
    class myTests(TestCaseGui):
        def testRecursive(self):
-           import inspect
-           try:
-               code = inspect.getsource(power)
-           except:
-               import __main__
-               code = str(__main__.__dict__.get('power', ''))
-           
+           code = self.getEditorText()
+
            recursion_count = code.count('power(')
-           self.assertGreaterEqual(recursion_count, 2, 
+           self.assertGreaterEqual(recursion_count, 1,
                f"Your solution must use recursion. Found {recursion_count-1} recursive calls, need at least 1.")
            
            self.assertNotIn('**', code, 

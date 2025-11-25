@@ -112,9 +112,6 @@ Case Manipulation Methods
    # swapcase() - swap upper/lower case
    print(f"swapcase():   '{text.swapcase()}'")
 
-   # casefold() - aggressive lowercase (Unicode-aware)
-   print(f"casefold():   '{text.casefold()}'")
-
    print("\n💡 Note: All return NEW strings (strings are immutable)")
 
 **Output:**
@@ -136,47 +133,6 @@ Case Manipulation Methods
 
 ---
 
-**lower() vs casefold():**
-
-.. activecode:: string_lower_vs_casefold
-   :language: python
-
-   # For ASCII, they're the same
-   text1 = "HELLO"
-   print(f"ASCII text: '{text1}'")
-   print(f"  lower():    '{text1.lower()}'")
-   print(f"  casefold(): '{text1.casefold()}'")
-   print(f"  Same? {text1.lower() == text1.casefold()}")
-
-   # For Unicode, casefold() is more aggressive
-   # German sharp-s (ß)
-   text2 = "Straße"
-   print(f"\nGerman text: '{text2}'")
-   print(f"  lower():    '{text2.lower()}'")
-   print(f"  casefold(): '{text2.casefold()}'")
-   print(f"  Same? {text2.lower() == text2.casefold()}")
-
-   print("\n💡 Use casefold() for case-insensitive comparisons!")
-   print("   It handles international characters better.")
-
-**Output:**
-
-::
-
-   ASCII text: 'HELLO'
-     lower():    'hello'
-     casefold(): 'hello'
-     Same? True
-
-   German text: 'Straße'
-     lower():    'straße'
-     casefold(): 'strasse'
-     Same? False
-
-   💡 Use casefold() for case-insensitive comparisons!
-      It handles international characters better.
-
----
 
 **Practical Case Example:**
 
@@ -758,7 +714,8 @@ Modification Methods
    # Test
    print("Clean Input:")
    print(f"  '{clean_input('  hello   world  ')}'")
-   print(f"  '{clean_input('\\n  test  \\t')}'")
+   my_string = '\\n  test  \\t'
+   print(f"  '{clean_input(my_string)}'")
 
    print("\nSanitize Filename:")
    print(f"  '{sanitize_filename('my<file>:name.txt')}'")
@@ -893,7 +850,7 @@ Splitting and Joining
 
    # partition() - split at first occurrence
    before, sep, after = email.partition('@')
-   print(f"partition('@'):")
+   print("partition('@'):")
    print(f"  Before: '{before}'")
    print(f"  Separator: '{sep}'")
    print(f"  After: '{after}'")
@@ -902,7 +859,7 @@ Splitting and Joining
    path = "/home/user/documents/file.txt"
    print(f"\nPath: '{path}'")
    before, sep, after = path.rpartition('/')
-   print(f"rpartition('/'):")
+   print("rpartition('/'):")
    print(f"  Directory: '{before}'")
    print(f"  Separator: '{sep}'")
    print(f"  Filename: '{after}'")

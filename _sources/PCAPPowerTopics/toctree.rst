@@ -1,6 +1,6 @@
 .. _pcap_power_topics_toctree:
 
-Chapter 29: PCAP Power Topics
+PCAP Power Topics
 ==============================
 
 .. toctree::

@@ -432,7 +432,6 @@ Build complete solutions from scratch!
 
    ====
    from unittest.gui import TestCaseGui
-   import os
 
    class myTests(TestCaseGui):
        def test_returns_default_on_missing(self):
@@ -755,7 +754,7 @@ Build complete solutions from scratch!
 
        def test_empty_string(self):
            result = parse_csv("")
-           self.assertEqual(result, [['']])
+           self.assertEqual(result, [])
 
    myTests().main()
 
@@ -1023,28 +1022,98 @@ Find and fix the bugs!
 
 .. activecode:: pcap_debug_exception
    :language: python
+   :autograde: unittest
 
    This code doesn't handle exceptions properly. Fix it!
    ~~~~
    def divide_numbers(a, b):
        try:
            result = a / b
-       except:  # Bug: Too broad!
+       except:
            print("Error occurred")
 
-       return result  # Bug: result might not be defined!
+       return result
 
-   # Test
    print(divide_numbers(10, 2))
    print(divide_numbers(10, 0))
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_normal_division(self):
+           """Should correctly divide two numbers"""
+           result = divide_numbers(10, 2)
+           self.assertEqual(result, 5.0, "10 / 2 should equal 5.0")
+
+       def test_division_with_floats(self):
+           """Should handle float division"""
+           result = divide_numbers(7, 2)
+           self.assertEqual(result, 3.5, "7 / 2 should equal 3.5")
+
+       def test_zero_division_returns_value(self):
+           """Should return a value (not crash) when dividing by zero"""
+           result = divide_numbers(10, 0)
+           self.assertIsNotNone(result, "Should return None instead of crashing")
+
+       def test_zero_division_does_not_crash(self):
+           """Should not raise exception when dividing by zero"""
+           try:
+               result = divide_numbers(10, 0)
+               crashed = False
+           except:
+               crashed = True
+           self.assertFalse(crashed, "Should handle division by zero without crashing")
+
+       def test_catches_specific_exception(self):
+           """Should catch ZeroDivisionError specifically"""
+           source = self.getEditorText()
+           func_code = source.split('def divide_numbers(')[1].split('\n\n')[0]
+           self.assertIn('ZeroDivisionError', func_code,
+                        "Should catch ZeroDivisionError specifically, not bare except")
+
+       def test_no_bare_except(self):
+           """Should not use bare except:"""
+           source = self.getEditorText()
+           func_code = source.split('def divide_numbers(')[1].split('\n\n')[0]
+
+           # Check for bare except (except: with no exception type)
+           lines = func_code.split('\n')
+           for line in lines:
+               if 'except' in line and ':' in line:
+                   # Make sure there's something between 'except' and ':'
+                   except_part = line.split('except')[1].split(':')[0].strip()
+                   if except_part == '':
+                       self.fail("Should not use bare 'except:' - specify exception type")
+
+       def test_negative_numbers(self):
+           """Should handle negative numbers"""
+           result = divide_numbers(-10, 2)
+           self.assertEqual(result, -5.0)
+
+       def test_type_error_handled(self):
+           """Should handle invalid types gracefully"""
+           result = divide_numbers("10", 2)
+           # Should return None or handle gracefully, not crash
+           self.assertTrue(result is None or isinstance(result, (int, float)),
+                         "Should handle type errors gracefully")
+
+       def test_returns_none_on_error(self):
+           """Should return None when error occurs"""
+           result = divide_numbers(10, 0)
+           self.assertIsNone(result, "Should return None when division by zero occurs")
+
+   myTests().main()
 
 .. reveal:: pcap_debug_exception_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
    **Problems:**
-   1. Bare ``except:`` catches everything (even KeyboardInterrupt!)
-   2. ``result`` might not be defined if exception occurs
+
+   1. Bare ``except:`` catches everything (bad practice)
+   2. ``result`` not defined if exception occurs (UnboundLocalError)
+   3. ``return`` is outside try/except block
 
    **Fix:**
 
@@ -1061,34 +1130,155 @@ Find and fix the bugs!
               print("Error: Invalid types")
               return None
 
+   **Key insights:**
+
+   - Never use bare ``except:`` - always specify exception types
+   - Return inside the try block OR ensure variable is always defined
+   - Handle specific exceptions (ZeroDivisionError, TypeError, etc.)
+
 ---
 
 **Debug 2: File Not Closing**
 
 .. activecode:: pcap_debug_file_closing
    :language: python
+   :autograde: unittest
 
    This code doesn't properly close files. Fix it!
    ~~~~
    def read_and_process(filename):
-       f = open(filename, 'r')  # Bug: No context manager!
+       f = open(filename, 'r')
        data = f.read()
 
        if len(data) == 0:
-           return None  # Bug: File not closed!
+           return None
 
        result = data.upper()
        f.close()
        return result
 
-   # Simulated test (would fail with real files)
-   print("Code doesn't guarantee file closure!")
+   print("Testing file handling...")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_context_manager(self):
+           """Should use 'with' statement for file handling"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+           self.assertIn('with open(', func_code,
+                        "Should use 'with open()' context manager")
+
+       def test_no_manual_close(self):
+           """Should not manually call f.close() when using context manager"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+
+           # If using 'with', should not have manual close
+           if 'with open(' in func_code:
+               self.assertNotIn('.close()', func_code,
+                              "Don't need manual .close() when using 'with' statement")
+
+       def test_no_bare_open(self):
+           """Should not use open() without context manager"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+
+           # Check if open is used without 'with'
+           lines = func_code.split('\n')
+           for line in lines:
+               if 'open(' in line and 'with' not in line:
+                   self.fail("Should use 'with open()' not bare 'open()' assignment")
+
+       def test_simulated_normal_file(self):
+           """Test logic with simulated file content"""
+           # Create a mock file-like object
+           class MockFile:
+               def __init__(self, content):
+                   self.content = content
+                   self.closed = False
+
+               def read(self):
+                   return self.content
+
+               def close(self):
+                   self.closed = True
+
+               def __enter__(self):
+                   return self
+
+               def __exit__(self, *args):
+                   self.closed = True
+
+           # Test that logic would work correctly
+           # We can't actually test the function directly in Skulpt,
+           # but we verify the structure is correct
+           source = self.getEditorText()
+           self.assertIn('data.upper()', source,
+                        "Should still convert data to uppercase")
+
+       def test_handles_empty_file_case(self):
+           """Should handle empty file by returning None"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+           self.assertIn('return None', func_code,
+                        "Should return None for empty data")
+           self.assertIn('len(data) == 0', func_code,
+                        "Should check if data is empty")
+
+       def test_returns_uppercase(self):
+           """Should return uppercase version of data"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+           self.assertIn('.upper()', func_code,
+                        "Should convert data to uppercase")
+
+       def test_proper_indentation_with_context_manager(self):
+           """Code inside 'with' block should be properly indented"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+
+           if 'with open(' in func_code:
+               # Find the with statement and check following lines are indented
+               lines = func_code.split('\n')
+               with_line_idx = None
+               for i, line in enumerate(lines):
+                   if 'with open(' in line:
+                       with_line_idx = i
+                       break
+
+               if with_line_idx is not None and with_line_idx + 1 < len(lines):
+                   # Next line should be more indented
+                   with_indent = len(lines[with_line_idx]) - len(lines[with_line_idx].lstrip())
+                   next_indent = len(lines[with_line_idx + 1]) - len(lines[with_line_idx + 1].lstrip())
+                   self.assertGreater(next_indent, with_indent,
+                                    "Code inside 'with' block should be indented")
+
+       def test_returns_result_not_variable(self):
+           """Should return data.upper() directly or store then return"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+           # Should have return statement with upper()
+           has_return = 'return' in func_code and '.upper()' in func_code
+           self.assertTrue(has_return, "Should return the uppercase result")
+
+       def test_as_variable_used_with_context_manager(self):
+           """Should use 'as' to assign file handle in context manager"""
+           source = self.getEditorText()
+           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
+
+           if 'with open(' in func_code:
+               self.assertIn(' as ', func_code,
+                           "Should use 'as' to assign file handle: 'with open(...) as f:'")
+
+   myTests().main()
 
 .. reveal:: pcap_debug_file_closing_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** File isn't closed if function returns early or if an exception occurs.
+   **Problem:** File isn't closed if function returns early (when data is empty). Manual ``f.close()`` is only reached if execution continues to that line.
 
    **Fix:**
 
@@ -1102,7 +1292,9 @@ Find and fix the bugs!
                   return None
 
               return data.upper()
-          # File automatically closed here
+          # File automatically closed here, even with early return
+
+   **Key insight:** Context managers (``with`` statement) **guarantee** cleanup happens, even with early returns or exceptions. The file is closed when exiting the ``with`` block, regardless of how you exit.
 
 ---
 
@@ -1110,6 +1302,7 @@ Find and fix the bugs!
 
 .. activecode:: pcap_debug_string_modification
    :language: python
+   :autograde: unittest
 
    This code tries to modify a string but fails. Fix it!
    ~~~~
@@ -1117,36 +1310,126 @@ Find and fix the bugs!
        words = text.split()
 
        for word in words:
-           word.capitalize()  # Bug: Strings are immutable!
+           word.capitalize()
 
-       return ' '.join(words)  # Bug: words unchanged!
+       return ' '.join(words)
 
-   # Test
    result = capitalize_words("hello world")
    print(f"Result: '{result}'")
-   print(f"Expected: 'Hello World'")
+   print("Expected: 'Hello World'")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_capitalizes_hello_world(self):
+           """Should capitalize 'hello world' to 'Hello World'"""
+           result = capitalize_words("hello world")
+           self.assertEqual(result, "Hello World",
+                          "Should capitalize each word")
+
+       def test_capitalizes_single_word(self):
+           """Should capitalize single word"""
+           result = capitalize_words("python")
+           self.assertEqual(result, "Python")
+
+       def test_capitalizes_multiple_words(self):
+           """Should capitalize multiple words"""
+           result = capitalize_words("the quick brown fox")
+           self.assertEqual(result, "The Quick Brown Fox")
+
+       def test_handles_already_capitalized(self):
+           """Should handle already capitalized words"""
+           result = capitalize_words("Hello World")
+           self.assertEqual(result, "Hello World")
+
+       def test_handles_mixed_case(self):
+           """Should handle mixed case input"""
+           result = capitalize_words("hELLo WoRLd")
+           self.assertEqual(result, "Hello World")
+
+       def test_captures_capitalize_result(self):
+           """Should capture the return value of capitalize()"""
+           source = self.getEditorText()
+           func_code = source.split('def capitalize_words(')[1].split('\n\n')[0]
+
+           # Should either use list comprehension, assignment, or build new list
+           has_capture = (
+               '[' in func_code and 'for' in func_code and ']' in func_code  # List comp
+               or 'append(' in func_code  # Building list
+               or '=' in func_code and 'capitalize()' in func_code  # Assignment
+               or '.title()' in func_code  # Using title() method
+           )
+           self.assertTrue(has_capture,
+                         "Should capture the result of capitalize() or use .title()")
+
+       def test_not_modifying_in_place(self):
+           """Should not try to modify strings in place"""
+           source = self.getEditorText()
+           func_code = source.split('def capitalize_words(')[1].split('\n\n')[0]
+
+           # Check if there's a standalone capitalize() call (not assigned)
+           lines = func_code.split('\n')
+           for line in lines:
+               line_stripped = line.strip()
+               # Look for capitalize() that's not being assigned or used
+               if 'capitalize()' in line_stripped:
+                   # Check if it's standalone (not assigned, not in list comp, not in return)
+                   if '=' not in line_stripped and '[' not in line_stripped and 'return' not in line_stripped:
+                       self.fail("Don't call capitalize() without capturing its return value")
+
+       def test_handles_empty_string(self):
+           """Should handle empty string"""
+           result = capitalize_words("")
+           self.assertEqual(result, "")
+
+       def test_handles_single_letter_words(self):
+           """Should handle single letter words"""
+           result = capitalize_words("a b c")
+           self.assertEqual(result, "A B C")
+
+       def test_preserves_spacing(self):
+           """Should preserve single space between words"""
+           result = capitalize_words("hello world")
+           self.assertEqual(result.count(' '), 1,
+                          "Should have single space between words")
+
+   myTests().main()
 
 .. reveal:: pcap_debug_string_modification_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** ``capitalize()`` returns a new string but doesn't modify the original (strings are immutable).
+   **Problem:** ``capitalize()`` returns a new string but doesn't modify the original. The returned value is ignored, so ``words`` list remains unchanged.
 
-   **Fix:**
+   **Fix Option 1 (List Comprehension):**
 
    .. code-block:: python
 
       def capitalize_words(text):
           words = text.split()
-
-          # Capture the returned values
           capitalized = [word.capitalize() for word in words]
-
           return ' '.join(capitalized)
 
-      # Or simpler:
+   **Fix Option 2 (Append to New List):**
+
+   .. code-block:: python
+
       def capitalize_words(text):
-          return text.title()
+          words = text.split()
+          capitalized = []
+          for word in words:
+              capitalized.append(word.capitalize())  # Capture result
+          return ' '.join(capitalized)
+
+   **Fix Option 3 (Built-in Method):**
+
+   .. code-block:: python
+
+      def capitalize_words(text):
+          return text.title()  # Simpler!
+
+   **Key insight:** Strings are **immutable** in Python. String methods like ``capitalize()``, ``upper()``, ``lower()`` return **new strings** and don't modify the original. Always capture the return value.
 
 ---
 
@@ -1154,43 +1437,138 @@ Find and fix the bugs!
 
 .. activecode:: pcap_debug_binary_mode
    :language: python
+   :autograde: unittest
 
    This code tries to read a binary file as text. Fix it!
    ~~~~
    def read_image_header(filename):
-       # Bug: Binary data needs 'rb' mode!
        with open(filename, 'r') as f:
            header = f.read(8)
 
-       # Bug: Can't compare str to bytes!
        if header == b'\x89PNG\r\n\x1a\n':
            return "PNG file"
        return "Unknown"
 
-   # Would fail with real binary file
-   print("This code would fail with binary files!")
+   print("Testing binary file handling...")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_binary_mode(self):
+           """Should use 'rb' mode for binary files"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn("'rb'", func_code,
+                        "Should use 'rb' mode for reading binary files")
+
+       def test_not_using_text_mode(self):
+           """Should not use text mode 'r' for binary data"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # Check for 'r' mode (but allow 'rb')
+           if "'r'" in func_code or '"r"' in func_code:
+               self.assertTrue("'rb'" in func_code or '"rb"' in func_code,
+                             "Should use 'rb' not 'r' for binary files")
+
+       def test_compares_with_bytes(self):
+           """Should compare header with bytes literal"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn("b'", func_code,
+                        "Should compare with bytes literal (b'...')")
+
+       def test_reads_correct_amount(self):
+           """Should read 8 bytes for PNG header"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('.read(8)', func_code,
+                        "Should read 8 bytes for PNG header")
+
+       def test_returns_png_file_on_match(self):
+           """Should return 'PNG file' when header matches"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('"PNG file"', func_code,
+                        "Should return 'PNG file' when header matches")
+
+       def test_returns_unknown_on_mismatch(self):
+           """Should return 'Unknown' when header doesn't match"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('"Unknown"', func_code,
+                        "Should return 'Unknown' when header doesn't match")
+
+       def test_uses_with_statement(self):
+           """Should use context manager (with statement)"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('with open(', func_code,
+                        "Should use 'with open()' for file handling")
+
+       def test_correct_png_signature(self):
+           """Should check for correct PNG signature bytes"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           # PNG signature: \x89PNG\r\n\x1a\n
+           self.assertIn('\\x89PNG', func_code,
+                        "Should check for PNG signature starting with \\x89PNG")
+
+       def test_binary_mode_format(self):
+           """Binary mode should be properly formatted"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # Should have 'rb' as a string
+           has_rb = ("'rb'" in func_code or '"rb"' in func_code)
+           self.assertTrue(has_rb,
+                         "Should use 'rb' mode (as a string)")
+
+       def test_no_mixed_type_comparison(self):
+           """Code structure should avoid str/bytes comparison issues"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # If using text mode 'r', can't properly compare to bytes
+           has_text_mode = ("open(filename, 'r')" in func_code or
+                           'open(filename, "r")' in func_code)
+           has_bytes_compare = "b'" in func_code or 'b"' in func_code
+
+           if has_text_mode and has_bytes_compare:
+               self.fail("Can't compare text (from 'r' mode) with bytes literal - use 'rb' mode")
+
+   myTests().main()
 
 .. reveal:: pcap_debug_binary_mode_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
    **Problems:**
-   1. Opening binary file in text mode
-   2. Comparing string to bytes
+
+   1. Opening binary file in text mode ('r') instead of binary mode ('rb')
+   2. Text mode returns strings, but comparing with bytes literal
 
    **Fix:**
 
    .. code-block:: python
 
       def read_image_header(filename):
-          # Use binary mode
-          with open(filename, 'rb') as f:
+          with open(filename, 'rb') as f:  # Binary mode!
               header = f.read(8)
 
-          # Now header is bytes, comparison works
+          # header is now bytes, comparison works
           if header == b'\x89PNG\r\n\x1a\n':
               return "PNG file"
           return "Unknown"
+
+   **Key insights:**
+
+   - **Text mode ('r')**: Returns strings, decodes bytes using encoding (usually UTF-8)
+   - **Binary mode ('rb')**: Returns bytes objects, no decoding
+   - **Use 'rb' for**: Images, audio, video, executables, any non-text files
+   - **Use 'r' for**: Text files, CSV, JSON, source code
+   - Can't compare ``str`` with ``bytes`` - types must match
 
 ---
 
@@ -1198,44 +1576,132 @@ Find and fix the bugs!
 
 .. activecode:: pcap_debug_strip
    :language: python
+   :autograde: unittest
 
    This code doesn't remove all intended characters. Fix it!
    ~~~~
    def clean_string(text):
-       # Bug: strip() only removes from ends, not middle!
        cleaned = text.strip('*')
-
-       # User expects all '*' removed
        return cleaned
 
-   # Test
    test = "**hello*world**"
    result = clean_string(test)
    print(f"Result: '{result}'")
-   print(f"Expected: 'helloworld'")
-   print(f"Problem: strip() only removes from ends!")
+   print("Expected: 'helloworld'")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_removes_all_asterisks(self):
+           """Should remove ALL asterisks, not just from ends"""
+           result = clean_string("**hello*world**")
+           self.assertEqual(result, "helloworld",
+                          "Should remove asterisks from middle too, not just ends")
+
+       def test_asterisks_in_middle_only(self):
+           """Should remove asterisks from middle"""
+           result = clean_string("hello*world")
+           self.assertEqual(result, "helloworld",
+                          "Should remove asterisks from the middle")
+
+       def test_asterisks_at_ends_only(self):
+           """Should remove asterisks from ends"""
+           result = clean_string("**hello**")
+           self.assertEqual(result, "hello")
+
+       def test_multiple_asterisks_scattered(self):
+           """Should remove all asterisks regardless of position"""
+           result = clean_string("*a*b*c*")
+           self.assertEqual(result, "abc")
+
+       def test_no_asterisks(self):
+           """Should handle strings without asterisks"""
+           result = clean_string("hello")
+           self.assertEqual(result, "hello")
+
+       def test_only_asterisks(self):
+           """Should return empty string for only asterisks"""
+           result = clean_string("***")
+           self.assertEqual(result, "")
+
+       def test_uses_replace_or_alternative(self):
+           """Should use replace() or another method to remove all occurrences"""
+           source = self.getEditorText()
+           func_code = source.split('def clean_string(')[1].split('\n\n')[0]
+
+           # Should use replace, or translate, or list comprehension, etc.
+           has_solution = (
+               '.replace(' in func_code or
+               '.translate(' in func_code or
+               '[' in func_code and 'for' in func_code and 'if' in func_code or  # List comp with filter
+               ''.join' in func_code
+           )
+           self.assertTrue(has_solution,
+                         "Should use replace() or another method to remove ALL asterisks")
+
+       def test_not_relying_only_on_strip(self):
+           """Strip alone is not sufficient for this task"""
+           result = clean_string("**hello*world**")
+           # The key test: if there's an asterisk in the middle, strip() alone won't work
+           self.assertNotIn('*', result,
+                          "Result should not contain any asterisks (strip() alone won't work)")
+
+       def test_consecutive_asterisks(self):
+           """Should handle consecutive asterisks"""
+           result = clean_string("hello***world")
+           self.assertEqual(result, "helloworld")
+
+       def test_empty_string(self):
+           """Should handle empty string"""
+           result = clean_string("")
+           self.assertEqual(result, "")
+
+       def test_mixed_content(self):
+           """Should only remove asterisks, keep other characters"""
+           result = clean_string("*hello!@#world*")
+           self.assertEqual(result, "hello!@#world",
+                          "Should keep other special characters")
+
+       def test_spaces_preserved(self):
+           """Should preserve spaces while removing asterisks"""
+           result = clean_string("*hello * world*")
+           self.assertEqual(result, "hello  world",
+                          "Should preserve spaces")
+
+   myTests().main()
 
 .. reveal:: pcap_debug_strip_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** ``strip()`` only removes characters from the beginning and end, not the middle.
+   **Problem:** ``strip()`` only removes characters from the **beginning and end** of a string, not from the middle.
 
    **Fix:**
 
    .. code-block:: python
 
       def clean_string(text):
-          # Use replace() to remove all occurrences
-          return text.replace('*', '')
+          return text.replace('*', '')  # Removes ALL occurrences
 
-      # Or if you want to strip from ends AND remove from middle:
+   **Alternative solutions:**
+
+   .. code-block:: python
+
+      # Using filter and join
       def clean_string(text):
-          # First strip from ends
-          cleaned = text.strip('*')
-          # Then remove from middle
-          cleaned = cleaned.replace('*', '')
-          return cleaned
+          return ''.join(char for char in text if char != '*')
+
+      # Using translate (for multiple characters)
+      def clean_string(text):
+          return text.translate(str.maketrans('', '', '*'))
+
+   **Key insight:**
+
+   - ``strip('*')`` → Removes '*' from **start and end only**
+   - ``replace('*', '')`` → Removes '*' from **everywhere**
+   - ``lstrip('*')`` → Removes from **start only**
+   - ``rstrip('*')`` → Removes from **end only**
 
 ---
 

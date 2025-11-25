@@ -302,8 +302,6 @@ Arrange the code blocks in the correct order to create working OOP solutions:
    =====
        return obj1 == obj2 #distractor
    =====
-       return id(obj1) == id(obj2)
-   =====
        return type(obj1) == type(obj2) #distractor
 
 **Problem 3: Simple ABC**
@@ -559,107 +557,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 3: Polymorphic Shape System**
-
-.. activecode:: oop_practice_code_shapes
-   :language: python
-   :autograde: unittest
-
-   Create an ABC ``Shape`` with abstract methods ``area()`` and ``perimeter()``.
-   Then create ``Rectangle`` and ``Circle`` classes that implement these methods.
-
-   Example::
-
-       rect = Rectangle(5, 10)
-       rect.area()  # 50
-       rect.perimeter()  # 30
-
-       circle = Circle(7)
-       circle.area()  # ~153.94
-       circle.perimeter()  # ~43.98
-
-   ~~~~
-   from abc import ABC, abstractmethod
-
-   class Shape(ABC):
-       # Your code here
-       pass
-
-   class Rectangle(Shape):
-       # Your code here
-       pass
-
-   class Circle(Shape):
-       # Your code here
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_cant_instantiate_shape(self):
-           with self.assertRaises(TypeError):
-               Shape()
-
-       def test_rectangle_area(self):
-           rect = Rectangle(5, 10)
-           self.assertEqual(rect.area(), 50)
-
-       def test_rectangle_perimeter(self):
-           rect = Rectangle(5, 10)
-           self.assertEqual(rect.perimeter(), 30)
-
-       def test_circle_area(self):
-           circle = Circle(7)
-           self.assertAlmostEqual(circle.area(), 153.94, places=1)
-
-       def test_circle_perimeter(self):
-           circle = Circle(7)
-           self.assertAlmostEqual(circle.perimeter(), 43.98, places=1)
-
-   myTests().main()
-
-.. reveal:: oop_practice_code_shapes_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      from abc import ABC, abstractmethod
-
-      class Shape(ABC):
-          @abstractmethod
-          def area(self):
-              pass
-
-          @abstractmethod
-          def perimeter(self):
-              pass
-
-      class Rectangle(Shape):
-          def __init__(self, width, height):
-              self.width = width
-              self.height = height
-
-          def area(self):
-              return self.width * self.height
-
-          def perimeter(self):
-              return 2 * (self.width + self.height)
-
-      class Circle(Shape):
-          def __init__(self, radius):
-              self.radius = radius
-
-          def area(self):
-              return 3.14159 * self.radius ** 2
-
-          def perimeter(self):
-              return 2 * 3.14159 * self.radius
-
----
-
-**Challenge 4: Mixin Composition**
+**Challenge 3: Mixin Composition**
 
 .. activecode:: oop_practice_code_mixins
    :language: python
@@ -739,7 +637,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 5: MRO Analyzer**
+**Challenge 4: MRO Analyzer**
 
 .. activecode:: oop_practice_code_mro_analyzer
    :language: python
@@ -819,7 +717,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 6: Identity vs Equality Checker**
+**Challenge 5: Identity vs Equality Checker**
 
 .. activecode:: oop_practice_code_identity_equality
    :language: python
@@ -896,7 +794,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 7: Multiple Inheritance Diamond**
+**Challenge 6: Multiple Inheritance Diamond**
 
 .. activecode:: oop_practice_code_diamond
    :language: python
@@ -980,7 +878,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 8: Duck Typing Function**
+**Challenge 7: Duck Typing Function**
 
 .. activecode:: oop_practice_code_duck_typing
    :language: python
@@ -1053,7 +951,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 9: Class Decorator**
+**Challenge 8: Class Decorator**
 
 .. activecode:: oop_practice_code_class_decorator
    :language: python
@@ -1133,7 +1031,7 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
 ---
 
-**Challenge 10: Polymorphic Container**
+**Challenge 9: Polymorphic Container**
 
 .. activecode:: oop_practice_code_polymorphic_container
    :language: python
@@ -1235,6 +1133,7 @@ Find and fix the bugs in these broken OOP systems!
 
 .. activecode:: oop_practice_debug_introspection
    :language: python
+   :autograde: unittest
 
    This code tries to safely access attributes but has bugs. Fix it!
    ~~~~
@@ -1244,7 +1143,7 @@ Find and fix the bugs in these broken OOP systems!
 
        for attr in dir(obj):
            if not attr.startswith('_'):
-               attributes[attr] = getattr(obj, attr)  # Bug here!
+               attributes[attr] = getattr(obj, attr)
 
        return attributes
 
@@ -1258,16 +1157,107 @@ Find and fix the bugs in these broken OOP systems!
    person = Person("Alice")
    attrs = get_all_attributes(person)
 
-   # Should only get 'name', not methods!
    print(f"Attributes: {attrs}")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_returns_name_attribute(self):
+           """Should return the name attribute"""
+           person = Person("Alice")
+           attrs = get_all_attributes(person)
+           self.assertIn('name', attrs, "Should include 'name' attribute")
+           self.assertEqual(attrs['name'], "Alice")
+
+       def test_excludes_methods(self):
+           """Should NOT include methods"""
+           person = Person("Bob")
+           attrs = get_all_attributes(person)
+           self.assertNotIn('greet', attrs,
+                          "Should NOT include 'greet' method")
+
+       def test_only_returns_data_attributes(self):
+           """Should only return non-callable attributes"""
+           class Car:
+               def __init__(self):
+                   self.brand = "Toyota"
+                   self.year = 2020
+
+               def drive(self):
+                   return "Driving"
+
+               def stop(self):
+                   return "Stopping"
+
+           car = Car()
+           attrs = get_all_attributes(car)
+
+           self.assertIn('brand', attrs)
+           self.assertIn('year', attrs)
+           self.assertNotIn('drive', attrs)
+           self.assertNotIn('stop', attrs)
+
+       def test_excludes_private_attributes(self):
+           """Should exclude attributes starting with underscore"""
+           class Secret:
+               def __init__(self):
+                   self.public = "visible"
+                   self._private = "hidden"
+                   self.__very_private = "very hidden"
+
+           obj = Secret()
+           attrs = get_all_attributes(obj)
+
+           self.assertIn('public', attrs)
+           self.assertNotIn('_private', attrs)
+
+       def test_returns_dict(self):
+           """Should return a dictionary"""
+           person = Person("Charlie")
+           attrs = get_all_attributes(person)
+           self.assertIsInstance(attrs, dict, "Should return a dictionary")
+
+       def test_multiple_attributes(self):
+           """Should handle multiple data attributes"""
+           class Book:
+               def __init__(self):
+                   self.title = "Python 101"
+                   self.author = "Alice"
+                   self.pages = 300
+
+               def read(self):
+                   pass
+
+           book = Book()
+           attrs = get_all_attributes(book)
+
+           self.assertEqual(len(attrs), 3,
+                          "Should have exactly 3 attributes")
+           self.assertEqual(attrs['title'], "Python 101")
+           self.assertEqual(attrs['author'], "Alice")
+           self.assertEqual(attrs['pages'], 300)
+
+       def test_empty_object(self):
+           """Should return empty dict for object with no public attributes"""
+           class Empty:
+               def method(self):
+                   pass
+
+           obj = Empty()
+           attrs = get_all_attributes(obj)
+           self.assertEqual(attrs, {},
+                          "Should return empty dict for object with no attributes")
+
+   myTests().main()
 
 .. reveal:: oop_practice_debug_introspection_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** The function includes methods, not just attributes.
+   **Problem:** The function returns methods in addition to attributes.
 
-   **Fix:** Check if the attribute is callable before adding it:
+   **Fix:**
 
    .. code-block:: python
 
@@ -1283,71 +1273,128 @@ Find and fix the bugs in these broken OOP systems!
 
           return attributes
 
+   **Key insight:** Use ``callable()`` to check if an attribute is a method. Only include non-callable attributes in the result.
+
 ---
 
 **Debug 2: Identity Confusion**
 
-.. activecode:: oop_practice_debug_identity
+.. activecode:: oop_practice_debug_identity_2
    :language: python
+   :autograde: unittest
 
    This code has identity vs equality confusion. Fix it!
    ~~~~
-   def remove_duplicates(items):
-       """Remove duplicate items from list."""
-       unique = []
+   def find_matching_user(users, target_name):
+       """Find user with matching name."""
+       for user in users:
+           if user['name'] is target_name:
+               return user
+       return None
 
-       for item in items:
-           # Check if item already in unique list
-           is_duplicate = False
-           for existing in unique:
-               if item is existing:  # Bug here!
-                   is_duplicate = True
-                   break
+   users = [
+       {'name': 'Alice', 'age': 30},
+       {'name': 'Bob', 'age': 25},
+       {'name': 'Charlie', 'age': 35}
+   ]
 
-           if not is_duplicate:
-               unique.append(item)
+   target = ''.join(['B', 'o', 'b'])
 
-       return unique
+   result = find_matching_user(users, target)
+   print(f"Found: {result}")
 
-   # Test
-   numbers = [1, 2, 2, 3, 3, 3, 4]
-   result = remove_duplicates(numbers)
-   print(f"Result: {result}")  # Should be [1, 2, 3, 4]
+   ====
+   from unittest.gui import TestCaseGui
 
-.. reveal:: oop_practice_debug_identity_solution
+   class myTests(TestCaseGui):
+       def test_finds_alice(self):
+           """Test finding Alice"""
+           users = [
+               {'name': 'Alice', 'age': 30},
+               {'name': 'Bob', 'age': 25}
+           ]
+           result = find_matching_user(users, 'Alice')
+           self.assertIsNotNone(result, "Should find Alice")
+           self.assertEqual(result['name'], 'Alice')
+
+       def test_finds_bob_constructed_string(self):
+           """Test finding Bob with constructed string (the bug!)"""
+           users = [
+               {'name': 'Alice', 'age': 30},
+               {'name': 'Bob', 'age': 25}
+           ]
+           target = ''.join(['B', 'o', 'b'])
+           result = find_matching_user(users, target)
+           self.assertIsNotNone(result, "Should find Bob even with constructed string")
+           self.assertEqual(result['name'], 'Bob')
+
+       def test_finds_charlie_with_concatenation(self):
+           """Test with another constructed string"""
+           users = [
+               {'name': 'Charlie', 'age': 35}
+           ]
+           target = 'Char' + 'lie'
+           result = find_matching_user(users, target)
+           self.assertIsNotNone(result, "Should find Charlie with concatenated string")
+           self.assertEqual(result['name'], 'Charlie')
+
+       def test_returns_none_when_not_found(self):
+           """Test returns None when user not found"""
+           users = [
+               {'name': 'Alice', 'age': 30}
+           ]
+           result = find_matching_user(users, 'David')
+           self.assertIsNone(result, "Should return None when user not found")
+
+       def test_returns_first_match(self):
+           """Test returns first matching user"""
+           users = [
+               {'name': 'Alice', 'age': 30},
+               {'name': 'Alice', 'age': 25}
+           ]
+           result = find_matching_user(users, 'Alice')
+           self.assertEqual(result['age'], 30,
+                          "Should return first matching user")
+
+       def test_with_empty_list(self):
+           """Test with empty user list"""
+           users = []
+           result = find_matching_user(users, 'Anyone')
+           self.assertIsNone(result, "Should return None for empty list")
+
+       def test_case_sensitive(self):
+           """Test that matching is case-sensitive"""
+           users = [
+               {'name': 'Bob', 'age': 25}
+           ]
+           result = find_matching_user(users, 'bob')
+           self.assertIsNone(result,
+                          "Should not find 'bob' when name is 'Bob' (case-sensitive)")
+
+   myTests().main()
+
+.. reveal:: oop_practice_debug_identity_2_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** Using ``is`` instead of ``==`` for value comparison.
+   **Problem:** Using ``is`` instead of ``==`` for string comparison. The ``is`` operator checks object identity, not value equality.
 
-   **Fix:** Use ``==`` to compare values:
+   **Fix:**
 
    .. code-block:: python
 
-      def remove_duplicates(items):
-          """Remove duplicate items from list."""
-          unique = []
+      def find_matching_user(users, target_name):
+          """Find user with matching name."""
+          for user in users:
+              if user['name'] == target_name:  # Use == for value comparison
+                  return user
+          return None
 
-          for item in items:
-              # Check if item already in unique list
-              is_duplicate = False
-              for existing in unique:
-                  if item == existing:  # Use == for value comparison
-                      is_duplicate = True
-                      break
+   **Remember:**
 
-              if not is_duplicate:
-                  unique.append(item)
-
-          return unique
-
-      # Or simply:
-      def remove_duplicates(items):
-          unique = []
-          for item in items:
-              if item not in unique:
-                  unique.append(item)
-          return unique
+   - ``is`` checks if two variables point to the **same object**
+   - ``==`` checks if two values are **equal**
+   - Use ``==`` for comparing strings, numbers, and other values
 
 ---
 
@@ -1355,110 +1402,263 @@ Find and fix the bugs in these broken OOP systems!
 
 .. activecode:: oop_practice_debug_mi
    :language: python
+   :autograde: unittest
 
    This multiple inheritance doesn't work correctly. Fix it!
    ~~~~
    class A:
        def __init__(self):
+           self.initialized_a = True
            print("A")
 
    class B:
        def __init__(self):
+           self.initialized_b = True
            print("B")
 
    class C(A, B):
        def __init__(self):
+           self.initialized_c = True
            print("C")
-           A.__init__(self)  # Bug here!
-           B.__init__(self)  # Bug here!
+           A.__init__(self)
+           B.__init__(self)
 
-   print("Creating C:")
    c = C()
    print(f"MRO: {[cls.__name__ for cls in C.__mro__]}")
-   print("\n⚠️ Only A and B printed, not object!")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_all_classes_initialized(self):
+           """All classes in hierarchy should be initialized"""
+           c = C()
+           self.assertTrue(hasattr(c, 'initialized_a'), "A should be initialized")
+           self.assertTrue(hasattr(c, 'initialized_b'), "B should be initialized")
+           self.assertTrue(hasattr(c, 'initialized_c'), "C should be initialized")
+
+       def test_object_initialized(self):
+           """object.__init__ should be called (via cooperative chain)"""
+           # If super() is used correctly, no errors should occur
+           try:
+               c = C()
+               success = True
+           except:
+               success = False
+           self.assertTrue(success, "Should initialize without errors")
+
+       def test_uses_super_in_a(self):
+           """Class A should use super()"""
+           source = self.getEditorText()
+           a_class_code = source.split('class A:')[1].split('class B:')[0]
+           self.assertIn('super()', a_class_code,
+                        "Class A should call super().__init__()")
+
+       def test_uses_super_in_b(self):
+           """Class B should use super()"""
+           source = self.getEditorText()
+           b_class_code = source.split('class B:')[1].split('class C')[0]
+           self.assertIn('super()', b_class_code,
+                        "Class B should call super().__init__()")
+
+       def test_uses_super_in_c(self):
+           """Class C should use super()"""
+           source = self.getEditorText()
+           c_class_code = source.split('class C(A, B):')[1]
+           self.assertIn('super()', c_class_code,
+                        "Class C should call super().__init__()")
+
+       def test_no_direct_parent_calls_in_c(self):
+           """Class C should not call A.__init__ or B.__init__ directly"""
+           source = self.getEditorText()
+           c_class_code = source.split('class C(A, B):')[1]
+           self.assertNotIn('A.__init__', c_class_code,
+                          "Don't call A.__init__ directly, use super()")
+           self.assertNotIn('B.__init__', c_class_code,
+                          "Don't call B.__init__ directly, use super()")
+
+       def test_mro_is_correct(self):
+           """MRO should be C -> A -> B -> object"""
+           mro_names = [cls.__name__ for cls in C.__mro__]
+           self.assertEqual(mro_names[:4], ['C', 'A', 'B', 'object'],
+                          "MRO should be C -> A -> B -> object")
+
+       def test_multiple_instances(self):
+           """Should work correctly for multiple instances"""
+           c1 = C()
+           c2 = C()
+
+           self.assertTrue(hasattr(c1, 'initialized_a'))
+           self.assertTrue(hasattr(c2, 'initialized_a'))
+           self.assertTrue(c1 is not c2, "Should be different instances")
+
+   myTests().main()
 
 .. reveal:: oop_practice_debug_mi_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** Direct parent calls instead of cooperative super().
+   **Problem:** Calling parent ``__init__`` directly breaks the cooperative inheritance chain.
 
-   **Fix:** Use super() in all classes:
+   **Fix:**
 
    .. code-block:: python
 
       class A:
           def __init__(self):
+              self.initialized_a = True
               print("A")
               super().__init__()  # Call next in MRO
 
       class B:
           def __init__(self):
+              self.initialized_b = True
               print("B")
               super().__init__()  # Call next in MRO
 
       class C(A, B):
           def __init__(self):
+              self.initialized_c = True
               print("C")
               super().__init__()  # Start the chain
 
+   **Key insight:** In multiple inheritance, use ``super()`` in ALL classes (including A and B) to ensure the entire MRO chain is followed. Direct calls like ``A.__init__(self)`` skip parts of the chain.
+
 ---
 
-**Debug 4: Abstract Base Class Error**
+**Debug 4: Type Checking Bug**
 
-.. activecode:: oop_practice_debug_abc
+.. activecode:: oop_practice_debug_type_checking
    :language: python
+   :autograde: unittest
 
-   This ABC implementation has bugs. Fix it!
+   This type checking code doesn't work with subclasses. Fix it!
    ~~~~
-   from abc import ABC
+   class Animal:
+       def __init__(self, name):
+           self.name = name
 
-   class Animal(ABC):
-       def speak(self):  # Bug here! Missing @abstractmethod
-           pass
+   class Dog(Animal):
+       def speak(self):
+           return "Woof!"
 
-       def move(self):  # Bug here! Missing @abstractmethod
-           pass
+   class Cat(Animal):
+       def speak(self):
+           return "Meow!"
 
-   # This should fail but doesn't!
-   class BrokenDog(Animal):
-       pass
+   class Puppy(Dog):
+       def speak(self):
+           return "Yip!"
 
-   try:
-       dog = BrokenDog()
-       print("❌ Created BrokenDog without implementing methods!")
-   except TypeError as e:
-       print(f"✅ Correctly prevented: {e}")
+   def process_animal(animal):
+       """Process animal based on type."""
+       if type(animal) == Dog:
+           return f"Dog {animal.name} says: {animal.speak()}"
+       elif type(animal) == Cat:
+           return f"Cat {animal.name} says: {animal.speak()}"
+       else:
+           return f"Unknown animal: {animal.name}"
 
-.. reveal:: oop_practice_debug_abc_solution
+   dog = Dog("Buddy")
+   cat = Cat("Whiskers")
+   puppy = Puppy("Max")
+
+   print(process_animal(dog))
+   print(process_animal(cat))
+   print(process_animal(puppy))
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_processes_dog_correctly(self):
+           """Should correctly identify and process Dog"""
+           dog = Dog("Buddy")
+           result = process_animal(dog)
+           self.assertIn("Dog", result, "Should identify as Dog")
+           self.assertIn("Woof!", result, "Should include dog's sound")
+
+       def test_processes_cat_correctly(self):
+           """Should correctly identify and process Cat"""
+           cat = Cat("Whiskers")
+           result = process_animal(cat)
+           self.assertIn("Cat", result, "Should identify as Cat")
+           self.assertIn("Meow!", result, "Should include cat's sound")
+
+       def test_processes_puppy_as_dog(self):
+           """Puppy (subclass of Dog) should be treated as Dog"""
+           puppy = Puppy("Max")
+           result = process_animal(puppy)
+           self.assertIn("Dog", result, "Puppy should be identified as Dog (subclass)")
+           self.assertNotIn("Unknown", result, "Should not be 'Unknown animal'")
+
+       def test_uses_isinstance(self):
+           """Code should use isinstance() not type()"""
+           source = self.getEditorText()
+           func_code = source.split('def process_animal(')[1].split('def ')[0]
+           self.assertIn('isinstance', func_code,
+                        "Should use isinstance() for type checking")
+
+       def test_does_not_use_type_equality(self):
+           """Should not use type() == comparison"""
+           source = self.getEditorText()
+           func_code = source.split('def process_animal(')[1].split('def ')[0]
+           self.assertNotIn('type(', func_code,
+                          "Should not use type() for type checking - use isinstance()")
+
+       def test_kitten_subclass(self):
+           """Should work with other subclasses too"""
+           class Kitten(Cat):
+               def speak(self):
+                   return "Mew!"
+
+           kitten = Kitten("Fluffy")
+           result = process_animal(kitten)
+           self.assertIn("Cat", result, "Kitten should be identified as Cat")
+           self.assertNotIn("Unknown", result)
+
+       def test_all_animals_have_names(self):
+           """All processed animals should include their names"""
+           dog = Dog("Rex")
+           cat = Cat("Luna")
+           puppy = Puppy("Spot")
+
+           self.assertIn("Rex", process_animal(dog))
+           self.assertIn("Luna", process_animal(cat))
+           self.assertIn("Spot", process_animal(puppy))
+
+       def test_inheritance_hierarchy(self):
+           """Verify class hierarchy is correct"""
+           puppy = Puppy("Test")
+           self.assertIsInstance(puppy, Dog, "Puppy should be instance of Dog")
+           self.assertIsInstance(puppy, Animal, "Puppy should be instance of Animal")
+
+   myTests().main()
+
+.. reveal:: oop_practice_debug_type_checking_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** Missing ``@abstractmethod`` decorator.
+   **Problem:** Using ``type() ==`` comparison doesn't work with subclasses. ``type(puppy) == Dog`` is ``False`` because ``type(puppy)`` is ``Puppy``.
 
-   **Fix:** Add ``@abstractmethod`` to abstract methods:
+   **Fix:**
 
    .. code-block:: python
 
-      from abc import ABC, abstractmethod
+      def process_animal(animal):
+          """Process animal based on type."""
+          if isinstance(animal, Dog):  # Works with subclasses!
+              return f"Dog {animal.name} says: {animal.speak()}"
+          elif isinstance(animal, Cat):
+              return f"Cat {animal.name} says: {animal.speak()}"
+          else:
+              return f"Unknown animal: {animal.name}"
 
-      class Animal(ABC):
-          @abstractmethod  # Add decorator
-          def speak(self):
-              pass
+   **Key insight:**
 
-          @abstractmethod  # Add decorator
-          def move(self):
-              pass
-
-      # Now this correctly fails
-      class BrokenDog(Animal):
-          pass
-
-      try:
-          dog = BrokenDog()
-      except TypeError as e:
-          print(f"✅ Correctly prevented: {e}")
+   - ``type(obj) == SomeClass`` checks for **exact type match** (excludes subclasses)
+   - ``isinstance(obj, SomeClass)`` checks if obj is an instance of SomeClass **or any subclass**
+   - Always use ``isinstance()`` for type checking unless you specifically need exact type
 
 ---
 
@@ -1466,6 +1666,7 @@ Find and fix the bugs in these broken OOP systems!
 
 .. activecode:: oop_practice_debug_mixin_order
    :language: python
+   :autograde: unittest
 
    The mixin order is wrong, causing method resolution issues. Fix it!
    ~~~~
@@ -1483,22 +1684,135 @@ Find and fix the bugs in these broken OOP systems!
            print("Caching...")
            return super().process()
 
-   # Bug: Wrong order! Mixins should come before Base
    class Processor(Base, LogMixin, CacheMixin):
        pass
 
    p = Processor()
    result = p.process()
    print(f"Result: {result}")
-   print(f"\n⚠️ Mixins never executed!")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_result_is_base(self):
+           """Process should eventually return 'Base'"""
+           p = Processor()
+           result = p.process()
+           self.assertEqual(result, "Base", "Should return 'Base' from base class")
+
+       def test_mro_has_mixins_before_base(self):
+           """MRO should have mixins before Base class"""
+           mro_names = [cls.__name__ for cls in Processor.__mro__]
+
+           # Find positions
+           processor_idx = mro_names.index('Processor')
+           base_idx = mro_names.index('Base')
+
+           # At least one mixin should be between Processor and Base
+           mixins_before_base = any(
+               'Mixin' in name and processor_idx < mro_names.index(name) < base_idx
+               for name in mro_names
+           )
+
+           self.assertTrue(mixins_before_base,
+                          "At least one mixin should appear before Base in MRO")
+
+       def test_logmixin_before_base_in_mro(self):
+           """LogMixin should come before Base in MRO"""
+           mro_names = [cls.__name__ for cls in Processor.__mro__]
+           log_idx = mro_names.index('LogMixin')
+           base_idx = mro_names.index('Base')
+           self.assertLess(log_idx, base_idx,
+                          "LogMixin should come before Base in MRO")
+
+       def test_cachemixin_before_base_in_mro(self):
+           """CacheMixin should come before Base in MRO"""
+           mro_names = [cls.__name__ for cls in Processor.__mro__]
+           cache_idx = mro_names.index('CacheMixin')
+           base_idx = mro_names.index('Base')
+           self.assertLess(cache_idx, base_idx,
+                          "CacheMixin should come before Base in MRO")
+
+       def test_inheritance_order_in_code(self):
+           """Processor class should list mixins before Base"""
+           source = self.getEditorText()
+
+           # Find the Processor class definition line
+           for line in source.split('\n'):
+               if 'class Processor(' in line and ')' in line:
+                   # Extract the parents
+                   parents_part = line.split('class Processor(')[1].split(')')[0]
+
+                   # Check Base is not first
+                   self.assertFalse(parents_part.strip().startswith('Base'),
+                                  "Base should not be the first parent in Processor class")
+                   break
+
+       def test_all_classes_in_mro(self):
+           """All classes should be present in MRO"""
+           mro_names = [cls.__name__ for cls in Processor.__mro__]
+           self.assertIn('Processor', mro_names)
+           self.assertIn('Base', mro_names)
+           self.assertIn('LogMixin', mro_names)
+           self.assertIn('CacheMixin', mro_names)
+
+       def test_processor_inherits_from_all(self):
+           """Processor should inherit from all classes"""
+           p = Processor()
+           self.assertIsInstance(p, Base)
+           self.assertIsInstance(p, LogMixin)
+           self.assertIsInstance(p, CacheMixin)
+
+       def test_cooperative_inheritance_works(self):
+           """With call tracking, verify all methods are called"""
+           # Create tracked versions
+           call_order = []
+
+           class TrackedBase:
+               def process(self):
+                   call_order.append('Base')
+                   return "Base"
+
+           class TrackedLogMixin:
+               def process(self):
+                   call_order.append('LogMixin')
+                   return super().process()
+
+           class TrackedCacheMixin:
+               def process(self):
+                   call_order.append('CacheMixin')
+                   return super().process()
+
+           # Correct order
+           class GoodProcessor(TrackedLogMixin, TrackedCacheMixin, TrackedBase):
+               pass
+
+           # Bad order
+           class BadProcessor(TrackedBase, TrackedLogMixin, TrackedCacheMixin):
+               pass
+
+           # Test good order
+           call_order.clear()
+           GoodProcessor().process()
+           self.assertEqual(len(call_order), 3,
+                          "With correct mixin order, all three methods should be called")
+
+           # Test bad order
+           call_order.clear()
+           BadProcessor().process()
+           self.assertEqual(len(call_order), 1,
+                          "With wrong order (Base first), only Base is called")
+
+   myTests().main()
 
 .. reveal:: oop_practice_debug_mixin_order_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** Base class comes before mixins in inheritance list.
+   **Problem:** Base class is listed first, so its ``process()`` method is found first and returns immediately without calling ``super()``, preventing mixins from executing.
 
-   **Fix:** Put mixins before base class:
+   **Fix:**
 
    .. code-block:: python
 
@@ -1516,13 +1830,15 @@ Find and fix the bugs in these broken OOP systems!
               print("Caching...")
               return super().process()
 
-      # Correct: Mixins before Base
+      # Correct: Mixins BEFORE Base
       class Processor(LogMixin, CacheMixin, Base):
           pass
 
       p = Processor()
       result = p.process()
-      print(f"Result: {result}")
+      # Now prints: Logging... Caching... Base
+
+   **Key insight:** In multiple inheritance, list mixins **before** the base class. This ensures the MRO visits mixins first, allowing them to add behavior via ``super()`` before reaching the base implementation.
 
 ---
 

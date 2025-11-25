@@ -36,17 +36,56 @@ Let's clarify the terminology:
 - A **module** is like a single document
 - A **package** is like a folder that organizes multiple documents
 
-.. activecode:: modules_vs_packages_demo
+.. activecode:: modules_vs_packages_demo_2
    :nocodelens:
 
-   # When you import a module:
-   import math  # math is a single module
+   # ✅ Modules that work in browser Python:
+   import math        # math is a single module
+   import random      # random is a single module
 
-   # When you import from a package:
-   import os.path  # os is a package, path is a module inside it
+   print("Single Modules:")
+   print(f"  math.pi = {math.pi}")
+   print(f"  random.randint(1, 10) = {random.randint(1, 10)}")
+   print()
 
-   # Another package example:
-   import email.mime.text  # email is a package with nested modules
+   # Note: Some packages aren't available in browser Python
+   # Here's what package imports WOULD look like:
+
+   print("Package Structure Examples:")
+   print("  (These work in regular Python, not browser)")
+   print()
+
+   print("📦 os (package)")
+   print("  import os.path  # os is package, path is module inside")
+   print("  Example: os.path.join('folder', 'file.txt')")
+   print()
+
+   print("📦 email (package)")
+   print("  import email.mime.text  # nested package structure")
+   print("  Example: email.mime.text.MIMEText('Hello')")
+   print()
+
+   print("📦 xml (package)")
+   print("  import xml.etree.ElementTree  # deeply nested")
+   print("  Example: xml.etree.ElementTree.parse('data.xml')")
+   print()
+
+   print("="*50)
+   print("Key Difference:")
+   print("  Module: Single file (math.py)")
+   print("  Package: Folder with __init__.py + multiple modules")
+
+**Visual Example:**
+
+::
+
+   Python Installation
+   ├── math.py              ← Single module (import math)
+   ├── random.py            ← Single module (import random)
+   └── os/                  ← Package (import os.path)
+       ├── __init__.py
+       ├── path.py          ← Module inside package
+       └── environ.py
 
 Why Use Packages?
 -----------------
@@ -501,56 +540,63 @@ Practice Problems
    =====
        └── enemy.py
 
-.. activecode:: package_creation_challenge
-   :nocodelens:
+.. mchoice:: modules_vs_packages_q1
+   :answer_a: A module is a single .py file; a package is a folder containing multiple modules
+   :answer_b: A module is for functions; a package is for classes
+   :answer_c: A module is built-in; a package is third-party
+   :answer_d: A module is old Python; a package is Python 3 only
+   :correct: a
+   :feedback_a: Correct! A module is a single Python file, while a package is a directory containing multiple modules (and must have __init__.py).
+   :feedback_b: No. Both modules and packages can contain functions, classes, and any Python code. The difference is structure, not content.
+   :feedback_c: No. Both modules and packages can be built-in or third-party. For example, 'math' is a built-in module, and 'os' is a built-in package.
+   :feedback_d: No. Both modules and packages have existed since early Python versions. This has nothing to do with Python version.
 
-   Complete the import statements to use the following package structure correctly:
+   What is the key difference between a **module** and a **package**?
 
-   Project structure:
-       tools/
-       ├── __init__.py
-       ├── calculator.py  (contains: add, multiply functions)
-       └── converter.py   (contains: celsius_to_fahrenheit function)
+.. mchoice:: modules_vs_packages_q2
+   :answer_a: os/__init__.py and os/path.py
+   :answer_b: os.py and os_path.py
+   :answer_c: os/package.py and os/path.py
+   :answer_d: Just os/path.py is enough
+   :correct: a
+   :feedback_a: Correct! A package needs __init__.py to mark the folder as a package, plus the module files (like path.py) inside it.
+   :feedback_b: No. This would create two separate modules (os and os_path), not a package structure. You need a folder with __init__.py.
+   :feedback_c: Close! You need __init__.py (not package.py) to make the folder a proper Python package.
+   :feedback_d: No. Without __init__.py, Python won't recognize the 'os' folder as a package, so 'import os.path' won't work.
 
-   Fill in the imports and test the functions.
-   ~~~~
-   # Import add and multiply from tools.calculator
-   # YOUR CODE HERE
+   To create a package structure that allows ``import os.path``, what files are minimally required?
 
-   # Import celsius_to_fahrenheit from tools.converter
-   # YOUR CODE HERE
+   **File structure:**
 
-   # Test the functions (uncomment when ready)
-   # print(add(10, 5))  # Should print 15
-   # print(multiply(4, 3))  # Should print 12
-   # print(celsius_to_fahrenheit(0))  # Should print 32.0
+   ::
 
-   # For this demo, let's define them here since we can't create actual files:
-   def add(a, b):
-       return a + b
+      python_lib/
+      └── os/
+          ├── ???
+          └── ???
 
-   def multiply(a, b):
-       return a * b
 
-   def celsius_to_fahrenheit(c):
-       return (c * 9/5) + 32
+.. mchoice:: modules_vs_packages_q4
+   :answer_a: It contains the code that runs when you import the package
+   :answer_b: It marks the directory as a Python package
+   :answer_c: It can define what's available when using 'from package import *'
+   :answer_d: All of the above
+   :correct: d
+   :feedback_a: Yes, any code in __init__.py runs when you first import the package. But is it the only answer?
+   :feedback_b: Correct! __init__.py tells Python "this folder is a package, not just a regular directory."
+   :feedback_c: Correct! __init__.py can define __all__ to control what gets imported with 'from package import *'.
+   :feedback_d: Correct! __init__.py serves all these purposes. It's required to make a package and can customize how the package behaves.
 
-   # Test the functions
-   print(f"10 + 5 = {add(10, 5)}")
-   print(f"4 × 3 = {multiply(4, 3)}")
-   print(f"0°C = {celsius_to_fahrenheit(0)}°F")
+   What is the purpose of ``__init__.py`` in a package folder?
 
-   ====
-   from unittest.gui import TestCaseGui
+   **Example structure:**
 
-   class MyTests(TestCaseGui):
-       def test_functions_exist(self):
-           # Test that functions work
-           self.assertEqual(add(10, 5), 15)
-           self.assertEqual(multiply(4, 3), 12)
-           self.assertEqual(celsius_to_fahrenheit(0), 32.0)
+   ::
 
-   MyTests().main()
+      mypackage/
+      ├── __init__.py      ← This file!
+      ├── module1.py
+      └── module2.py
 
 Key Takeaways
 -------------

@@ -196,8 +196,8 @@ Check Your Understanding
    :iscode:
    :feedback: The base case is where recursion stops—the simplest problem we can solve directly.
 
-   :click-correct:def factorial(n)::endclick:
-       :click-correct:if n == 0::endclick:
+   :click-incorrect:def factorial(n)::endclick:
+       :click-incorrect:if n == 0::endclick:
            :click-correct:return 1:endclick:
        :click-incorrect:else::endclick:
            :click-incorrect:return n * factorial(n - 1):endclick:

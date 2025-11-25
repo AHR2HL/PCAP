@@ -453,9 +453,43 @@ Class Decorators
 
 .. index:: class decorators, @property, @staticmethod, @classmethod
 
-Python has built-in class decorators that use closures internally:
+Python has built-in class decorators that modify how class methods behave. Understanding these is crucial for writing clean, professional Python code.
 
-**@property — Computed Attributes**
+---
+
+@property — Computed Attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. index:: property decorator, computed properties, getters and setters
+
+**What is @property?**
+
+The ``@property`` decorator allows you to define methods that act like attributes. Instead of calling ``obj.get_radius()``, you can write ``obj.radius`` — it looks like an attribute but runs method code behind the scenes!
+
+**Why use @property?**
+
+✅ **Clean syntax** - Access computed values like attributes
+✅ **Validation** - Control what values can be set
+✅ **Computed values** - Calculate on-the-fly without storing
+✅ **Backwards compatibility** - Can add logic to existing attributes later
+
+**How it works:**
+
+.. code-block:: python
+
+   class Example:
+       @property
+       def my_attr(self):
+           # Getter: called when reading obj.my_attr
+           return some_value
+
+       @my_attr.setter
+       def my_attr(self, value):
+           # Setter: called when writing obj.my_attr = value
+           # Can validate or transform the value
+           pass
+
+**Full Example:**
 
 .. activecode:: closure_adv_property_decorator
    :language: python
@@ -463,11 +497,11 @@ Python has built-in class decorators that use closures internally:
 
    class Circle:
        def __init__(self, radius):
-           self._radius = radius
+           self._radius = radius  # Private variable (by convention)
 
        @property
        def radius(self):
-           """Get radius"""
+           """Get radius - looks like attribute access!"""
            return self._radius
 
        @radius.setter
@@ -479,29 +513,29 @@ Python has built-in class decorators that use closures internally:
 
        @property
        def diameter(self):
-           """Computed property"""
+           """Computed property - calculated on demand"""
            return self._radius * 2
 
        @property
        def area(self):
-           """Computed property"""
+           """Another computed property"""
            return 3.14159 * self._radius ** 2
 
    # Use like attributes (but they're actually methods!)
    c = Circle(5)
-   print(f"Radius: {c.radius}")
-   print(f"Diameter: {c.diameter}")
-   print(f"Area: {c.area:.2f}")
+   print(f"Radius: {c.radius}")      # Calls radius getter
+   print(f"Diameter: {c.diameter}")  # Computed on-the-fly
+   print(f"Area: {c.area:.2f}")      # Not stored, calculated each time
 
    # Setter works too
-   c.radius = 10
+   c.radius = 10  # Calls radius setter (with validation!)
    print(f"\nAfter changing radius to 10:")
-   print(f"Diameter: {c.diameter}")
+   print(f"Diameter: {c.diameter}")  # Automatically updates!
    print(f"Area: {c.area:.2f}")
 
-   # Validation
+   # Validation in action
    try:
-       c.radius = -5
+       c.radius = -5  # Setter rejects invalid value
    except ValueError as e:
        print(f"\n❌ {e}")
 
@@ -519,54 +553,398 @@ Python has built-in class decorators that use closures internally:
 
    ❌ Radius must be positive
 
-``@property`` creates a closure that stores the getter, setter, and deleter methods!
+**Key Insights:**
+
+.. important::
+
+   **@property creates a closure!**
+
+   Behind the scenes, ``@property`` stores the getter, setter, and deleter functions in a closure. When you access ``obj.radius``, Python:
+
+   1. Looks up the property object
+   2. Calls the getter function from the closure
+   3. Returns the result
+
+   This is closure-based encapsulation in action!
+
+**When to use @property:**
+
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
+
+   * - **Use @property When:**
+     - **Don't Use @property When:**
+   * - Value needs computation (area from radius)
+     - Simple attribute storage with no logic
+   * - You need validation on setting
+     - Value is expensive to compute (cache instead)
+   * - Converting old code (public attr → property)
+     - Method takes arguments (use regular method)
+   * - Read-only attributes (no setter)
+     - Complex multi-step operations
 
 ---
 
-**@staticmethod and @classmethod**
+@staticmethod — No Instance Required
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. index:: staticmethod decorator, static methods
+
+**What is @staticmethod?**
+
+A ``@staticmethod`` is a method that doesn't need access to the instance (``self``) or the class (``cls``). It's just a regular function that happens to live inside a class namespace.
+
+**Why use @staticmethod?**
+
+✅ **Organization** - Group related functions with a class
+✅ **No instance needed** - Can call without creating an object
+✅ **Clear intent** - Signals "this doesn't modify instance/class state"
+✅ **Utility functions** - Helper functions that belong conceptually to the class
+
+**Comparison:**
+
+.. code-block:: python
+
+   class Example:
+       # Regular instance method
+       def instance_method(self, x):
+           return self.value + x  # Needs self!
+
+       # Static method
+       @staticmethod
+       def static_method(x, y):
+           return x + y  # No self or cls needed!
+
+**Think of it as:** A function that logically belongs to a class but doesn't need instance or class data.
+
+---
+
+@classmethod — Receives the Class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. index:: classmethod decorator, class methods
+
+**What is @classmethod?**
+
+A ``@classmethod`` receives the **class itself** (not an instance) as its first argument, conventionally named ``cls``. This allows it to access class-level data and create instances.
+
+**Why use @classmethod?**
+
+✅ **Alternative constructors** - Create instances in different ways
+✅ **Factory methods** - Build objects from different data formats
+✅ **Access class attributes** - Read/modify class-level variables
+✅ **Inheritance-friendly** - Works correctly in subclasses
+
+**Common Pattern: Alternative Constructors**
+
+.. code-block:: python
+
+   class Date:
+       def __init__(self, year, month, day):
+           self.year = year
+           self.month = month
+           self.day = day
+
+       @classmethod
+       def from_string(cls, date_string):
+           """Alternative constructor from string"""
+           year, month, day = map(int, date_string.split('-'))
+           return cls(year, month, day)  # cls is Date (or subclass!)
+
+       @classmethod
+       def today(cls):
+           """Create instance with today's date"""
+           import datetime
+           today = datetime.date.today()
+           return cls(today.year, today.month, today.day)
+
+---
+
+**Complete Comparison:**
 
 .. activecode:: closure_adv_class_method_decorators
    :language: python
-   :caption: @staticmethod and @classmethod
+   :caption: All Three Method Types
 
    class MathUtils:
-       pi = 3.14159
+       pi = 3.14159  # Class attribute
 
+       def __init__(self, name):
+           self.name = name  # Instance attribute
+
+       # INSTANCE METHOD - needs self
+       def instance_method(self):
+           """Has access to instance data (self)"""
+           return f"Instance method called by {self.name}"
+
+       # STATIC METHOD - needs nothing
        @staticmethod
        def add(a, b):
-           """Static method: no access to class or instance"""
+           """No access to instance or class - just a utility function"""
            return a + b
 
+       # CLASS METHOD - needs cls (the class)
        @classmethod
        def circle_area(cls, radius):
-           """Class method: receives class as first argument"""
+           """Has access to class data (cls.pi)"""
            return cls.pi * radius ** 2
 
-       def instance_method(self):
-           """Regular instance method"""
-           return "I need an instance!"
+       @classmethod
+       def create_default(cls):
+           """Alternative constructor - returns new instance"""
+           return cls("Default")
 
-   # Static method: call without instance
-   print(MathUtils.add(5, 3))
+   print("="*50)
+   print("STATIC METHOD - No instance needed")
+   print("="*50)
+   result = MathUtils.add(5, 3)  # Call directly on class
+   print(f"5 + 3 = {result}")
 
-   # Class method: receives the class
-   print(f"Area: {MathUtils.circle_area(5):.2f}")
+   print("\n" + "="*50)
+   print("CLASS METHOD - Uses class data")
+   print("="*50)
+   area = MathUtils.circle_area(5)  # Uses cls.pi
+   print(f"Circle area (radius=5): {area:.2f}")
 
-   # Instance method: needs an instance
-   obj = MathUtils()
+   print("\n" + "="*50)
+   print("CLASS METHOD - Alternative constructor")
+   print("="*50)
+   obj = MathUtils.create_default()  # Creates instance
+   print(f"Created: {obj.name}")
+
+   print("\n" + "="*50)
+   print("INSTANCE METHOD - Needs instance")
+   print("="*50)
+   obj = MathUtils("Alice")
    print(obj.instance_method())
 
-   # Can also call on instance
-   print(obj.add(10, 20))
+   print("\n" + "="*50)
+   print("Can call static/class methods on instance too")
+   print("="*50)
+   print(f"obj.add(10, 20) = {obj.add(10, 20)}")
+   print(f"obj.circle_area(3) = {obj.circle_area(3):.2f}")
 
 **Output:**
 
 ::
 
-   8
-   Area: 78.54
-   I need an instance!
-   30
+   ==================================================
+   STATIC METHOD - No instance needed
+   ==================================================
+   5 + 3 = 8
+
+   ==================================================
+   CLASS METHOD - Uses class data
+   ==================================================
+   Circle area (radius=5): 78.54
+
+   ==================================================
+   CLASS METHOD - Alternative constructor
+   ==================================================
+   Created: Default
+
+   ==================================================
+   INSTANCE METHOD - Needs instance
+   ==================================================
+   Instance method called by Alice
+
+   ==================================================
+   Can call static/class methods on instance too
+   ==================================================
+   obj.add(10, 20) = 30
+   obj.circle_area(3) = 28.27
+
+---
+
+**Visual Comparison:**
+
+.. list-table:: Method Types at a Glance
+   :widths: 20 25 25 30
+   :header-rows: 1
+
+   * - Method Type
+     - First Argument
+     - Access To
+     - Common Use Cases
+   * - **Instance Method**
+     - ``self``
+     - Instance & class data
+     - Modify object state, use instance variables
+   * - **@staticmethod**
+     - (none)
+     - Nothing special
+     - Utility functions, helpers, pure functions
+   * - **@classmethod**
+     - ``cls``
+     - Class data & can create instances
+     - Alternative constructors, factory methods
+
+**Decision Flowchart:**
+
+::
+
+   Does the method need access to instance data (self.something)?
+   ├─ YES → Use regular instance method
+   └─ NO ↓
+
+      Does it need access to class data (cls.something)?
+      ├─ YES → Use @classmethod
+      └─ NO ↓
+
+         Does it logically belong to this class?
+         ├─ YES → Use @staticmethod
+         └─ NO → Make it a module-level function
+
+---
+
+**Real-World Example:**
+
+.. activecode:: closure_adv_class_decorators_real_world
+   :language: python
+   :caption: Real-World: Date Class
+
+   class Date:
+       def __init__(self, year, month, day):
+           self.year = year
+           self.month = month
+           self.day = day
+
+       # INSTANCE METHOD - uses self
+       def format(self):
+           """Format this date as string"""
+           return f"{self.year}-{self.month:02d}-{self.day:02d}"
+
+       # CLASS METHOD - alternative constructor
+       @classmethod
+       def from_string(cls, date_str):
+           """Create Date from '2024-03-15' format"""
+           year, month, day = map(int, date_str.split('-'))
+           return cls(year, month, day)
+
+       # CLASS METHOD - factory method
+       @classmethod
+       def today(cls):
+           """Create Date with current date"""
+           # In real code, would use datetime module
+           return cls(2024, 3, 15)
+
+       # STATIC METHOD - utility
+       @staticmethod
+       def is_leap_year(year):
+           """Check if year is leap year"""
+           return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+
+   # Regular constructor
+   d1 = Date(2024, 3, 15)
+   print(f"Regular: {d1.format()}")
+
+   # Alternative constructor (class method)
+   d2 = Date.from_string("2024-12-25")
+   print(f"From string: {d2.format()}")
+
+   # Factory method (class method)
+   d3 = Date.today()
+   print(f"Today: {d3.format()}")
+
+   # Static method (no instance needed)
+   print(f"Is 2024 leap year? {Date.is_leap_year(2024)}")
+   print(f"Is 2023 leap year? {Date.is_leap_year(2023)}")
+
+**Output:**
+
+::
+
+   Regular: 2024-03-15
+   From string: 2024-12-25
+   Today: 2024-03-15
+   Is 2024 leap year? True
+   Is 2023 leap year? False
+
+---
+
+**Practice: Understanding Method Types**
+
+.. mchoice:: class_decorator_property_purpose
+   :answer_a: To create private attributes
+   :answer_b: To make methods look like attributes
+   :answer_c: To make attributes immutable
+   :answer_d: To speed up attribute access
+   :correct: b
+   :feedback_a: @property doesn't make attributes private (use _ convention for that)
+   :feedback_b: Correct! @property lets you write methods that are accessed like attributes: obj.radius instead of obj.radius()
+   :feedback_c: Properties can have setters, so they're not necessarily immutable
+   :feedback_d: Properties are actually slightly slower than regular attributes (they call functions)
+
+   What is the main purpose of ``@property``?
+
+.. mchoice:: class_decorator_staticmethod_when
+   :answer_a: When the method needs to modify instance variables
+   :answer_b: When the method doesn't need access to instance or class data
+   :answer_c: When the method should be private
+   :answer_d: When the method needs to be faster
+   :correct: b
+   :feedback_a: If you need self, use a regular instance method, not @staticmethod
+   :feedback_b: Correct! @staticmethod is for utility functions that logically belong to the class but don't need self or cls
+   :feedback_c: @staticmethod doesn't affect visibility/privacy
+   :feedback_d: @staticmethod doesn't improve performance
+
+   When should you use ``@staticmethod``?
+
+.. mchoice:: class_decorator_classmethod_constructor
+   :answer_a: To make the constructor private
+   :answer_b: To create alternative ways to construct instances
+   :answer_c: To prevent instantiation
+   :answer_d: To automatically call __init__
+   :correct: b
+   :feedback_a: @classmethod doesn't affect visibility
+   :feedback_b: Correct! A common pattern is using @classmethod for alternative constructors like Date.from_string() or Date.today()
+   :feedback_c: @classmethod doesn't prevent instantiation
+   :feedback_d: You still need to call __init__ (via cls())
+
+   Why use ``@classmethod`` for alternative constructors?
+
+.. mchoice:: class_decorator_which_receives_class
+   :answer_a: Instance methods receive cls
+   :answer_b: Static methods receive cls
+   :answer_c: Class methods receive cls
+   :answer_d: Property methods receive cls
+   :correct: c
+   :feedback_a: Instance methods receive self (the instance), not cls
+   :feedback_b: Static methods don't automatically receive any special arguments
+   :feedback_c: Correct! Class methods receive cls (the class) as their first argument
+   :feedback_d: Property methods receive self (the instance)
+
+   Which method type receives the class itself as an argument?
+
+---
+
+**Key Takeaways:**
+
+.. important::
+
+   **Class Decorator Summary**
+
+   **@property**
+   - Makes methods look like attributes
+   - Great for computed values and validation
+   - Uses closures to store getter/setter/deleter
+
+   **@staticmethod**
+   - No access to instance (``self``) or class (``cls``)
+   - Just a utility function grouped with the class
+   - Use when logic belongs to class but doesn't need data
+
+   **@classmethod**
+   - Receives class (``cls``) as first argument
+   - Perfect for alternative constructors
+   - Works correctly with inheritance
+
+   **Decision Guide:**
+   - Need instance data? → Instance method
+   - Need class data or to create instances? → ``@classmethod``
+   - Need neither? → ``@staticmethod``
+   - Want method-like-attribute? → ``@property``
 
 ---
 
@@ -579,17 +957,16 @@ Python lets you **inspect closures** at runtime to see captured variables!
 
 **The __closure__ Attribute**
 
-.. activecode:: closure_adv_introspection_basic
-   :language: python
-   :caption: Inspecting Closures
+Python functions have a ``__closure__`` attribute that lets you inspect captured variables. Here's how it works:
+
+.. code-block:: python
 
    def make_counter(start=0, step=1):
-       count = start
+       count = [start]  # Use list to avoid nonlocal
 
        def increment():
-           nonlocal count
-           count += step
-           return count
+           count[0] += step
+           return count[0]
 
        return increment
 
@@ -618,14 +995,14 @@ Python lets you **inspect closures** at runtime to see captured variables!
 
    Is it a closure? True
    Number of captured variables: 2
-   Variable 0: 10
+   Variable 0: [10]
    Variable 1: 5
 
    After calling counter():
    Result: 15
 
    Captured variables after call:
-   Variable 0: 15
+   Variable 0: [15]
    Variable 1: 5
 
 .. note::
@@ -636,70 +1013,65 @@ Python lets you **inspect closures** at runtime to see captured variables!
    - Access the value with ``cell.cell_contents``
    - ``__closure__`` is ``None`` for non-closures
 
+**Try it yourself:**
+
+Save this code as ``inspect_closure.py`` and run it on your local Python installation to see closure introspection in action!
+
 ---
 
-**Introspection for Debugging**
+**Practice: Understanding Closure Introspection**
 
-.. activecode:: closure_adv_introspection_debugging
-   :language: python
-   :caption: Debugging Tool for Closures
+.. mchoice:: closure_introspection_q1
+   :answer_a: True
+   :answer_b: False
+   :answer_c: None
+   :answer_d: An empty tuple ()
+   :correct: a
+   :feedback_a: Correct! A closure's __closure__ attribute is not None (it's a tuple of cells).
+   :feedback_b: __closure__ is a tuple (which is truthy), not False.
+   :feedback_c: __closure__ is None only for non-closures (functions that don't capture variables).
+   :feedback_d: Even if empty, () is not None, so the expression would be True. But in this case, it captures variables so it's a non-empty tuple.
 
-   def inspect_closure(func):
-       """Inspect a closure's captured variables"""
-       print(f"🔍 Inspecting: {func.__name__}")
+   Given ``counter = make_counter(10, 5)``, what does ``counter.__closure__ is not None`` evaluate to?
 
-       if func.__closure__ is None:
-           print("  ❌ Not a closure!")
-           return
+.. mchoice:: closure_introspection_q2
+   :answer_a: 0
+   :answer_b: 1
+   :answer_c: 2
+   :answer_d: 3
+   :correct: c
+   :feedback_a: There are captured variables: count and step!
+   :feedback_b: There are two captured variables, not just one.
+   :feedback_c: Correct! The closure captures two variables: count (the list [10]) and step (5).
+   :feedback_d: Only two variables are captured from the enclosing scope.
 
-       print(f"  ✅ Closure with {len(func.__closure__)} captured variable(s):")
+   How many variables does the ``increment`` closure capture in the example above?
 
-       # Get variable names from code object
-       var_names = func.__code__.co_freevars
+.. mchoice:: closure_introspection_q3
+   :answer_a: [10] and 5
+   :answer_b: [15] and 5
+   :answer_c: 10 and 5
+   :answer_d: 15 and 5
+   :correct: b
+   :feedback_a: After calling counter(), count[0] becomes 15, so count is [15].
+   :feedback_b: Correct! After increment runs, count becomes [15] (was [10], added 5), and step remains 5.
+   :feedback_c: count is a list [15], not just the integer 15.
+   :feedback_d: count is stored as a list [15], not just 15.
 
-       for name, cell in zip(var_names, func.__closure__):
-           print(f"     - {name} = {cell.cell_contents}")
+   After calling ``counter()`` once, what are the values in ``cell.cell_contents``?
 
-   # Test with various closures
-   def make_adder(x):
-       def add(y):
-           return x + y
-       return add
+.. mchoice:: closure_introspection_q4
+   :answer_a: Regular functions that don't capture variables
+   :answer_b: Functions that have syntax errors
+   :answer_c: Functions defined at module level
+   :answer_d: Both A and C
+   :correct: d
+   :feedback_a: Correct! If a function doesn't capture anything, __closure__ is None.
+   :feedback_b: Functions with syntax errors wouldn't be created in the first place.
+   :feedback_c: Correct! Module-level functions usually don't capture variables from an enclosing scope.
+   :feedback_d: Correct! Both module-level functions and functions that don't capture variables have __closure__ = None.
 
-   def make_greeter(greeting, punctuation):
-       def greet(name):
-           return f"{greeting}, {name}{punctuation}"
-       return greet
-
-   add_five = make_adder(5)
-   enthusiastic = make_greeter("Hello", "!!!")
-
-   inspect_closure(add_five)
-   print()
-   inspect_closure(enthusiastic)
-
-   # Not a closure
-   def regular_function():
-       return "I'm not a closure"
-
-   print()
-   inspect_closure(regular_function)
-
-**Output:**
-
-::
-
-   🔍 Inspecting: add
-     ✅ Closure with 1 captured variable(s):
-        - x = 5
-
-   🔍 Inspecting: greet
-     ✅ Closure with 2 captured variable(s):
-        - greeting = Hello
-        - punctuation = !!!
-
-   🔍 Inspecting: regular_function
-     ❌ Not a closure!
+   When is ``function.__closure__`` equal to ``None``?
 
 ---
 
@@ -712,9 +1084,9 @@ Closures have performance implications you should understand:
 
 **Memory Usage**
 
-.. activecode:: closure_adv_memory_usage
-   :language: python
-   :caption: Closure Memory Overhead
+Closures require extra memory to store captured variables. Here's a comparison:
+
+.. code-block:: python
 
    import sys
 
@@ -751,7 +1123,31 @@ Closures have performance implications you should understand:
      Closure cells:    48 bytes
      Total closure:    184 bytes
 
-Closures have overhead for storing captured variables, but it's usually negligible!
+**What This Tells Us:**
+
+.. list-table:: Closure Memory Breakdown
+   :widths: 40 30 30
+   :header-rows: 1
+
+   * - Component
+     - Size
+     - Purpose
+   * - Function object itself
+     - ~136 bytes
+     - Function metadata, code object
+   * - Closure cells (per variable)
+     - ~48 bytes each
+     - Storage for captured variables
+   * - **Total overhead**
+     - **~48 bytes per captured var**
+     - **Extra cost vs regular function**
+
+**Key Insights:**
+
+✅ **Closure overhead is small** - ~48 bytes per captured variable
+✅ **Usually negligible** - Modern computers have gigabytes of RAM
+✅ **Matters only at scale** - Creating thousands/millions of closures
+✅ **Benefits often outweigh cost** - Cleaner code, encapsulation
 
 ---
 
@@ -765,11 +1161,10 @@ Closures have overhead for storing captured variables, but it's usually negligib
 
    # Closure implementation
    def make_counter_closure():
-       count = 0
+       count = {"hits":0}
        def increment():
-           nonlocal count
-           count += 1
-           return count
+           count["hits"] += 1
+           return count["hits"]
        return increment
 
    # Class implementation
@@ -1027,78 +1422,6 @@ Best Practices and Patterns
 
 ---
 
-**Common Pitfalls**
-
-.. activecode:: closure_adv_pitfalls
-   :language: python
-   :caption: Common Closure Pitfalls
-
-   # PITFALL 1: Loop variable capture
-   print("❌ WRONG: Loop variable capture")
-   functions = []
-   for i in range(3):
-       def func():
-           return i  # All will see final i!
-       functions.append(func)
-
-   print([f() for f in functions])  # All return 2!
-
-   # FIX: Use default argument
-   print("\n✅ RIGHT: Default argument")
-   functions = []
-   for i in range(3):
-       def func(x=i):  # Capture current value
-           return x
-       functions.append(func)
-
-   print([f() for f in functions])  # Returns [0, 1, 2]
-
-   # PITFALL 2: Forgetting nonlocal
-   print("\n❌ WRONG: Missing nonlocal")
-   def make_counter():
-       count = 0
-       def increment():
-           count += 1  # Error! Can't modify without nonlocal
-           return count
-       return increment
-
-   try:
-       counter = make_counter()
-       counter()
-   except UnboundLocalError as e:
-       print(f"Error: {e}")
-
-   # FIX: Use nonlocal
-   print("\n✅ RIGHT: Using nonlocal")
-   def make_counter():
-       count = 0
-       def increment():
-           nonlocal count
-           count += 1
-           return count
-       return increment
-
-   counter = make_counter()
-   print(counter())  # Works!
-
-**Output:**
-
-::
-
-   ❌ WRONG: Loop variable capture
-   [2, 2, 2]
-
-   ✅ RIGHT: Default argument
-   [0, 1, 2]
-
-   ❌ WRONG: Missing nonlocal
-   Error: local variable 'count' referenced before assignment
-
-   ✅ RIGHT: Using nonlocal
-   1
-
----
-
 **Code Style Guidelines**
 
 .. code-block:: python
@@ -1162,7 +1485,10 @@ Practice Challenges
 
 .. activecode:: closure_adv_practice_chaining
    :language: python
+   :autograde: unittest
    :caption: Challenge - Method Chaining with Closures
+
+   from functools import wraps
 
    def chainable(func):
        """
@@ -1176,26 +1502,138 @@ Practice Challenges
                # return self automatically added!
        """
        # TODO: Your code here
+       # Hint: Wrapper should call the function, then return self
+       # Hint: Use @wraps to preserve function metadata
        pass
 
-   # Test code (uncomment when ready):
-   # class Builder:
-   #     def __init__(self):
-   #         self.items = []
-   #
-   #     @chainable
-   #     def add(self, item):
-   #         self.items.append(item)
-   #
-   #     @chainable
-   #     def remove(self, item):
-   #         self.items.remove(item)
-   #
-   #     def build(self):
-   #         return self.items.copy()
-   #
-   # result = Builder().add(1).add(2).add(3).remove(2).build()
-   # print(result)  # Should print: [1, 3]
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_decorator_exists(self):
+           """Test that chainable decorator is defined"""
+           self.assertTrue(callable(chainable), "chainable should be a callable decorator")
+
+       def test_basic_chaining(self):
+           """Test that decorator enables chaining"""
+           class Builder:
+               def __init__(self):
+                   self.items = []
+
+               @chainable
+               def add(self, item):
+                   self.items.append(item)
+
+           b = Builder()
+           result = b.add(1)
+
+           # Should return self for chaining
+           self.assertIs(result, b, "Decorated method should return self")
+
+       def test_multiple_chains(self):
+           """Test chaining multiple method calls"""
+           class Builder:
+               def __init__(self):
+                   self.items = []
+
+               @chainable
+               def add(self, item):
+                   self.items.append(item)
+
+           b = Builder()
+           b.add(1).add(2).add(3)
+
+           self.assertEqual(b.items, [1, 2, 3], "Multiple chained calls should all execute")
+
+       def test_function_still_executes(self):
+           """Test that the original function logic still runs"""
+           class Counter:
+               def __init__(self):
+                   self.count = 0
+
+               @chainable
+               def increment(self):
+                   self.count += 1
+
+           c = Counter()
+           c.increment().increment().increment()
+
+           self.assertEqual(c.count, 3, "Original function logic should execute")
+
+       def test_with_arguments(self):
+           """Test that decorator passes arguments correctly"""
+           class Builder:
+               def __init__(self):
+                   self.items = []
+
+               @chainable
+               def add(self, item):
+                   self.items.append(item)
+
+               @chainable
+               def remove(self, item):
+                   self.items.remove(item)
+
+           b = Builder()
+           b.add(1).add(2).add(3).remove(2)
+
+           self.assertEqual(b.items, [1, 3], "Should handle args correctly")
+
+       def test_complex_chaining(self):
+           """Test full builder pattern with chaining"""
+           class Builder:
+               def __init__(self):
+                   self.items = []
+
+               @chainable
+               def add(self, item):
+                   self.items.append(item)
+
+               @chainable
+               def remove(self, item):
+                   self.items.remove(item)
+
+               def build(self):
+                   return self.items.copy()
+
+           result = Builder().add(1).add(2).add(3).remove(2).build()
+
+           self.assertEqual(result, [1, 3], "Complex chaining should work correctly")
+
+       def test_with_kwargs(self):
+           """Test that decorator handles keyword arguments"""
+           class Config:
+               def __init__(self):
+                   self.settings = {}
+
+               @chainable
+               def set(self, key, value):
+                   self.settings[key] = value
+
+           c = Config()
+           c.set('host', 'localhost').set('port', 8080)
+
+           self.assertEqual(c.settings, {'host': 'localhost', 'port': 8080})
+
+       def test_preserves_function_name(self):
+           """Test that decorator preserves function metadata"""
+           class Example:
+               @chainable
+               def my_method(self):
+                   """This is my docstring"""
+                   pass
+
+           self.assertEqual(Example.my_method.__name__, "my_method")
+           self.assertEqual(Example.my_method.__doc__, "This is my docstring")
+
+       def test_uses_wraps(self):
+           """Test that implementation uses @wraps"""
+           source = self.getEditorText()
+
+           has_wraps = 'wraps' in source or '@wraps' in source
+           self.assertTrue(has_wraps, "Implementation should use @wraps to preserve metadata")
+
+   myTests().main()
 
 .. reveal:: closure_adv_practice_chaining_solution
    :showtitle: Show Solution
@@ -1203,7 +1641,10 @@ Practice Challenges
 
    .. code-block:: python
 
+      from functools import wraps
+
       def chainable(func):
+          @wraps(func)
           def wrapper(self, *args, **kwargs):
               func(self, *args, **kwargs)
               return self  # Always return self for chaining
@@ -1215,6 +1656,7 @@ Practice Challenges
 
 .. activecode:: closure_adv_practice_throttle
    :language: python
+   :autograde: unittest
    :caption: Challenge - Throttle Decorator
 
    import time
@@ -1224,23 +1666,187 @@ Practice Challenges
        Decorator that prevents a function from being called
        more frequently than min_interval seconds.
 
-       If called too soon, should print a message and skip execution.
+       If called too soon, should return None and skip execution.
+
+       Args:
+           min_interval: Minimum seconds between calls
 
        Example: @throttle(2) allows calls at most every 2 seconds
        """
        # TODO: Your code here
        # Hint: Store the timestamp of the last successful call
+       # Hint: Use time.time() to get current time
+       # Hint: Compare elapsed time with min_interval
        pass
 
-   # Test code (uncomment when ready):
-   # @throttle(1.0)
-   # def save_file():
-   #     print("💾 File saved!")
-   #
-   # save_file()  # Works
-   # save_file()  # Too soon, skipped
-   # time.sleep(1.1)
-   # save_file()  # Works again
+   ====
+   from unittest.gui import TestCaseGui
+   import time
+
+   class myTests(TestCaseGui):
+       def test_decorator_exists(self):
+           """Test that throttle decorator is defined"""
+           self.assertTrue(callable(throttle), "throttle should be a callable decorator")
+
+       def test_first_call_succeeds(self):
+           """Test that first call always succeeds"""
+           call_count = [0]
+
+           @throttle(1.0)
+           def counter():
+               call_count[0] += 1
+               return "success"
+
+           result = counter()
+
+           self.assertEqual(result, "success", "First call should succeed")
+           self.assertEqual(call_count[0], 1, "Function should execute on first call")
+
+       def test_immediate_second_call_throttled(self):
+           """Test that immediate second call is throttled"""
+           call_count = [0]
+
+           @throttle(1.0)
+           def counter():
+               call_count[0] += 1
+               return "success"
+
+           counter()  # First call
+           result = counter()  # Immediate second call
+
+           self.assertIsNone(result, "Throttled call should return None")
+           self.assertEqual(call_count[0], 1, "Function should not execute when throttled")
+
+       def test_call_after_interval_succeeds(self):
+           """Test that call after interval succeeds"""
+           call_count = [0]
+
+           @throttle(0.5)  # Short interval for faster testing
+           def counter():
+               call_count[0] += 1
+               return "success"
+
+           counter()  # First call
+           time.sleep(0.6)  # Wait longer than interval
+           result = counter()  # Should succeed
+
+           self.assertEqual(result, "success", "Call after interval should succeed")
+           self.assertEqual(call_count[0], 2, "Function should execute after waiting")
+
+       def test_multiple_throttles_sequence(self):
+           """Test sequence of throttled and successful calls"""
+           call_count = [0]
+
+           @throttle(0.3)
+           def counter():
+               call_count[0] += 1
+               return call_count[0]
+
+           result1 = counter()  # Should work
+           result2 = counter()  # Should be throttled
+           result3 = counter()  # Should be throttled
+
+           self.assertEqual(result1, 1)
+           self.assertIsNone(result2)
+           self.assertIsNone(result3)
+           self.assertEqual(call_count[0], 1, "Only first call should execute")
+
+           time.sleep(0.35)
+           result4 = counter()  # Should work now
+
+           self.assertEqual(result4, 2)
+           self.assertEqual(call_count[0], 2)
+
+       def test_preserves_arguments(self):
+           """Test that decorator passes arguments correctly"""
+           @throttle(0.5)
+           def add(a, b):
+               return a + b
+
+           result = add(5, 3)
+           self.assertEqual(result, 8, "Arguments should pass through correctly")
+
+       def test_preserves_kwargs(self):
+           """Test that decorator passes keyword arguments"""
+           @throttle(0.5)
+           def greet(name, greeting="Hello"):
+               return f"{greeting}, {name}!"
+
+           result = greet("Alice", greeting="Hi")
+           self.assertEqual(result, "Hi, Alice!", "Kwargs should pass through correctly")
+
+       def test_independent_throttles(self):
+           """Test that different decorated functions have independent throttles"""
+           @throttle(1.0)
+           def func1():
+               return "A"
+
+           @throttle(1.0)
+           def func2():
+               return "B"
+
+           # Both should work (independent counters)
+           result1 = func1()
+           result2 = func2()
+
+           self.assertEqual(result1, "A")
+           self.assertEqual(result2, "B")
+
+           # Both should be throttled independently
+           self.assertIsNone(func1())
+           self.assertIsNone(func2())
+
+       def test_different_intervals(self):
+           """Test that different intervals work correctly"""
+           count_fast = [0]
+           count_slow = [0]
+
+           @throttle(0.2)
+           def fast():
+               count_fast[0] += 1
+               return "fast"
+
+           @throttle(0.5)
+           def slow():
+               count_slow[0] += 1
+               return "slow"
+
+           fast()
+           slow()
+
+           time.sleep(0.25)
+
+           # Fast should work now (0.2s interval)
+           result_fast = fast()
+           # Slow should still be throttled (0.5s interval)
+           result_slow = slow()
+
+           self.assertEqual(result_fast, "fast")
+           self.assertIsNone(result_slow)
+
+       def test_uses_time_module(self):
+           """Test that implementation uses time.time()"""
+           source = self.getEditorText()
+
+           self.assertIn('time.time()', source, "Implementation should use time.time() for timestamps")
+
+       def test_stores_last_call_time(self):
+           """Test that implementation stores timestamp of last call"""
+           source = self.getEditorText()
+
+           # Look for timestamp storage pattern
+           has_timestamp = 'last' in source or 'time' in source or 'timestamp' in source
+           self.assertTrue(has_timestamp, "Implementation should store timestamp of last call")
+
+       def test_compares_elapsed_time(self):
+           """Test that implementation checks elapsed time"""
+           source = self.getEditorText()
+
+           # Should have comparison with min_interval
+           has_comparison = ('min_interval' in source and '<' in source) or 'elapsed' in source
+           self.assertTrue(has_comparison, "Implementation should compare elapsed time with min_interval")
+
+   myTests().main()
 
 .. reveal:: closure_adv_practice_throttle_solution
    :showtitle: Show Solution
@@ -1248,30 +1854,34 @@ Practice Challenges
 
    .. code-block:: python
 
+      import time
+
       def throttle(min_interval):
           def decorator(func):
-              last_called = [0]  # Use list for mutable default
+              last_called = [0]  # Use list to avoid nonlocal
 
               def wrapper(*args, **kwargs):
                   current = time.time()
                   elapsed = current - last_called[0]
 
                   if elapsed < min_interval:
-                      print(f"⏳ Throttled! Wait {min_interval - elapsed:.1f}s")
+                      # Too soon - throttle the call
                       return None
 
+                  # Enough time has passed - allow the call
                   last_called[0] = current
                   return func(*args, **kwargs)
 
               return wrapper
           return decorator
 
----
+----
 
 **Challenge 3: Build a Call Counter with Reset**
 
 .. activecode:: closure_adv_practice_call_counter
    :language: python
+   :autograde: unittest
    :caption: Challenge - Call Counter with Reset
 
    def counted(func):
@@ -1291,57 +1901,205 @@ Practice Challenges
            print(greet.call_count)  # 0
        """
        # TODO: Your code here
+       # Hint: Create wrapper function that increments counter
+       # Hint: Add call_count as an attribute on the wrapper
+       # Hint: Add reset_count as a method on the wrapper
        pass
 
-   # Test code (uncomment when ready):
-   # @counted
-   # def say_hello():
-   #     return "Hello!"
-   #
-   # say_hello()
-   # say_hello()
-   # say_hello()
-   # print(f"Calls: {say_hello.call_count}")
-   # say_hello.reset_count()
-   # say_hello()
-   # print(f"Calls after reset: {say_hello.call_count}")
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_decorator_exists(self):
+           """Test that counted decorator is defined"""
+           self.assertTrue(callable(counted), "counted should be a callable decorator")
+
+       def test_has_call_count_attribute(self):
+           """Test that decorated function has call_count attribute"""
+           @counted
+           def dummy():
+               return "OK"
+
+           self.assertTrue(hasattr(dummy, 'call_count'), "Decorated function should have call_count attribute")
+
+       def test_call_count_starts_at_zero(self):
+           """Test that call_count starts at 0"""
+           @counted
+           def dummy():
+               return "OK"
+
+           self.assertEqual(dummy.call_count, 0, "call_count should start at 0")
+
+       def test_call_count_increments(self):
+           """Test that call_count increments with each call"""
+           @counted
+           def dummy():
+               return "OK"
+
+           dummy()
+           self.assertEqual(dummy.call_count, 1)
+           dummy()
+           self.assertEqual(dummy.call_count, 2)
+           dummy()
+           self.assertEqual(dummy.call_count, 3)
+
+       def test_function_still_executes(self):
+           """Test that original function logic still runs"""
+           results = []
+
+           @counted
+           def append_value(val):
+               results.append(val)
+               return val
+
+           result1 = append_value(1)
+           result2 = append_value(2)
+
+           self.assertEqual(result1, 1, "Function should return correct value")
+           self.assertEqual(result2, 2, "Function should return correct value")
+           self.assertEqual(results, [1, 2], "Function logic should execute")
+
+       def test_has_reset_count_method(self):
+           """Test that decorated function has reset_count method"""
+           @counted
+           def dummy():
+               return "OK"
+
+           self.assertTrue(hasattr(dummy, 'reset_count'), "Should have reset_count method")
+           self.assertTrue(callable(dummy.reset_count), "reset_count should be callable")
+
+       def test_reset_count_works(self):
+           """Test that reset_count resets the counter to 0"""
+           @counted
+           def dummy():
+               return "OK"
+
+           dummy()
+           dummy()
+           dummy()
+           self.assertEqual(dummy.call_count, 3)
+
+           dummy.reset_count()
+           self.assertEqual(dummy.call_count, 0, "reset_count should reset counter to 0")
+
+       def test_count_after_reset(self):
+           """Test that counting works correctly after reset"""
+           @counted
+           def dummy():
+               return "OK"
+
+           dummy()
+           dummy()
+           dummy.reset_count()
+           dummy()
+           dummy()
+
+           self.assertEqual(dummy.call_count, 2, "Should count correctly after reset")
+
+       def test_multiple_resets(self):
+           """Test multiple reset cycles"""
+           @counted
+           def dummy():
+               return "OK"
+
+           dummy()
+           dummy()
+           self.assertEqual(dummy.call_count, 2)
+
+           dummy.reset_count()
+           dummy()
+           self.assertEqual(dummy.call_count, 1)
+
+           dummy.reset_count()
+           dummy()
+           dummy()
+           dummy()
+           self.assertEqual(dummy.call_count, 3)
+
+       def test_preserves_arguments(self):
+           """Test that decorator passes arguments correctly"""
+           @counted
+           def add(a, b):
+               return a + b
+
+           result = add(5, 3)
+           self.assertEqual(result, 8)
+           self.assertEqual(add.call_count, 1)
+
+       def test_preserves_kwargs(self):
+           """Test that decorator passes keyword arguments"""
+           @counted
+           def greet(name, greeting="Hello"):
+               return f"{greeting}, {name}!"
+
+           result = greet("Alice", greeting="Hi")
+           self.assertEqual(result, "Hi, Alice!")
+           self.assertEqual(greet.call_count, 1)
+
+       def test_independent_counters(self):
+           """Test that different decorated functions have independent counters"""
+           @counted
+           def func1():
+               return "A"
+
+           @counted
+           def func2():
+               return "B"
+
+           func1()
+           func1()
+           func2()
+
+           self.assertEqual(func1.call_count, 2)
+           self.assertEqual(func2.call_count, 1)
+
+           func1.reset_count()
+           self.assertEqual(func1.call_count, 0)
+           self.assertEqual(func2.call_count, 1, "Other function counter should be unaffected")
+
+       def test_wrapper_function_created(self):
+           """Test that implementation creates a wrapper function"""
+           source = self.getEditorText()
+
+           has_wrapper = 'def wrapper' in source or 'def inner' in source
+           self.assertTrue(has_wrapper, "Implementation should create a wrapper function")
+
+       def test_increments_counter(self):
+           """Test that implementation increments the counter"""
+           source = self.getEditorText()
+
+           has_increment = '+= 1' in source or '+=' in source or '+ 1' in source
+           self.assertTrue(has_increment, "Implementation should increment call_count")
+
+       def test_sets_attributes_on_wrapper(self):
+           """Test that implementation sets attributes on wrapper"""
+           source = self.getEditorText()
+
+           has_attribute_setting = 'wrapper.call_count' in source or '.call_count =' in source
+           self.assertTrue(has_attribute_setting, "Implementation should set call_count as wrapper attribute")
+
+   myTests().main()
 
 .. reveal:: closure_adv_practice_call_counter_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
+   **Simple approach using function attributes:**
+
    .. code-block:: python
 
-      def counted(func):
-          count = [0]  # Use list for mutability
-
-          def wrapper(*args, **kwargs):
-              count[0] += 1
-              return func(*args, **kwargs)
-
-          def reset():
-              count[0] = 0
-
-          wrapper.call_count = property(lambda self: count[0])
-          wrapper.reset_count = reset
-
-          # Simpler approach:
-          # wrapper.reset_count = lambda: count.__setitem__(0, 0)
-
-          return wrapper
-
-      # Or even simpler with attributes:
       def counted(func):
           def wrapper(*args, **kwargs):
               wrapper.call_count += 1
               return func(*args, **kwargs)
 
+          # Initialize attributes
           wrapper.call_count = 0
           wrapper.reset_count = lambda: setattr(wrapper, 'call_count', 0)
 
           return wrapper
 
----
+----
 
 Check Your Understanding
 -------------------------

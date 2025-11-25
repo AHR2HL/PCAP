@@ -1,10 +1,10 @@
-..  Copyright (C)  Adam Roush.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
+.. Copyright (C) Adam Roush. Permission is granted to copy, distribute
+   and/or modify this document under the terms of the GNU Free Documentation
+   License, Version 1.3 or any later version published by the Free Software
+   Foundation; with Invariant Sections being Forward, Prefaces, and
+   Contributor List, no Front-Cover Texts, and no Back-Cover Texts. A copy of
+   the license is included in the section entitled "GNU Free Documentation
+   License".
 
 Section 3: State and Encapsulation
 ===================================
@@ -37,9 +37,7 @@ The Privacy Problem
 
 Let's start with a common problem: unprotected state.
 
-.. activecode:: closure_no_privacy
-   :language: python
-   :caption: The Problem with Global State
+.. code-block:: python
 
    # Global counter (anyone can modify it!)
    counter = 0
@@ -55,7 +53,7 @@ Let's start with a common problem: unprotected state.
 
    # Oops! Someone directly modifies the counter
    counter = 1000000
-   print(f"Count: {increment()}")  # Unexpected jump!
+   print(f"Count: {increment()}") # Unexpected jump!
 
    # Or even worse
    counter = "HACKED"
@@ -82,20 +80,16 @@ Closures Provide Automatic Privacy
 
 .. index:: closure privacy, protected state, data hiding
 
-Now let's use a closure for the same counter:
+Now let's use a closure for the same counter. (Remember: `nonlocal` won't run in browser, so this is for static inspection!)
 
-.. activecode:: closure_with_privacy
-   :language: python
-   :caption: Closure Privacy in Action
+.. code-block:: python
 
    def make_counter():
-       count = 0  # Private variable!
-
+       count = 0   # Private variable!
        def increment():
            nonlocal count
            count += 1
            return count
-
        return increment
 
    counter = make_counter()
@@ -131,6 +125,7 @@ Now let's use a closure for the same counter:
 **Key Insight:** There's **no way** to directly access or modify ``count`` from outside the closure. It's truly private!
 
 .. important::
+
    **Closure Privacy Guarantee**
 
    Variables in the enclosing scope are **completely inaccessible** from outside the closure:
@@ -142,19 +137,40 @@ Now let's use a closure for the same counter:
 
 ---
 
+.. parsonsprob:: closure_counter_parsons
+   :adaptive:
+
+   Drag and drop the code snippets to recreate the closure-based counter that ensures privacy.
+
+   -----
+   def make_counter():
+   =====
+       count = 0
+   =====
+       def increment():
+   =====
+           nonlocal count
+   =====
+           count += 1
+   =====
+           return count
+   =====
+       return increment
+   =====
+       return count+1
+
+---
+
 Building Object-Like Structures
---------------------------------
+-------------------------------
 
 .. index:: closure as object, object-oriented closure, stateful functions
 
 Closures can mimic objects by returning multiple functions that operate on shared private state:
 
-.. activecode:: closure_bank_account
-   :language: python
-   :caption: Bank Account Using Closures
+.. code-block:: python
 
    def make_bank_account(account_holder, initial_balance):
-       # Private variables (completely inaccessible from outside)
        balance = initial_balance
        holder = account_holder
        transaction_count = 0
@@ -184,38 +200,29 @@ Closures can mimic objects by returning multiple functions that operate on share
 
        def get_balance():
            return balance
-
        def get_info():
            return {
                'holder': holder,
                'balance': balance,
                'transactions': transaction_count
            }
-
-       # Return a dictionary of functions (like methods)
        return {
            'deposit': deposit,
            'withdraw': withdraw,
            'balance': get_balance,
            'info': get_info
        }
-
    # Create an account
    alice_account = make_bank_account("Alice", 1000)
-
-   # Use the "methods"
    print(f"Starting balance: ${alice_account['balance']():.2f}")
    alice_account['deposit'](500)
    alice_account['withdraw'](200)
-   alice_account['withdraw'](2000)  # Should fail
-
-   print("\nAccount Info:")
+   alice_account['withdraw'](2000) # Should fail
+   print("\\nAccount Info:")
    info = alice_account['info']()
    for key, value in info.items():
-       print(f"  {key}: {value}")
-
-   # Try to cheat
-   print("\n🔒 Security check:")
+       print(f" {key}: {value}")
+   print("\\n🔒 Security check:")
    print(f"Can we access 'balance' directly? {hasattr(alice_account, 'balance')}")
    print(f"Can we modify transaction_count? No way to even try!")
 
@@ -227,17 +234,65 @@ Closures can mimic objects by returning multiple functions that operate on share
    ✅ Deposited $500.00
    ✅ Withdrew $200.00
    ❌ Insufficient funds (balance: $1300.00)
-
    Account Info:
-     holder: Alice
-     balance: 1300
-     transactions: 2
-
+    holder: Alice
+    balance: 1300
+    transactions: 2
    🔒 Security check:
    Can we access 'balance' directly? False
    Can we modify transaction_count? No way to even try!
 
-This is **object-oriented programming** using closures! The private variables (``balance``, ``holder``, ``transaction_count``) are completely protected.
+This is **object-oriented programming** using closures! The private variables (`balance`, `holder`, `transaction_count`) are completely protected.
+
+---
+
+.. parsonsprob:: closure_bank_account_parsons
+   :adaptive:
+
+   Drag these code blocks into order to implement a closure-based bank account with deposit, withdraw, and balance/info methods.
+
+   -----
+   def make_bank_account(account_holder, initial_balance):
+   =====
+      balance = initial_balance
+   =====
+      holder = account_holder
+   =====
+      transaction_count = 0
+   =====
+      def deposit(amount):
+   =====
+         nonlocal balance, transaction_count
+   =====
+         if amount <= 0:
+   =====
+            print("❌ Deposit amount must be positive")
+            return balance
+   =====
+         balance += amount
+   =====
+         transaction_count += 1
+   =====
+         print(f"✅ Deposited ${amount:.2f}")
+         return balance
+   =====
+      def get_balance():
+   =====
+         return balance
+   =====
+      def get_info():
+   =====
+         return {
+            'holder': holder,
+            'balance': balance,
+            'transactions': transaction_count
+         }
+   =====
+      return {
+         'deposit': deposit,
+         'balance': get_balance,
+         'info': get_info
+      }
 
 ---
 
@@ -248,52 +303,43 @@ Closures vs. Classes
 
 Let's compare the same functionality using both approaches:
 
-.. activecode:: closure_vs_class_comparison
-   :language: python
-   :caption: Closure vs. Class Side-by-Side
+.. code-block:: python
 
    # Using a CLASS
    class Counter:
        def __init__(self, start=0):
-           self._count = start  # Convention: _ means "private" (but not enforced!)
-
+           self._count = start # Convention: _ means "private" (but not enforced!)
        def increment(self):
            self._count += 1
            return self._count
-
        def reset(self):
            self._count = 0
 
    # Using a CLOSURE
    def make_counter(start=0):
-       count = start  # Truly private!
-
+       count = start # Truly private!
        def increment():
            nonlocal count
            count += 1
            return count
-
        def reset():
            nonlocal count
            count = 0
-
        return increment, reset
 
    print("=== CLASS ===")
    c1 = Counter(10)
    print(c1.increment())
    print(c1.increment())
-   print(c1._count)  # ❌ Can access "private" variable!
-   c1._count = 1000  # ❌ Can modify it directly!
+   print(c1._count) # ❌ Can access "private" variable!
+   c1._count = 1000 # ❌ Can modify it directly!
    print(c1.increment())
 
-   print("\n=== CLOSURE ===")
+   print("\\n=== CLOSURE ===")
    inc, reset = make_counter(10)
    print(inc())
    print(inc())
-   # print(count)  # ❌ NameError: 'count' doesn't exist here
-   # No way to access or modify count!
-   print(inc())
+   # print(count) # ❌ NameError: 'count' doesn't exist here
 
 **Output:**
 
@@ -309,6 +355,32 @@ Let's compare the same functionality using both approaches:
    11
    12
    13
+
+.. parsonsprob:: closure_vs_class_parsons
+   :adaptive:
+
+   Arrange the code snippets for the closure-based counter (not the class!) to ensure true privacy of the variable.
+
+   -----
+   def make_counter(start=0):
+   =====
+       count = start
+       =====
+       def increment():
+       =====
+           nonlocal count
+           =====
+           count += 1
+           =====
+           return count
+           =====
+       def reset():
+       =====
+           nonlocal count
+           =====
+           count = 0
+           =====
+       return increment, reset
 
 .. list-table:: Closures vs. Classes for State Management
    :widths: 25 35 40
@@ -345,13 +417,10 @@ Real-World Encapsulation Patterns
 
 **Pattern 1: Input Validation with Protected State**
 
-.. activecode:: closure_validator_pattern
-   :language: python
-   :caption: Protected State with Validation
+.. code-block:: python
 
    def make_age_tracker():
        age = 0  # Private, always valid
-
        def set_age(new_age):
            nonlocal age
            if not isinstance(new_age, int):
@@ -363,20 +432,16 @@ Real-World Encapsulation Patterns
            age = new_age
            print(f"✅ Age set to {age}")
            return True
-
        def get_age():
            return age
-
        def birthday():
            nonlocal age
            age += 1
            print(f"🎂 Happy Birthday! Now {age} years old")
            return age
-
        return set_age, get_age, birthday
 
    set_age, get_age, birthday = make_age_tracker()
-
    # Valid operations
    set_age(25)
    birthday()
@@ -404,43 +469,30 @@ The ``age`` variable is **guaranteed** to always be valid because it's protected
 
 **Pattern 2: Configuration with Immutable Settings**
 
-.. activecode:: closure_config_pattern_immutable
-   :language: python
-   :caption: Immutable Configuration
+.. code-block:: python
 
    def create_api_client(api_key, base_url):
        # Configuration is captured and cannot be changed
-
        def get(endpoint):
            url = f"{base_url}/{endpoint}"
            # In real code, this would make an HTTP request
            return f"GET {url} with key {api_key[:5]}..."
-
        def post(endpoint, data):
            url = f"{base_url}/{endpoint}"
            return f"POST {url} with key {api_key[:5]}... | Data: {data}"
-
        def get_config():
            # Only allow reading config, not modifying
            return {
                'base_url': base_url,
                'api_key': api_key[:5] + '...'  # Don't expose full key
            }
-
        return get, post, get_config
 
-   # Create client
    get, post, get_config = create_api_client("SECRET123456", "https://api.example.com")
-
-   # Use the client
    print(get("users"))
    print(post("users", {'name': 'Alice'}))
-
-   # Can view config (safely)
-   print(f"\nConfig: {get_config()}")
-
-   # Cannot modify api_key or base_url - they're locked in!
-   print("\n🔒 Configuration is immutable and api_key is hidden!")
+   print(f"\\nConfig: {get_config()}")
+   print("\\n🔒 Configuration is immutable and api_key is hidden!")
 
 **Output:**
 
@@ -448,47 +500,36 @@ The ``age`` variable is **guaranteed** to always be valid because it's protected
 
    GET https://api.example.com/users with key SECRE...
    POST https://api.example.com/users with key SECRE... | Data: {'name': 'Alice'}
-
    Config: {'base_url': 'https://api.example.com', 'api_key': 'SECRE...'}
-
    🔒 Configuration is immutable and api_key is hidden!
 
 ---
 
 **Pattern 3: Stateful Iterators**
 
-.. activecode:: closure_iterator_pattern
-   :language: python
-   :caption: Custom Iterator with State
+.. code-block:: python
 
    def make_fibonacci_iterator():
        a, b = 0, 1
        count = 0
-
        def next_fib():
            nonlocal a, b, count
            result = a
            a, b = b, a + b
            count += 1
            return result
-
        def get_count():
            return count
-
        def reset():
            nonlocal a, b, count
            a, b, count = 0, 1, 0
-
        return next_fib, get_count, reset
 
    fib, count, reset = make_fibonacci_iterator()
-
    # Generate first 10 Fibonacci numbers
    fibs = [fib() for _ in range(10)]
    print(f"First 10 Fibonacci numbers: {fibs}")
    print(f"Generated {count()} numbers")
-
-   # Reset and generate more
    reset()
    print(f"After reset: {[fib() for _ in range(5)]}")
 
@@ -503,7 +544,7 @@ The ``age`` variable is **guaranteed** to always be valid because it's protected
 ---
 
 When to Use Closures for Encapsulation
----------------------------------------
+--------------------------------------
 
 .. index:: closure use cases, when to use closures
 
@@ -535,9 +576,7 @@ Practice Challenges
 
 **Challenge 1: Build a Secret Box**
 
-.. activecode:: closure_practice_secret_box
-   :language: python
-   :caption: Challenge - Secret Box
+.. code-block:: python
 
    def make_secret_box(initial_secret):
        """
@@ -553,60 +592,65 @@ Practice Challenges
        # TODO: Your code here
        pass
 
-   # Test your code (uncomment when ready):
-   # get, set_secret, change_pass = make_secret_box("treasure")
-   #
-   # print(get("opensesame"))        # Should print: treasure
-   # print(get("wrong"))              # Should print: Access denied!
-   # set_secret("gold", "opensesame")
-   # print(get("opensesame"))        # Should print: gold
-   # change_pass("opensesame", "newpass")
-   # print(get("newpass"))            # Should print: gold
+# Test code would go here
 
-.. reveal:: closure_practice_secret_box_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
+.. parsonsprob:: closure_secret_box_parsons
+   :adaptive:
 
-   .. code-block:: python
+   Here is a solution for a closure-based secret box.
+   Drag the blocks to reconstruct the function.
 
-      def make_secret_box(initial_secret):
-          secret = initial_secret
-          password = "opensesame"
-
-          def get_secret(pwd):
-              if pwd == password:
-                  return secret
-              return "Access denied!"
-
-          def set_secret(new_secret, pwd):
-              nonlocal secret
-              if pwd == password:
-                  secret = new_secret
-                  return "Secret updated!"
-              return "Access denied!"
-
-          def change_password(old_pwd, new_pwd):
-              nonlocal password
-              if old_pwd == password:
-                  password = new_pwd
-                  return "Password changed!"
-              return "Access denied!"
-
-          return get_secret, set_secret, change_password
+   -----
+   def make_secret_box(initial_secret):
+   =====
+       secret = initial_secret
+       =====
+       password = "opensesame"
+       =====
+       def get_secret(pwd):
+       =====
+           if pwd == password:
+           =====
+               return secret
+               =====
+           return "Access denied!"
+           =====
+       def set_secret(new_secret, pwd):
+       =====
+           nonlocal secret
+           =====
+           if pwd == password:
+           =====
+               secret = new_secret
+               =====
+               return "Secret updated!"
+               =====
+           return "Access denied!"
+           =====
+       def change_password(old_pwd, new_pwd):
+       =====
+           nonlocal password
+           =====
+           if old_pwd == password:
+           =====
+               password = new_pwd
+               =====
+               return "Password changed!"
+               =====
+           return "Access denied!"
+           =====
+       return get_secret, set_secret, change_password
 
 ---
 
 **Challenge 2: Build a Retry Mechanism**
 
-.. activecode:: closure_practice_retry
-   :language: python
-   :caption: Challenge - Retry Mechanism
+.. code-block:: python
 
    def make_retry_wrapper(max_retries):
        """
        Create a closure that wraps a function and automatically
        retries it if it raises an exception.
-
        Should track:
        - Total attempts made
        - Total failures
@@ -617,57 +661,114 @@ Practice Challenges
        # TODO: Your code here
        pass
 
-   # Test your code (uncomment when ready):
-   # wrap, stats = make_retry_wrapper(3)
-   #
-   # attempts = 0
-   # def unreliable_function():
-   #     global attempts
-   #     attempts += 1
-   #     if attempts < 3:
-   #         raise ValueError("Not yet!")
-   #     return "Success!"
-   #
-   # wrapped = wrap(unreliable_function)
-   # print(wrapped())  # Should retry and eventually succeed
-   # print(stats())    # Show statistics
+# Test code would go here
 
-.. reveal:: closure_practice_retry_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
+.. parsonsprob:: closure_retry_wrapper_parsons
+   :language: python
+   :adaptive:
+   :numbered: left
 
-   .. code-block:: python
+   Create a ``make_retry_wrapper(max_retries)`` function that returns two functions:
 
-      def make_retry_wrapper(max_retries):
-          total_attempts = 0
-          total_failures = 0
-          total_successes = 0
+   1. ``wrap(func)`` - wraps a function to automatically retry on exceptions
+   2. ``get_stats()`` - returns dictionary with 'attempts', 'failures', 'successes'
 
-          def wrap(func):
-              def wrapper(*args, **kwargs):
-                  nonlocal total_attempts, total_failures, total_successes
+   **Requirements:**
 
-                  for attempt in range(max_retries):
-                      try:
-                          total_attempts += 1
-                          result = func(*args, **kwargs)
-                          total_successes += 1
-                          return result
-                      except Exception as e:
-                          if attempt == max_retries - 1:
-                              total_failures += 1
-                              raise
-                          continue
-              return wrapper
+   - Retry up to ``max_retries`` times
+   - Track total attempts, failures, and successes across all wrapped functions
+   - If all retries fail, raise the exception and count as failure
+   - If any attempt succeeds, count as success and return result
 
-          def get_stats():
-              return {
-                  'attempts': total_attempts,
-                  'failures': total_failures,
-                  'successes': total_successes
-              }
+   **Example:**
 
-          return wrap, get_stats
+   ::
+
+      wrap, get_stats = make_retry_wrapper(3)
+
+      attempts = 0
+      def flaky():
+          global attempts
+          attempts += 1
+          if attempts < 3:
+              raise ValueError("Not yet!")
+          return "Success!"
+
+      wrapped = wrap(flaky)
+      result = wrapped()  # Retries twice, succeeds on 3rd attempt
+      print(result)       # "Success!"
+      print(get_stats())  # {'attempts': 3, 'failures': 0, 'successes': 1}
+
+   Arrange the blocks to create the complete solution:
+   -----
+   def make_retry_wrapper(max_retries):
+   =====
+       total_attempts = 0
+       total_failures = 0
+       total_successes = 0
+   =====
+       total_attempts = []
+       total_failures = []
+       total_successes = [] #distractor
+   =====
+       def wrap(func):
+   =====
+           def wrapper(*args, **kwargs):
+   =====
+               nonlocal total_attempts, total_failures, total_successes
+   =====
+               global total_attempts, total_failures, total_successes #distractor
+   =====
+               for attempt in range(max_retries):
+   =====
+               for attempt in range(1, max_retries + 1): #distractor
+   =====
+                   try:
+   =====
+                       total_attempts += 1
+   =====
+                       result = func(*args, **kwargs)
+   =====
+                       total_successes += 1
+   =====
+                       return result
+   =====
+                   except Exception as e:
+   =====
+                   except: #distractor
+   =====
+                       if attempt == max_retries - 1:
+   =====
+                       if attempt >= max_retries: #distractor
+   =====
+                           total_failures += 1
+   =====
+                           raise
+   =====
+                           return None #distractor
+   =====
+           return wrapper
+   =====
+           return func #distractor
+   =====
+       def get_stats():
+   =====
+           return {
+               'attempts': total_attempts,
+               'failures': total_failures,
+               'successes': total_successes
+           }
+   =====
+           nonlocal total_attempts
+           return {
+               'attempts': total_attempts,
+               'failures': total_failures,
+               'successes': total_successes
+           } #distractor
+   =====
+       return wrap, get_stats
+   =====
+       return wrap #distractor
 
 ---
 
@@ -685,8 +786,6 @@ Check Your Understanding
    :feedback_c: Even introspection can't directly access closure variables.
    :feedback_d: They're stored in the closure's local scope, not globally.
 
-   What level of privacy do closure variables have?
-
 .. mchoice:: closure_vs_class_privacy
    :answer_a: Classes provide better privacy than closures
    :answer_b: Closures and classes have the same privacy level
@@ -697,8 +796,6 @@ Check Your Understanding
    :feedback_b: Closures enforce privacy; classes use conventions (like _name).
    :feedback_c: Correct! Closures have language-enforced privacy; class "privacy" is just convention.
    :feedback_d: Closures definitely provide privacy!
-
-   How does closure privacy compare to class privacy in Python?
 
 .. mchoice:: closure_when_to_use
    :answer_a: Always use closures instead of classes
@@ -711,8 +808,6 @@ Check Your Understanding
    :feedback_c: Closures are great for many scenarios!
    :feedback_d: Closures are useful far beyond just math!
 
-   When should you use closures for state management?
-
 .. mchoice:: closure_multiple_instances
    :answer_a: You can only create one closure per outer function
    :answer_b: Each call to the outer function creates an independent closure with its own state
@@ -724,50 +819,48 @@ Check Your Understanding
    :feedback_c: Each closure has its OWN copy of enclosing variables.
    :feedback_d: Multiple independent closures are fully supported!
 
-   Can you create multiple independent closures from the same outer function?
-
 ---
 
 Key Takeaways
 -------------
 
 .. important::
+
    **Section 3 Summary: State and Encapsulation**
 
    ✅ **True Privacy:**
-      - Closure variables are **completely inaccessible** from outside
-      - No way to read or modify them except through returned functions
-      - Unlike classes, privacy is **enforced by the language**
+   - Closure variables are **completely inaccessible** from outside
+   - No way to read or modify them except through returned functions
+   - Unlike classes, privacy is **enforced by the language**
 
    ✅ **Object-Like Behavior:**
-      - Closures can mimic objects by returning multiple functions
-      - Shared private state between returned functions
-      - No boilerplate (no ``__init__``, no ``self``)
+   - Closures can mimic objects by returning multiple functions
+   - Shared private state between returned functions
+   - No boilerplate (no ``__init__``, no ``self``)
 
    ✅ **Closures vs. Classes:**
+   **Closures Win:**
+   - Simpler syntax for small state
+   - True, enforced privacy
+   - Less boilerplate
 
-      **Closures Win:**
-      - Simpler syntax for small state
-      - True, enforced privacy
-      - Less boilerplate
-
-      **Classes Win:**
-      - Inheritance and polymorphism
-      - Complex state with many attributes
-      - Better introspection
-      - Team familiarity
+   **Classes Win:**
+   - Inheritance and polymorphism
+   - Complex state with many attributes
+   - Better introspection
+   - Team familiarity
 
    ✅ **Practical Patterns:**
-      - **Validators:** Protected state with validation
-      - **Configuration:** Immutable settings
-      - **Iterators:** Stateful iteration with hidden state
-      - **Security:** Password protection, access control
+   - **Validators:** Protected state with validation
+   - **Configuration:** Immutable settings
+   - **Iterators:** Stateful iteration with hidden state
+   - **Security:** Password protection, access control
 
    ✅ **Decision Guide:**
-      - Simple state (1-5 variables)? → Closure
-      - Need inheritance? → Class
-      - Want guaranteed privacy? → Closure
-      - Complex object hierarchy? → Class
+   - Simple state (1-5 variables)? → Closure
+   - Need inheritance? → Class
+   - Want guaranteed privacy? → Closure
+   - Complex object hierarchy? → Class
 
 ---
 
@@ -790,8 +883,8 @@ Ready to see closures in action solving real problems? Let's go! 🚀
 ---
 
 .. note::
-   **✅ Section 3 Complete!**
 
+   **✅ Section 3 Complete!**
    You've learned:
    - [✓] How closures provide true data privacy
    - [✓] Building object-like structures with closures

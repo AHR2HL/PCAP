@@ -281,8 +281,7 @@ The ``bytearray`` Type
 
 **Basic bytearray Operations:**
 
-.. activecode:: file_bytearray_basic
-   :language: python
+.. code-block:: python
 
    # Create bytearray
    data = bytearray(b"Hello")
@@ -329,8 +328,7 @@ The ``bytearray`` Type
 
 **Practical bytearray Example:**
 
-.. activecode:: file_bytearray_practical
-   :language: python
+.. code-block:: python
 
    def modify_binary_data(data):
        """Modify binary data in-place using bytearray."""
@@ -365,7 +363,7 @@ The ``bytearray`` Type
 ::
 
    Original: bytearray(b'Secret Message')
-   Encrypted: bytearray(b'yOE\\O^*wO]]MQO')
+   Encrypted: bytearray(b'yOE\O^\x1ewO]]MQO')
    Decrypted: bytearray(b'Secret Message')
 
    Final: b'Secret Message'
@@ -374,8 +372,7 @@ The ``bytearray`` Type
 
 **bytearray Methods:**
 
-.. activecode:: file_bytearray_methods
-   :language: python
+.. code-block:: python
 
    data = bytearray(b"Hello World")
 
@@ -440,11 +437,9 @@ The ``errno`` Module
 
 The **``errno``** module provides error code constants for system errors.
 
-.. activecode:: file_errno_basic
-   :language: python
+.. code-block:: python
 
    import errno
-   import os
 
    print("Common errno Values:")
    print("="*50)
@@ -462,8 +457,8 @@ The **``errno``** module provides error code constants for system errors.
    for code, description in errors:
        print(f"  {code:2d} - {description}")
 
-   print(f"\n💡 These are standard POSIX error codes")
-   print(f"   Used across Unix/Linux/macOS systems")
+   print("\n💡 These are standard POSIX error codes")
+   print("   Used across Unix/Linux/macOS systems")
 
 **Output:**
 
@@ -485,8 +480,7 @@ The **``errno``** module provides error code constants for system errors.
 
 **Using errno in Exception Handling:**
 
-.. activecode:: file_errno_exceptions
-   :language: python
+.. code-block:: python
 
    import errno
 
@@ -533,8 +527,7 @@ The **``errno``** module provides error code constants for system errors.
 
 **Practical errno Example:**
 
-.. activecode:: file_errno_practical
-   :language: python
+.. code-block:: python
 
    import errno
 
@@ -712,32 +705,35 @@ Python provides three standard streams via the ``sys`` module:
 .. activecode:: file_streams_redirect
    :language: python
 
-   import sys
-   from io import StringIO
+   # Simple output capture that works in browser
+   captured_output = []
 
-   # Save original stdout
-   original_stdout = sys.stdout
+   # Save original print function
+   original_print = print
 
-   # Create a string buffer
-   string_buffer = StringIO()
+   # Custom print function that captures output
+   def capture_print(*args, sep=' ', end='\n'):
+       """Custom print that saves to a list."""
+       text = sep.join(str(arg) for arg in args) + end
+       captured_output.append(text)
 
-   # Redirect stdout to buffer
-   sys.stdout = string_buffer
+   # Replace built-in print with our custom one
+   print = capture_print
 
-   # These go to the buffer, not console
+   # These go to the capture list, not console
    print("This is captured")
    print("So is this")
+   print("Line 3 here")
 
-   # Restore original stdout
-   sys.stdout = original_stdout
+   # Restore original print
+   print = original_print
 
-   # Get captured output
-   captured = string_buffer.getvalue()
-
+   # Display captured output
    print("Captured output:")
-   print(repr(captured))
+   for line in captured_output:
+       print(f"  {repr(line)}")
 
-   print("\n💡 Use cases for stream redirection:")
+   print("\n💡 Use cases for output capture:")
    print("  • Testing functions that print")
    print("  • Capturing program output")
    print("  • Logging to strings")
@@ -748,9 +744,11 @@ Python provides three standard streams via the ``sys`` module:
 ::
 
    Captured output:
-   'This is captured\nSo is this\n'
+     'This is captured\n'
+     'So is this\n'
+     'Line 3 here\n'
 
-   💡 Use cases for stream redirection:
+   💡 Use cases for output capture:
      • Testing functions that print
      • Capturing program output
      • Logging to strings
@@ -993,7 +991,7 @@ The ``with`` statement ensures files are properly closed.
            print(f"Read: {content}")
 
            # File automatically closed when exiting 'with' block
-           print(f"File automatically closed")
+           print("File automatically closed")
            return content
 
        except Exception as e:
@@ -1057,7 +1055,7 @@ The ``with`` statement ensures files are properly closed.
        print(f"  Writing to {output_file}")
        output_data = '\n'.join(processed)
 
-       print(f"  Both files automatically closed")
+       print("  Both files automatically closed")
 
        return output_data
 

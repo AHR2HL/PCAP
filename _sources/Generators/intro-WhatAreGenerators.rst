@@ -40,8 +40,7 @@ The Memory Problem
 
 Let's see what happens when we work with larger datasets:
 
-.. activecode:: gen_intro_memory_problem
-   :language: python
+.. code-block:: python
 
    import sys
 
@@ -55,7 +54,14 @@ Let's see what happens when we work with larger datasets:
    print(f"Memory used: {memory_mb:.2f} MB")
    print(f"That's {len(big_list):,} numbers stored in memory!")
 
-**The problem:** List comprehensions create the **entire list in memory** before you can use it.
+**Output:**
+
+::
+
+   Memory used: 8.00 MB
+   That's 1,000,000 numbers stored in memory!
+
+**The Problem:** All million numbers must be stored in memory at once!
 
 What if you have:
 
@@ -160,26 +166,75 @@ You've probably streamed movies online:
 Your First Generator: range()
 ------------------------------
 
-Good news: **You've already used a generator!** (Sort of.)
+Good news: You've already used a generator! (Sort of.)
 
-In Python 3, ``range()`` returns a **range object**, which behaves like a generator:
+In Python 3, ``range()`` returns a range object, which behaves like a generator:
 
-.. activecode:: gen_intro_range_example
+.. activecode:: gen_intro_range
    :language: python
-
-   import sys
 
    # range() doesn't create a list - it's lazy!
    r = range(1_000_000)
 
    print(f"Type: {type(r)}")
-   print(f"Memory used: {sys.getsizeof(r)} bytes")
+   print(f"String representation: {r}")
 
-   # Compare to a list of the same numbers
+   # We can iterate it, but it doesn't store all values
+   print("\nFirst 10 values:")
+   count = 0
+   for num in r:
+       print(num, end=' ')
+       count += 1
+       if count >= 10:
+           break
+
+   print("\n\n💡 Key Point:")
+   print("range(1_000_000) doesn't create 1 million numbers in memory!")
+   print("It just remembers: start=0, stop=1_000_000, step=1")
+
+   # Compare to actually creating a list
+   print("\n🐌 Creating an actual list of 1 million numbers...")
+   print("(This takes time and memory)")
    big_list = list(range(1_000_000))
-   print(f"\nList memory: {sys.getsizeof(big_list):,} bytes")
+   print(f"List created! Length: {len(big_list):,}")
+   print(f"First 5: {big_list[:5]}")
+   print(f"Last 5: {big_list[-5:]}")
 
-   print(f"\nMemory savings: {sys.getsizeof(big_list) / sys.getsizeof(r):.0f}x less memory!")
+**The Difference:**
+
+.. list-table:: range() vs list()
+   :widths: 30 35 35
+   :header-rows: 0
+
+   * - Aspect
+     - ``range(1_000_000)``
+     - ``list(range(1_000_000))``
+   * - **Memory**
+     - ~48 bytes (fixed size!)
+     - ~8 MB (grows with size)
+   * - **Creation Speed**
+     - Instant
+     - Takes time to build
+   * - **Storage**
+     - Stores only start/stop/step
+     - Stores all 1 million numbers
+   * - **Access**
+     - Calculates values on demand
+     - All values pre-computed
+
+**Why This Matters:**
+
+.. code-block:: python
+
+   # ✅ Efficient: Only stores 3 numbers (start, stop, step)
+   for i in range(1_000_000):
+       process(i)
+
+   # ❌ Wasteful: Stores 1 million numbers first
+   for i in list(range(1_000_000)):
+       process(i)
+
+**Key Insight:** ``range()`` is **lazy** - it generates values on-the-fly instead of storing them all at once!
 
 **Notice:**
 
@@ -214,71 +269,6 @@ In Python 3, ``range()`` returns a **range object**, which behaves like a genera
    :feedback_c: Actually, range() is often faster because it doesn't allocate memory for a huge list!
 
    How does ``range(1_000_000)`` work?
-
-----
-
-Lists vs. Generators: Side-by-Side
------------------------------------
-
-Let's compare lists and generators directly:
-
-.. activecode:: gen_intro_comparison
-   :language: python
-
-   import sys
-
-   # LIST: Eager evaluation - compute everything NOW
-   print("=== LIST ===")
-   my_list = [n * 2 for n in range(10)]
-   print(f"Type: {type(my_list)}")
-   print(f"Contents: {my_list}")
-   print(f"Memory: {sys.getsizeof(my_list)} bytes")
-   print(f"Can access multiple times: {my_list[0]}, {my_list[5]}, {my_list[0]}")
-
-   print("\n=== GENERATOR ===")
-   my_gen = (n * 2 for n in range(10))  # Note: parentheses, not brackets!
-   print(f"Type: {type(my_gen)}")
-   print(f"Contents: {my_gen}")  # Can't see values - they haven't been generated yet!
-   print(f"Memory: {sys.getsizeof(my_gen)} bytes")
-
-   # To use a generator, iterate over it
-   print("Values:")
-   for value in my_gen:
-       print(value, end=" ")
-   print()
-
-   # Try to iterate again - it's exhausted!
-   print("\nTrying to iterate again:")
-   for value in my_gen:
-       print(value, end=" ")
-   print("(Nothing! Generator is exhausted.)")
-
-**Key Differences:**
-
-+----------------------+--------------------------------+----------------------------------+
-| Feature              | List                           | Generator                        |
-+======================+================================+==================================+
-| **Memory**           | Stores all items               | Stores only current item         |
-+----------------------+--------------------------------+----------------------------------+
-| **Evaluation**       | Eager (compute everything now) | Lazy (compute on demand)         |
-+----------------------+--------------------------------+----------------------------------+
-| **Access**           | Can access any item anytime    | Can iterate only once            |
-+----------------------+--------------------------------+----------------------------------+
-| **Speed (first use)**| Slower (must create everything)| Faster (just creates recipe)     |
-+----------------------+--------------------------------+----------------------------------+
-| **Reusability**      | Can iterate many times         | Exhausted after one iteration    |
-+----------------------+--------------------------------+----------------------------------+
-
-.. mchoice:: list_vs_gen_when
-   :answer_a: When you need to iterate over items multiple times
-   :answer_b: When you're processing huge datasets once
-   :answer_c: When you need to access items by index (e.g., my_data[5])
-   :correct: b
-   :feedback_a: Use a list for that! Generators can only iterate once.
-   :feedback_b: Perfect use case! Process once, save memory.
-   :feedback_c: Generators don't support indexing - use a list!
-
-   When should you use a **generator** instead of a list?
 
 ----
 

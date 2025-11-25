@@ -347,32 +347,6 @@ Here's a function that computes the sum of digits in a number:
 
    In what order do the return values come back when calling ``sum_digits(123)``?
 
-Visualize Any Recursive Function
----------------------------------
-
-Want to see the stack for ANY Python code? Use **Python Tutor**!
-
-.. raw:: html
-
-   <div style="border: 2px solid #4CAF50; padding: 15px; margin: 20px 0; background-color: #f9f9f9;">
-   <h4 style="margin-top: 0;">🔍 Python Tutor: Your Stack Visualization Superpower</h4>
-   <p><strong>Python Tutor</strong> (<a href="https://pythontutor.com" target="_blank">pythontutor.com</a>) 
-   is a free tool that shows you:</p>
-   <ul>
-       <li>Each stack frame as it's created</li>
-       <li>Variable values at each step</li>
-       <li>The exact line currently executing</li>
-       <li>How the stack grows and shrinks</li>
-   </ul>
-   <p><strong>How to use it:</strong></p>
-   <ol>
-       <li>Go to <a href="https://pythontutor.com/visualize.html" target="_blank">pythontutor.com/visualize.html</a></li>
-       <li>Paste your recursive function</li>
-       <li>Click "Visualize Execution"</li>
-       <li>Step through with the "Next" button</li>
-   </ol>
-   <p>Try it with <code>factorial(4)</code> or any recursive function from this chapter!</p>
-   </div>
 
 Practice with the Stack
 ------------------------

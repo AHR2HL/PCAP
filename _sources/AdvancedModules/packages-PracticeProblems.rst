@@ -608,26 +608,6 @@ Math Module Quick Review
    print("\nGeometric:")
    print(f"  hypot(3, 4) = {math.hypot(3, 4)}")
 
-Platform Module Quick Review
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. activecode:: platform_module_review
-   :nocodelens:
-
-   import platform
-
-   print("💻 Platform Module Quick Review\n")
-   print("=" * 50)
-
-   print("System Information:")
-   print(f"  Platform: {platform.platform()}")
-   print(f"  System: {platform.system()}")
-   print(f"  Machine: {platform.machine()}")
-
-   print("\nPython Information:")
-   print(f"  Version: {platform.python_version()}")
-   print(f"  Implementation: {platform.python_implementation()}")
-   print(f"  Version tuple: {platform.python_version_tuple()}")
 
 Mixed Multiple Choice Questions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -739,7 +719,7 @@ Mixed Multiple Choice Questions
 Parsons Problems
 ~~~~~~~~~~~~~~~~
 
-.. parsonsprob:: package_structure_parsons
+.. parsonsprob:: package_structure_parsons_2
    :numbered: left
    :adaptive:
 
@@ -819,12 +799,12 @@ Coding Challenges
 
    class MyTests(TestCaseGui):
        def test_calculate_statistics(self):
-           result = calculate_statistics([10, 20, 30, 40, 50])
-           self.assertAlmostEqual(result['mean'], 30.0, places=1)
-           self.assertEqual(result['max'], 50)
+           result = calculate_statistics([10, 20, 30, 40])
+           self.assertAlmostEqual(result['mean'], 25.0, places=1)
+           self.assertEqual(result['max'], 40)
            self.assertEqual(result['min'], 10)
-           self.assertEqual(result['range'], 40)
-           self.assertAlmostEqual(result['sqrt_of_mean'], math.sqrt(30), places=1)
+           self.assertEqual(result['range'], 30)
+           self.assertAlmostEqual(result['sqrt_of_mean'], math.sqrt(25), places=1)
 
        def test_different_data(self):
            result = calculate_statistics([5, 15, 25])
@@ -878,80 +858,130 @@ Coding Challenges
    Write a function ``validate_package_structure(structure)`` that takes
    a dictionary representing a package structure and validates it.
 
-   The structure dict format:
-   {
-       'name': 'package_name',
-       'has_init': True/False,
-       'modules': ['module1.py', 'module2.py'],
-       'subpackages': [nested structure dicts]
-   }
+   **The structure dict format:**
+
+   ::
+
+       {
+           'name': 'package_name',
+           'has_init': True/False,
+           'modules': ['module1.py', 'module2.py'],
+           'subpackages': [nested structure dicts]
+       }
 
    Return a list of validation errors. If valid, return empty list.
 
-   Rules:
+   **Rules:**
+
    - Package name must not be empty
-   - Must have __init__.py (has_init must be True)
-   - All module names must end with .py
+   - Must have ``__init__.py`` (has_init must be True)
+   - All module names must end with ``.py``
    - Recursively validate subpackages
+
+   **Example:**
+
+   ::
+
+       structure = {
+           'name': 'mypackage',
+           'has_init': True,
+           'modules': ['utils.py', 'helpers.py'],
+           'subpackages': []
+       }
+
+       validate_package_structure(structure)  # Returns: []
+
+       bad_structure = {
+           'name': '',
+           'has_init': False,
+           'modules': ['utils.txt'],
+           'subpackages': []
+       }
+
+       validate_package_structure(bad_structure)
+       # Returns: ['Package name is empty',
+       #           'Missing __init__.py',
+       #           'Module utils.txt must end with .py']
+
    ~~~~
    def validate_package_structure(structure):
        # Your code here
        pass
 
-   # Test case 1: Valid structure
-   valid_pkg = {
-       'name': 'mypackage',
-       'has_init': True,
-       'modules': ['module1.py', 'module2.py'],
-       'subpackages': []
-   }
-   print("Valid package errors:", validate_package_structure(valid_pkg))  # Should be []
-
-   # Test case 2: Invalid structure
-   invalid_pkg = {
-       'name': '',
-       'has_init': False,
-       'modules': ['module1.py', 'badmodule'],
-       'subpackages': []
-   }
-   print("Invalid package errors:", validate_package_structure(invalid_pkg))
-   # Should list errors: empty name, no __init__.py, bad module name
-
    ====
    from unittest.gui import TestCaseGui
 
-   class MyTests(TestCaseGui):
+   class myTests(TestCaseGui):
        def test_valid_structure(self):
-           valid = {
-               'name': 'pkg',
+           structure = {
+               'name': 'mypackage',
                'has_init': True,
-               'modules': ['mod.py'],
+               'modules': ['main.py'],
                'subpackages': []
            }
-           result = validate_package_structure(valid)
-           self.assertEqual(len(result), 0, "Valid structure should have no errors")
+           errors = validate_package_structure(structure)
+           self.assertEqual(errors, [])
+
+       def test_empty_name(self):
+           structure = {
+               'name': '',
+               'has_init': True,
+               'modules': [],
+               'subpackages': []
+           }
+           errors = validate_package_structure(structure)
+           self.assertIn('Package name is empty', errors)
 
        def test_missing_init(self):
-           invalid = {
+           structure = {
                'name': 'pkg',
                'has_init': False,
                'modules': [],
                'subpackages': []
            }
-           result = validate_package_structure(invalid)
-           self.assertTrue(len(result) > 0, "Should report missing __init__.py")
+           errors = validate_package_structure(structure)
+           self.assertIn('Missing __init__.py', errors)
 
-       def test_bad_module_name(self):
-           invalid = {
+       def test_invalid_module_extension(self):
+           structure = {
                'name': 'pkg',
                'has_init': True,
-               'modules': ['badmodule'],
+               'modules': ['file.txt'],
                'subpackages': []
            }
-           result = validate_package_structure(invalid)
-           self.assertTrue(len(result) > 0, "Should report bad module name")
+           errors = validate_package_structure(structure)
+           self.assertTrue(any('must end with .py' in err for err in errors))
 
-   MyTests().main()
+   myTests().main()
+
+.. reveal:: package_structure_validator_solution
+   :showtitle: Show Solution
+   :hidetitle: Hide Solution
+
+   .. code-block:: python
+
+      def validate_package_structure(structure):
+          errors = []
+
+          # Check package name
+          if not structure.get('name'):
+              errors.append('Package name is empty')
+
+          # Check __init__.py
+          if not structure.get('has_init'):
+              errors.append('Missing __init__.py')
+
+          # Check module extensions
+          for module in structure.get('modules', []):
+              if not module.endswith('.py'):
+                  errors.append(f'Module {module} must end with .py')
+
+          # Recursively check subpackages
+          for subpkg in structure.get('subpackages', []):
+              sub_errors = validate_package_structure(subpkg)
+              errors.extend(sub_errors)
+
+          return errors
 
 .. activecode:: requirements_parser_challenge
    :nocodelens:
@@ -960,12 +990,14 @@ Coding Challenges
    a requirements.txt content and categorizes packages.
 
    Return a dictionary:
-   {
+   ::
+
+     {
        'pinned': [(package, version), ...],  # Exact version (==)
        'flexible': [(package, constraint), ...],  # Version range (>=, <, etc.)
        'latest': [package, ...],  # No version specified
        'comments': [comment_line, ...]
-   }
+     }
    ~~~~
    def parse_and_categorize_requirements(req_text):
        # Your code here

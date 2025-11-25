@@ -265,19 +265,18 @@ Arrange the code blocks in the correct order to create working closures:
 
 **Problem 1: Basic Counter**
 
-.. parsonsprob:: closure_practice_parsons_counter
+.. parsonsprob:: closure_practice_parsons_counter2
    :language: python
    :adaptive:
    :numbered: left
 
    Arrange the blocks to create a counter function that starts at 0 and increments by 1 each time it's called.
+
+   **Goal:** Create ``make_counter()`` that returns an ``increment()`` function. Each call to ``increment()`` should increase the count by 1 and return the new value.
    -----
    def make_counter():
    =====
        count = 0
-   =====
-       count = 0 #distractor
-       global count
    =====
        def increment():
    =====
@@ -287,7 +286,7 @@ Arrange the code blocks in the correct order to create working closures:
    =====
            count += 1
    =====
-           count = count + 1 #distractor
+           count == count + 1 #distractor
    =====
            return count
    =====
@@ -301,6 +300,7 @@ Arrange the code blocks in the correct order to create working closures:
    :numbered: left
 
    Arrange the blocks to create a function factory that returns multiplier functions.
+
    -----
    def make_multiplier(factor):
    =====
@@ -329,8 +329,8 @@ Arrange the code blocks in the correct order to create working closures:
    -----
    def logger(func):
    =====
-   @logger #distractor
-   def logger(func):
+   @logger
+   def logger(func): #distractor
    =====
        def wrapper(*args, **kwargs):
    =====
@@ -1279,99 +1279,6 @@ Build these closures from scratch! Each challenge tests different aspects of clo
 
 ---
 
-**Challenge 10: Pipeline Builder**
-
-.. activecode:: closure_practice_code_pipeline
-   :language: python
-   :autograde: unittest
-
-   Create ``make_pipeline()`` that returns a pipeline object with:
-   - ``add(func)`` — adds a transformation to the pipeline
-   - ``execute(data)`` — runs data through all transformations
-   - ``reset()`` — clears the pipeline
-
-   Example::
-
-       pipeline = make_pipeline()
-       pipeline.add(lambda x: x * 2)
-       pipeline.add(lambda x: x + 10)
-       print(pipeline.execute(5))  # (5 * 2) + 10 = 20
-
-   ~~~~
-   def make_pipeline():
-       # Your code here
-       # Return an object (dict) with 'add', 'execute', 'reset' keys
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_single_transform(self):
-           pipeline = make_pipeline()
-           pipeline['add'](lambda x: x * 2)
-           result = pipeline['execute'](5)
-           self.assertEqual(result, 10)
-
-       def test_multiple_transforms(self):
-           pipeline = make_pipeline()
-           pipeline['add'](lambda x: x * 2)
-           pipeline['add'](lambda x: x + 10)
-           pipeline['add'](lambda x: x ** 2)
-           result = pipeline['execute'](5)
-           # (5 * 2) = 10, (10 + 10) = 20, (20 ** 2) = 400
-           self.assertEqual(result, 400)
-
-       def test_reset(self):
-           pipeline = make_pipeline()
-           pipeline['add'](lambda x: x * 2)
-           pipeline['reset']()
-           result = pipeline['execute'](5)
-           self.assertEqual(result, 5)  # No transformations
-
-       def test_independent_pipelines(self):
-           p1 = make_pipeline()
-           p2 = make_pipeline()
-
-           p1['add'](lambda x: x * 2)
-           p2['add'](lambda x: x + 10)
-
-           self.assertEqual(p1['execute'](5), 10)
-           self.assertEqual(p2['execute'](5), 15)
-
-   myTests().main()
-
-.. reveal:: closure_practice_code_pipeline_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def make_pipeline():
-          transforms = []
-
-          def add(func):
-              nonlocal transforms
-              transforms.append(func)
-
-          def execute(data):
-              result = data
-              for transform in transforms:
-                  result = transform(result)
-              return result
-
-          def reset():
-              nonlocal transforms
-              transforms = []
-
-          return {
-              'add': add,
-              'execute': execute,
-              'reset': reset
-          }
-
----
-
 Part 5: Debugging Challenges
 -----------------------------
 
@@ -1383,6 +1290,7 @@ Find and fix the bugs in these broken closures!
 
 .. activecode:: closure_practice_debug_counter
    :language: python
+   :autograde: unittest
 
    This counter doesn't increment properly. Fix it!
    ~~~~
@@ -1390,23 +1298,87 @@ Find and fix the bugs in these broken closures!
        count = 0
 
        def increment():
-           count = count + 1  # Bug here!
+           count = count + 1
            return count
 
        return increment
 
    counter = make_counter()
-   print(counter())  # Should print 1
-   print(counter())  # Should print 2
-   print(counter())  # Should print 3
+   print(counter())
+   print(counter())
+   print(counter())
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_first_call_returns_1(self):
+           """First call should return 1"""
+           counter = make_counter()
+           result = counter()
+           self.assertEqual(result, 1, "First call should return 1")
+
+       def test_second_call_returns_2(self):
+           """Second call should return 2"""
+           counter = make_counter()
+           counter()  # First call
+           result = counter()  # Second call
+           self.assertEqual(result, 2, "Second call should return 2")
+
+       def test_third_call_returns_3(self):
+           """Third call should return 3"""
+           counter = make_counter()
+           counter()  # 1
+           counter()  # 2
+           result = counter()  # 3
+           self.assertEqual(result, 3, "Third call should return 3")
+
+       def test_sequence_of_five(self):
+           """Test counting up to 5"""
+           counter = make_counter()
+           results = [counter() for _ in range(5)]
+           self.assertEqual(results, [1, 2, 3, 4, 5],
+                          "Should count 1, 2, 3, 4, 5")
+
+       def test_multiple_counters_independent(self):
+           """Multiple counters should be independent"""
+           counter1 = make_counter()
+           counter2 = make_counter()
+
+           counter1()  # counter1 = 1
+           counter1()  # counter1 = 2
+
+           result2 = counter2()  # counter2 = 1
+           result1 = counter1()  # counter1 = 3
+
+           self.assertEqual(result2, 1, "counter2 should start at 1")
+           self.assertEqual(result1, 3, "counter1 should be at 3")
+
+       def test_returns_integer(self):
+           """Counter should return integers"""
+           counter = make_counter()
+           result = counter()
+           self.assertIsInstance(result, int, "Counter should return integers")
+
+   myTests().main()
 
 .. reveal:: closure_practice_debug_counter_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** Missing ``nonlocal`` keyword. Python creates a new local variable instead of modifying the enclosing one.
+   **Problem:** Missing ``nonlocal`` keyword. When Python sees ``count = count + 1``, it assumes ``count`` is a local variable in the ``increment()`` function. But you're trying to read ``count`` (right side) before it's been assigned locally, causing an error.
 
-   **Fix:**
+   **The Error You Get:**
+
+   ::
+
+      UnboundLocalError: local variable 'count' referenced before assignment
+
+   **Why This Happens:**
+
+   Python sees the assignment ``count = ...`` and treats ``count`` as a local variable throughout the entire ``increment()`` function. When it tries to evaluate ``count + 1``, it looks for a local ``count`` but hasn't found one yet (because the assignment hasn't happened), causing the error.
+
+   **The Fix:**
 
    .. code-block:: python
 
@@ -1414,10 +1386,50 @@ Find and fix the bugs in these broken closures!
           count = 0
 
           def increment():
-              nonlocal count  # Add this!
+              nonlocal count  # Tell Python to use the enclosing scope's count
               count = count + 1
               return count
 
+          return increment
+
+   **Key Lesson:**
+
+   .. important::
+
+      **When to use `nonlocal`:**
+
+      ✅ When you need to **modify** a variable from an enclosing (non-global) scope
+
+      ✅ Without ``nonlocal``, assignments create **new local variables**
+
+      ✅ Reading without assignment is OK, modifying requires ``nonlocal``
+
+   **Examples:**
+
+   .. code-block:: python
+
+      # ✅ This works (just reading)
+      def make_reader():
+          value = 10
+          def read():
+              return value  # Just reading, no nonlocal needed
+          return read
+
+      # ❌ This fails (trying to modify)
+      def make_incrementer():
+          value = 10
+          def increment():
+              value = value + 1  # UnboundLocalError!
+              return value
+          return increment
+
+      # ✅ This works (nonlocal for modification)
+      def make_incrementer():
+          value = 10
+          def increment():
+              nonlocal value  # Now it works!
+              value = value + 1
+              return value
           return increment
 
 ---
@@ -1426,6 +1438,7 @@ Find and fix the bugs in these broken closures!
 
 .. activecode:: closure_practice_debug_loop
    :language: python
+   :autograde: unittest
 
    These multipliers all return the same value! Fix it!
    ~~~~
@@ -1438,27 +1451,78 @@ Find and fix the bugs in these broken closures!
        return multipliers
 
    m1, m2, m3 = make_multipliers()
-   print(m1(10))  # Should print 10 (1 * 10)
-   print(m2(10))  # Should print 20 (2 * 10)
-   print(m3(10))  # Should print 30 (3 * 10)
+   print(m1(10))
+   print(m2(10))
+   print(m3(10))
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_first_multiplier(self):
+           """m1 should multiply by 1"""
+           m1, m2, m3 = make_multipliers()
+           self.assertEqual(m1(10), 10, "m1(10) should return 10")
+
+       def test_second_multiplier(self):
+           """m2 should multiply by 2"""
+           m1, m2, m3 = make_multipliers()
+           self.assertEqual(m2(10), 20, "m2(10) should return 20")
+
+       def test_third_multiplier(self):
+           """m3 should multiply by 3"""
+           m1, m2, m3 = make_multipliers()
+           self.assertEqual(m3(10), 30, "m3(10) should return 30")
+
+       def test_all_multipliers_together(self):
+           """All three multipliers should work correctly"""
+           m1, m2, m3 = make_multipliers()
+           results = [m1(10), m2(10), m3(10)]
+           self.assertEqual(results, [10, 20, 30],
+                          "Should return [10, 20, 30]")
+
+       def test_with_different_input(self):
+           """Test with input value of 5"""
+           m1, m2, m3 = make_multipliers()
+           self.assertEqual(m1(5), 5, "m1(5) should return 5")
+           self.assertEqual(m2(5), 10, "m2(5) should return 10")
+           self.assertEqual(m3(5), 15, "m3(5) should return 15")
+
+       def test_multipliers_are_different(self):
+           """Each multiplier should produce different results"""
+           m1, m2, m3 = make_multipliers()
+           results = {m1(10), m2(10), m3(10)}
+           self.assertEqual(len(results), 3,
+                          "All three multipliers should return different values")
+
+       def test_zero_input(self):
+           """Test with zero"""
+           m1, m2, m3 = make_multipliers()
+           self.assertEqual(m1(0), 0)
+           self.assertEqual(m2(0), 0)
+           self.assertEqual(m3(0), 0)
+
+   myTests().main()
 
 .. reveal:: closure_practice_debug_loop_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** All closures share the same ``i`` variable, which has the value 3 after the loop ends.
+   **Problem:** All closures capture the same ``i`` variable. After the loop, ``i = 3``, so all multipliers use 3.
 
-   **Fix:** Use a default argument to capture the current value:
+   **Fix:**
 
    .. code-block:: python
 
       def make_multipliers():
           multipliers = []
           for i in range(1, 4):
-              def multiply(x, factor=i):  # Capture current i
+              def multiply(x, factor=i):  # Capture current value of i
                   return x * factor
               multipliers.append(multiply)
           return multipliers
+
+   **How it works:** Default arguments are evaluated when the function is **defined**, not when it's **called**. This captures the current value of ``i`` at each loop iteration.
 
 ---
 
@@ -1466,6 +1530,7 @@ Find and fix the bugs in these broken closures!
 
 .. activecode:: closure_practice_debug_decorator
    :language: python
+   :autograde: unittest
 
    This decorator loses the function's name and docstring! Fix it!
    ~~~~
@@ -1483,23 +1548,70 @@ Find and fix the bugs in these broken closures!
        """Calculate sum of squares"""
        return sum(x**2 for x in range(n))
 
-   print(calculate.__name__)  # Should print "calculate"
-   print(calculate.__doc__)   # Should print "Calculate sum of squares"
+   print(calculate.__name__)
+   print(calculate.__doc__)
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_function_name_preserved(self):
+           """Decorated function should keep its name"""
+           self.assertEqual(calculate.__name__, "calculate",
+                          "Function name should be 'calculate', not 'wrapper'")
+
+       def test_docstring_preserved(self):
+           """Decorated function should keep its docstring"""
+           self.assertEqual(calculate.__doc__, "Calculate sum of squares",
+                          "Docstring should be preserved")
+
+       def test_function_still_works(self):
+           """Decorated function should still work correctly"""
+           result = calculate(5)
+           expected = sum(x**2 for x in range(5))  # 0 + 1 + 4 + 9 + 16 = 30
+           self.assertEqual(result, expected,
+                          "Function should still calculate correctly")
+
+       def test_decorator_with_another_function(self):
+           """Test decorator on a different function"""
+           @timer
+           def multiply(a, b):
+               """Multiply two numbers"""
+               return a * b
+
+           self.assertEqual(multiply.__name__, "multiply",
+                          "Function name should be preserved")
+           self.assertEqual(multiply.__doc__, "Multiply two numbers",
+                          "Docstring should be preserved")
+           self.assertEqual(multiply(3, 4), 12,
+                          "Function should work correctly")
+
+       def test_function_has_name_attribute(self):
+           """Function should have __name__ attribute"""
+           self.assertTrue(hasattr(calculate, '__name__'),
+                          "Function should have __name__ attribute")
+
+       def test_function_has_doc_attribute(self):
+           """Function should have __doc__ attribute"""
+           self.assertTrue(hasattr(calculate, '__doc__'),
+                          "Function should have __doc__ attribute")
+
+   myTests().main()
 
 .. reveal:: closure_practice_debug_decorator_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** The wrapper function replaces the original function, losing metadata.
+   **Problem:** The wrapper function replaces the original function's metadata (name, docstring, etc.).
 
-   **Fix:** Use ``functools.wraps``:
+   **Fix:**
 
    .. code-block:: python
 
       def timer(func):
           from functools import wraps
 
-          @wraps(func)  # Preserves func's metadata
+          @wraps(func)  # Copies metadata from func to wrapper
           def wrapper(*args, **kwargs):
               import time
               start = time.time()
@@ -1508,20 +1620,23 @@ Find and fix the bugs in these broken closures!
               return result
           return wrapper
 
+   **What `@wraps(func)` does:** Copies ``__name__``, ``__doc__``, ``__module__``, and other metadata from the original function to the wrapper.
+
 ---
 
 **Debug 4: Bank Account with Wrong Scope**
 
 .. activecode:: closure_practice_debug_bank
    :language: python
+   :autograde: unittest
 
    This bank account doesn't update the balance! Fix it!
    ~~~~
-   balance = 1000  # Global balance
+   balance = 1000
 
    def make_account():
        def deposit(amount):
-           balance = balance + amount  # Bug here!
+           balance = balance + amount
            return balance
 
        def get_balance():
@@ -1530,25 +1645,100 @@ Find and fix the bugs in these broken closures!
        return deposit, get_balance
 
    deposit, get_balance = make_account()
-   print(get_balance())  # Should print 1000
+   print(get_balance())
    deposit(500)
-   print(get_balance())  # Should print 1500
+   print(get_balance())
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_initial_balance(self):
+           """Account should start with initial balance"""
+           deposit, get_balance = make_account()
+           self.assertEqual(get_balance(), 1000,
+                          "Initial balance should be 1000")
+
+       def test_single_deposit(self):
+           """Deposit should increase balance"""
+           deposit, get_balance = make_account()
+           deposit(500)
+           self.assertEqual(get_balance(), 1500,
+                          "Balance should be 1500 after depositing 500")
+
+       def test_multiple_deposits(self):
+           """Multiple deposits should accumulate"""
+           deposit, get_balance = make_account()
+           deposit(100)
+           deposit(200)
+           deposit(300)
+           self.assertEqual(get_balance(), 1600,
+                          "Balance should be 1600 after three deposits")
+
+       def test_deposit_returns_new_balance(self):
+           """Deposit should return the new balance"""
+           deposit, get_balance = make_account()
+           result = deposit(250)
+           self.assertEqual(result, 1250,
+                          "Deposit should return new balance (1250)")
+
+       def test_multiple_accounts_independent(self):
+           """Multiple accounts should be independent"""
+           deposit1, get_balance1 = make_account()
+           deposit2, get_balance2 = make_account()
+
+           deposit1(500)
+           deposit2(200)
+
+           self.assertEqual(get_balance1(), 1500,
+                          "Account 1 should have 1500")
+           self.assertEqual(get_balance2(), 1200,
+                          "Account 2 should have 1200")
+
+       def test_sequence_of_operations(self):
+           """Test a realistic sequence"""
+           deposit, get_balance = make_account()
+
+           deposit(100)  # 1100
+           deposit(50)   # 1150
+           deposit(350)  # 1500
+
+           self.assertEqual(get_balance(), 1500,
+                          "Balance should be 1500 after sequence")
+
+       def test_get_balance_unchanged_by_multiple_calls(self):
+           """get_balance() shouldn't change the balance"""
+           deposit, get_balance = make_account()
+           deposit(100)
+
+           balance1 = get_balance()
+           balance2 = get_balance()
+           balance3 = get_balance()
+
+           self.assertEqual(balance1, balance2)
+           self.assertEqual(balance2, balance3)
+           self.assertEqual(balance3, 1100)
+
+   myTests().main()
 
 .. reveal:: closure_practice_debug_bank_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** The account should have its own balance, not use the global one. Also missing ``nonlocal``.
+   **Problems:**
+
+   1. Using global ``balance`` instead of enclosing scope
+   2. Missing ``nonlocal`` declaration
 
    **Fix:**
 
    .. code-block:: python
 
       def make_account(initial_balance=1000):
-          balance = initial_balance  # Local to make_account
+          balance = initial_balance  # Create account's own balance
 
           def deposit(amount):
-              nonlocal balance  # Modify enclosing variable
+              nonlocal balance  # Modify the enclosing balance
               balance = balance + amount
               return balance
 
@@ -1557,18 +1747,21 @@ Find and fix the bugs in these broken closures!
 
           return deposit, get_balance
 
+   **Key points:** Move ``balance`` inside ``make_account()`` so each account has its own balance, and use ``nonlocal`` in ``deposit()`` to modify it.
+
 ---
 
 **Debug 5: Memoization Doesn't Work**
 
 .. activecode:: closure_practice_debug_memoize
    :language: python
+   :autograde: unittest
 
    This memoization decorator doesn't cache anything! Fix it!
    ~~~~
    def memoize(func):
        def wrapper(*args):
-           cache = {}  # Bug here!
+           cache = {}
 
            if args in cache:
                print("Cache hit!")
@@ -1588,20 +1781,125 @@ Find and fix the bugs in these broken closures!
        return fibonacci(n-1) + fibonacci(n-2)
 
    print(fibonacci(5))
-   print(fibonacci(5))  # Should be cached!
+   print(fibonacci(5))
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_fibonacci_correctness(self):
+           """Function should return correct results"""
+           self.assertEqual(fibonacci(5), 5)
+           self.assertEqual(fibonacci(6), 8)
+           self.assertEqual(fibonacci(7), 13)
+
+       def test_caching_with_counter(self):
+           """Cache should prevent redundant computations"""
+           call_count = [0]  # Use list to allow modification in nested function
+
+           @memoize
+           def expensive(n):
+               call_count[0] += 1
+               return n * 2
+
+           # First call - should compute
+           result1 = expensive(5)
+           self.assertEqual(result1, 10)
+           self.assertEqual(call_count[0], 1, "Should compute on first call")
+
+           # Second call with same arg - should use cache
+           result2 = expensive(5)
+           self.assertEqual(result2, 10)
+           self.assertEqual(call_count[0], 1, "Should NOT compute again (use cache)")
+
+           # Third call with same arg - should still use cache
+           result3 = expensive(5)
+           self.assertEqual(call_count[0], 1, "Should still use cache")
+
+       def test_cache_different_arguments(self):
+           """Different arguments should be cached separately"""
+           call_count = [0]
+
+           @memoize
+           def compute(n):
+               call_count[0] += 1
+               return n ** 2
+
+           compute(2)  # call_count = 1
+           compute(3)  # call_count = 2
+           compute(2)  # call_count should still be 2 (cached)
+           compute(3)  # call_count should still be 2 (cached)
+
+           self.assertEqual(call_count[0], 2,
+                          "Should compute once per unique argument")
+
+       def test_cache_persists_across_many_calls(self):
+           """Cache should persist for multiple repeated calls"""
+           call_count = [0]
+
+           @memoize
+           def add_ten(n):
+               call_count[0] += 1
+               return n + 10
+
+           # Call same argument 10 times
+           for _ in range(10):
+               result = add_ten(5)
+               self.assertEqual(result, 15)
+
+           self.assertEqual(call_count[0], 1,
+                          "Should only compute once, not 10 times")
+
+       def test_multiple_memoized_functions_independent(self):
+           """Different memoized functions should have separate caches"""
+           count1 = [0]
+           count2 = [0]
+
+           @memoize
+           def func1(n):
+               count1[0] += 1
+               return n * 2
+
+           @memoize
+           def func2(n):
+               count2[0] += 1
+               return n * 3
+
+           func1(5)  # count1 = 1
+           func1(5)  # count1 still 1 (cached)
+           func2(5)  # count2 = 1
+           func2(5)  # count2 still 1 (cached)
+
+           self.assertEqual(count1[0], 1, "func1 should compute once")
+           self.assertEqual(count2[0], 1, "func2 should compute once")
+
+       def test_returns_correct_cached_value(self):
+           """Cached value should be the same as computed value"""
+           @memoize
+           def multiply(a, b):
+               return a * b
+
+           result1 = multiply(3, 4)
+           result2 = multiply(3, 4)
+
+           self.assertEqual(result1, 12)
+           self.assertEqual(result2, 12)
+           self.assertEqual(result1, result2)
+
+   myTests().main()
 
 .. reveal:: closure_practice_debug_memoize_solution
    :showtitle: Show Solution
    :hidetitle: Hide Solution
 
-   **Problem:** The cache is created inside the wrapper, so it's reset on every call!
+   **Problem:** Cache is created inside ``wrapper()``, so it's recreated on every call. The cache never persists!
 
-   **Fix:** Move the cache outside the wrapper but inside the decorator:
+   **Fix:**
 
    .. code-block:: python
 
       def memoize(func):
-          cache = {}  # Create once, shared across all calls
+          cache = {}  # Move outside wrapper - created once per decorated function
 
           def wrapper(*args):
               if args in cache:
@@ -1614,6 +1912,8 @@ Find and fix the bugs in these broken closures!
               return result
 
           return wrapper
+
+   **Key insight:** The cache must be in the closure scope (between ``memoize`` and ``wrapper``) so it persists across multiple calls to ``wrapper``.
 
 ---
 

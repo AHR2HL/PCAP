@@ -106,31 +106,74 @@ Let's compare list comprehensions and generator expressions directly:
 .. activecode:: genexpr_comparison
    :language: python
 
-   import sys
-
    n = 100_000
 
    # List comprehension - all values computed now
    print("Creating list comprehension...")
    list_comp = [x ** 2 for x in range(n)]
    print(f"Type: {type(list_comp)}")
-   print(f"Memory: {sys.getsizeof(list_comp):,} bytes")
+   print(f"Length: {len(list_comp):,} items")
    print(f"First 5: {list_comp[:5]}")
+   print(f"Last 5: {list_comp[-5:]}")
+   print("✅ Can access any element: list_comp[50000] =", list_comp[50000])
    print()
 
    # Generator expression - values computed on demand
    print("Creating generator expression...")
    gen_expr = (x ** 2 for x in range(n))
    print(f"Type: {type(gen_expr)}")
-   print(f"Memory: {sys.getsizeof(gen_expr):,} bytes")
-   print(f"Can't index, but can iterate:")
+   print("❌ Cannot get length (no len())")
+   print("❌ Cannot index (no gen_expr[0])")
+   print("✅ Can iterate:")
 
    # Get first 5 values manually
    for i, value in enumerate(gen_expr):
        if i < 5:
-           print(f"  {value}")
+           print(f"  Value {i}: {value}")
        else:
            break
+
+   print("\n📊 Key Differences:")
+   print("━" * 50)
+   print("List Comprehension:")
+   print("  • All 100,000 values computed immediately")
+   print("  • Stored in memory (~800 KB)")
+   print("  • Can access any element instantly")
+   print("  • Takes time to create")
+   print()
+   print("Generator Expression:")
+   print("  • Values computed one at a time (lazy)")
+   print("  • Minimal memory (~200 bytes)")
+   print("  • Can only iterate forward")
+   print("  • Created instantly")
+
+**The Trade-off:**
+
+.. list-table::
+   :widths: 30 35 35
+   :header-rows: 1
+
+   * - Feature
+     - List Comprehension
+     - Generator Expression
+   * - **Syntax**
+     - ``[x**2 for x in range(n)]``
+     - ``(x**2 for x in range(n))``
+   * - **Memory**
+     - All values stored
+     - Only current value
+   * - **Speed**
+     - Fast access, slow creation
+     - Fast creation, on-demand
+   * - **Reusable**
+     - ✅ Yes
+     - ❌ One-time use
+   * - **Indexing**
+     - ✅ ``list_comp[5]``
+     - ❌ Not supported
+   * - **Best For**
+     - Need all values / random access
+     - One-pass processing / large data
 
 **Results:**
 
@@ -195,7 +238,7 @@ Just like list comprehensions, generator expressions support filtering:
 
    # Complex filtering
    large_squares = (x ** 2 for x in range(100) if x ** 2 > 50)
-   print(f"\nSquares > 50:")
+   print("\nSquares > 50:")
    for i, val in enumerate(large_squares):
        if i < 5:
            print(f"  {val}")
@@ -485,12 +528,19 @@ Practice: Generator Expressions
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-       def test_total(self):
+       def test_total_correct(self):
            expected = sum(x ** 2 for x in range(1, 51))
            self.assertEqual(total, expected, f"Sum of squares 1-50 should be {expected}")
 
-       def test_value(self):
-           self.assertEqual(total, 42925, "Sum should be 42925")
+       def test_uses_sum(self):
+           source = self.getEditorText()
+           self.assertIn('sum', source, "Your code should use sum()")
+
+       def test_uses_generator_not_list(self):
+           source = self.getEditorText()
+           # Check it's not a list comprehension
+           self.assertNotIn('[x', source, "Don't use list comprehension [x for x ...], use generator (x for x ...)")
+           self.assertNotIn('[ x', source, "Don't use list comprehension, use generator expression")
 
    myTests().main()
 

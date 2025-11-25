@@ -377,7 +377,7 @@ Practice Problems
 .. activecode:: math_challenge_2
    :nocodelens:
 
-   Write a function ``boxes_needed(items, box_capacity)`` that calculates how many boxes are needed to pack a given number of items. Use the appropriate ``math`` function to ensure you have enough boxes.
+   Write a function ``boxes_needed(items, box_capacity)`` that calculates how many boxes of size 10 are needed to pack a given number of items. Use the appropriate ``math`` function to ensure you have enough boxes. Assume all items are identical in size.
 
    Also return how many items will be in the last (partially filled) box.
    Return a tuple: (total_boxes, items_in_last_box)

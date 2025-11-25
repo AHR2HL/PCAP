@@ -529,7 +529,7 @@ Virtual Environment Workflow
        def deactivate(self):
            """Deactivate the virtual environment."""
            self.active = False
-           print(f"$ Environment deactivated")
+           print("$ Environment deactivated")
 
        def install(self, package, version="latest"):
            """Install a package."""
@@ -822,46 +822,103 @@ Practice Problems
 
    MyTests().main()
 
-.. activecode:: package_lister_challenge
-   :nocodelens:
+.. mchoice:: package_lister_q1
+   :answer_a: packages['numpy']
+   :answer_b: for package in packages:
+   :answer_c: for name, version in packages.items():
+   :answer_d: for i in range(len(packages)):
+   :correct: c
+   :feedback_a: This only accesses one specific package. You need to loop through all packages.
+   :feedback_b: This gives you only the keys (package names), not the versions.
+   :feedback_c: Correct! items() gives you both keys and values as tuples, which you can unpack into name and version.
+   :feedback_d: This would work for lists, not dictionaries. Dictionaries don't have numeric indices.
 
-   Create a function ``simulate_pip_list(packages_dict)`` that takes a dictionary
-   of packages (keys) and versions (values), and prints them in a formatted
-   table like 'pip list' does.
+   Given this dictionary: ``packages = {'numpy': '1.24.3', 'flask': '2.3.2'}``, which code correctly iterates through both package names AND versions?
 
-   Format: Left-align package names in 15 characters, then show version.
-   ~~~~
-   def simulate_pip_list(packages_dict):
-       # Your code here
-       pass
+.. mchoice:: package_lister_q2
+   :answer_a: f"{name:15} {version}"
+   :answer_b: f"{name:>15} {version}"
+   :answer_c: f"{name:<15} {version}"
+   :answer_d: f"{name:^15} {version}"
+   :correct: c
+   :feedback_a: Close! But :15 alone doesn't specify alignment. Use :< for left-align.
+   :feedback_b: No. :> means right-align. This would put spaces before the name.
+   :feedback_c: Correct! :< means left-align, and 15 is the field width.
+   :feedback_d: No. :^ means center-align. The name would be centered with spaces on both sides.
 
-   # Test data
-   packages = {
-       'numpy': '1.24.3',
-       'requests': '2.31.0',
-       'flask': '2.3.2'
-   }
+   To format a package name left-aligned in 15 characters with the version after it, which f-string format is correct?
 
-   simulate_pip_list(packages)
-   # Expected output format:
-   # numpy          1.24.3
-   # requests       2.31.0
-   # flask          2.3.2
+   **Example output:** ``"numpy          1.24.3"``
 
-   ====
-   from unittest.gui import TestCaseGui
+.. mchoice:: package_lister_q3
+   :answer_a: "numpy      1.24.3"
+   :answer_b: "numpy          1.24.3"
+   :answer_c: "     numpy1.24.3"
+   :answer_d: "   numpy   1.24.3"
+   :correct: b
+   :feedback_a: No. :10 would make it 10 characters wide, but we need 15.
+   :feedback_b: Correct! "numpy" is 5 characters, so 10 spaces are added to reach 15 total, then the version.
+   :feedback_c: No. :< means left-align (text on left, spaces on right), not right-align.
+   :feedback_d: No. This would be center-alignment (:^), not left-alignment (:<).
 
-   class MyTests(TestCaseGui):
-       def test_simulate_pip_list(self):
-           # Just verify the function runs without errors
-           packages = {'test': '1.0.0'}
-           try:
-               simulate_pip_list(packages)
-               self.assertTrue(True)
-           except Exception as e:
-               self.fail(f"Function raised exception: {e}")
+   What does ``f"{'numpy':<15} 1.24.3"`` produce?
 
-   MyTests().main()
+.. mchoice:: package_lister_q4
+   :answer_a: for name, version in packages.items(): print(name, version)
+   :answer_b: for name, version in packages.items(): print(f"{name:<15} {version}")
+   :answer_c: for name in packages: print(f"{name:<15} {packages[name]}")
+   :answer_d: Both B and C
+   :correct: d
+   :feedback_a: This prints with default spacing, not the formatted 15-character alignment.
+   :feedback_b: Correct! Uses items() to get both name and version, formats with :<15.
+   :feedback_c: Correct! Iterates keys, looks up values, formats with :<15.
+   :feedback_d: Correct! Both approaches work. B is more elegant (unpacks tuple), C works by accessing dictionary values.
+
+   Which code correctly prints packages in the format ``"numpy          1.24.3"``?
+
+   Given: ``packages = {'numpy': '1.24.3', 'flask': '2.3.2'}``
+
+.. mchoice:: package_lister_q5
+   :answer_a: To make the output look organized and readable
+   :answer_b: Because Python requires it for dictionaries
+   :answer_c: To make the code run faster
+   :answer_d: To prevent errors when package names are long
+   :correct: a
+   :feedback_a: Correct! Fixed-width formatting creates neat columns so version numbers align vertically, making the output easier to read.
+   :feedback_b: No. Python doesn't require any specific formatting. This is purely for human readability.
+   :feedback_c: No. Formatting actually makes it slightly slower (though negligibly). The benefit is readability, not performance.
+   :feedback_d: No. If a package name is longer than 15 characters, it will simply extend beyond and the alignment will break. Formatting doesn't prevent errors.
+
+   Why does ``pip list`` use fixed-width formatting (like ``:<15``) for package names?
+
+   **Unformatted:**
+
+   ::
+
+      numpy 1.24.3
+      requests 2.31.0
+      flask 2.3.2
+
+   **Formatted:**
+
+   ::
+
+      numpy          1.24.3
+      requests       2.31.0
+      flask          2.3.2
+
+.. mchoice:: package_lister_q6
+   :answer_a: name[:15]
+   :answer_b: name.ljust(15)
+   :answer_c: f"{name:<15}"
+   :answer_d: Both B and C
+   :correct: d
+   :feedback_a: This truncates but doesn't add padding. "numpy"[:15] is just "numpy" (5 chars), not "numpy          " (15 chars).
+   :feedback_b: Correct! ljust(15) left-justifies the string in 15 characters, adding spaces as needed.
+   :feedback_c: Correct! The :<15 format specifier does the same thing as ljust(15).
+   :feedback_d: Correct! Both methods achieve the same result - left-align the text in a 15-character field.
+
+   Which method(s) can left-align a string in 15 characters?
 
 Key Takeaways
 -------------

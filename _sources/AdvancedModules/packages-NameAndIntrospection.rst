@@ -353,7 +353,7 @@ Use Case 3: Demonstrations
 Module Introspection
 --------------------
 
-Python provides several special attributes (called **dunder attributes** because they have **d**ouble **under**scores) that give you information about modules.
+Python provides several special attributes (called **dunder attributes** because they have **d** ouble **under** scores) that give you information about modules.
 
 Common Module Attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -424,17 +424,11 @@ The ``__file__`` attribute shows the path to the module's file:
    :nocodelens:
 
    import math
-   import os
 
    # Show where the math module is located
    print(f"math module location:")
    print(f"  {math.__file__}")
    print()
-
-   # Get the directory containing the module
-   math_dir = os.path.dirname(math.__file__)
-   print(f"math module directory:")
-   print(f"  {math_dir}")
 
 The ``__dict__`` Attribute
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

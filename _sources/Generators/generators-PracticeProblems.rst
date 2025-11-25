@@ -252,7 +252,7 @@ Arrange the code blocks in the correct order to solve each problem.
    =====
            yield i
    =====
-           return i #paired
+           return i #distractor
 
 .. parsonsprob:: parsons_filter_generator
    :numbered: left
@@ -272,7 +272,7 @@ Arrange the code blocks in the correct order to solve each problem.
    =====
                yield i ** 2
    =====
-               yield i * 2 #paired
+               yield i * 2 #distractor
 
 .. parsonsprob:: parsons_pipeline
    :numbered: left
@@ -603,44 +603,63 @@ Part 5: Reflection and Self-Assessment
 
 Before moving on, test your mastery:
 
-.. checklist:: generators_mastery_checklist
-   :label: Generators Mastery Checklist
+.. important::
 
-   Core Concepts
-   - I understand lazy vs. eager evaluation
-   - I can explain how yield works
-   - I know what generator objects are
-   - I understand next() and StopIteration
-   - I can explain state preservation in generators
+   **Generators Mastery Checklist**
 
-   Generator Functions
-   - I can write basic generator functions with yield
-   - I can create generators with multiple yield statements
-   - I understand when the function body executes
-   - I can create infinite generators
+   Use this checklist to track your progress. Review each item and make sure you can confidently explain or demonstrate it.
 
-   Generator Expressions
-   - I can write generator expressions using (...)
-   - I know the difference between (...) and [...]
-   - I can chain generator expressions
+    **Core Concepts**
 
-   Practical Patterns
-   - I can use generators for file processing
-   - I can build data pipelines with generators
-   - I can create infinite sequences
-   - I can implement filtering and mapping patterns
+    - ☐ I understand lazy vs. eager evaluation
+    - ☐ I can explain how ``yield`` works
+    - ☐ I know what generator objects are
+    - ☐ I understand ``next()`` and ``StopIteration``
+    - ☐ I can explain state preservation in generators
 
-   Decision-Making
-   - I know when to use generators vs. lists
-   - I understand memory trade-offs
-   - I can identify appropriate use cases
-   - I know common mistakes to avoid
+    **Generator Functions**
 
-   PCEP Readiness
-   - I can define and invoke generator functions
-   - I understand return vs. yield
-   - I can convert generator objects to lists
-   - I understand lazy evaluation concepts
+    - ☐ I can write basic generator functions with ``yield``
+    - ☐ I can create generators with multiple ``yield`` statements
+    - ☐ I understand when the function body executes
+    - ☐ I can create infinite generators
+
+    **Generator Expressions**
+
+    - ☐ I can write generator expressions using ``(...)``
+    - ☐ I know the difference between ``(...)`` and ``[...]``
+    - ☐ I can chain generator expressions
+
+    **Practical Patterns**
+
+    - ☐ I can use generators for file processing
+    - ☐ I can build data pipelines with generators
+    - ☐ I can create infinite sequences
+    - ☐ I can implement filtering and mapping patterns
+
+    **Decision-Making**
+
+    - ☐ I know when to use generators vs. lists
+    - ☐ I understand memory trade-offs
+    - ☐ I can identify appropriate use cases
+    - ☐ I know common mistakes to avoid
+
+    **PCAP Readiness**
+
+    - ☐ I can define and invoke generator functions
+    - ☐ I understand ``return`` vs. ``yield``
+    - ☐ I can convert generator objects to lists
+    - ☐ I understand lazy evaluation concepts
+
+.. tip::
+
+   **How to Use This Checklist:**
+
+   1. Read through each item
+   2. Try to explain it out loud or write it down
+   3. If you're unsure, revisit that section
+   4. Focus on 2-3 items at a time
+   5. Come back and review weekly
 
 .. note::
 
@@ -729,12 +748,12 @@ Chapter Summary
 
 You've mastered:
 
-✅ **Lazy vs. eager evaluation** - When and why to compute on-demand
-✅ **Generator functions** - Using yield to create memory-efficient sequences
-✅ **Generator expressions** - Compact syntax for simple generators
-✅ **Practical patterns** - Pipelines, infinite sequences, file processing
-✅ **Decision-making** - When to use generators vs. lists
-✅ **PCEP skills** - Everything you need for the certification exam
+- ✅ **Lazy vs. eager evaluation** - When and why to compute on-demand
+- ✅ **Generator functions** - Using yield to create memory-efficient sequences
+- ✅ **Generator expressions** - Compact syntax for simple generators
+- ✅ **Practical patterns** - Pipelines, infinite sequences, file processing
+- ✅ **Decision-making** - When to use generators vs. lists
+- ✅ **PCEP skills** - Everything you need for the certification exam
 
 .. important::
 

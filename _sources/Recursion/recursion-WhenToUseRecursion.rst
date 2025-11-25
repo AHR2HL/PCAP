@@ -324,95 +324,21 @@ For each problem, decide: **Recursion or Iteration?**
 
 ----
 
-Final Challenge: Design Your Own
----------------------------------
-
-.. activecode:: final_challenge_directory_sum
-   :language: python
-   :autograde: unittest
-
-   **Real-world scenario:** You're building a disk space analyzer. Given a folder structure (like the file system example),
-   write a recursive function ``total_size(folder)`` that calculates the total size of all files in a folder and its subfolders.
-
-   Each file has a 'size' in MB. Return the total size.
-   ~~~~
-   def total_size(folder):
-       """Recursively calculate total size of all files in folder and subfolders."""
-       # YOUR CODE HERE
-       pass
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class MyTests(TestCaseGui):
-       def test_total_size(self):
-           folder1 = {
-               'name': 'Root',
-               'files': [{'name': 'a.txt', 'size': 10}, {'name': 'b.txt', 'size': 20}],
-               'subfolders': []
-           }
-           self.assertEqual(total_size(folder1), 30, "Should sum files in root folder")
-
-           folder2 = {
-               'name': 'Root',
-               'files': [{'name': 'a.txt', 'size': 10}],
-               'subfolders': [
-                   {
-                       'name': 'SubFolder',
-                       'files': [{'name': 'b.txt', 'size': 20}],
-                       'subfolders': []
-                   }
-               ]
-           }
-           self.assertEqual(total_size(folder2), 30, "Should sum files in root and subfolders")
-
-           folder3 = {
-               'name': 'Root',
-               'files': [],
-               'subfolders': [
-                   {
-                       'name': 'Sub1',
-                       'files': [{'name': 'x.txt', 'size': 5}],
-                       'subfolders': [
-                           {
-                               'name': 'Sub2',
-                               'files': [{'name': 'y.txt', 'size': 15}],
-                               'subfolders': []
-                           }
-                       ]
-                   }
-               ]
-           }
-           self.assertEqual(total_size(folder3), 20, "Should handle nested subfolders")
-
-   MyTests().main()
-
-----
-
 Reflection: Your Recursion Journey
 -----------------------------------
 
-.. mchoice:: reflection_confidence
+.. poll:: reflection_confidence
    :answer_a: Very confident — I know when and how to use recursion
    :answer_b: Somewhat confident — I understand the concepts but need more practice
    :answer_c: Still uncertain — I need to review the material
-   :correct: a
-   :feedback_a: Excellent! You're ready to use recursion in real projects.
-   :feedback_b: That's normal! Practice is key. Try implementing some of the real-world examples.
-   :feedback_c: Review Lessons 1-6 and try the practice problems again. You'll get there!
 
    How confident do you feel about using recursion now?
 
-.. mchoice:: reflection_key_insight
+.. poll:: reflection_key_insight
    :answer_a: Recursion is always better than loops
    :answer_b: Recursion and iteration are tools — choose based on the problem
    :answer_c: Recursion is too hard and should be avoided
    :answer_d: Recursion is only for math problems
-   :correct: b
-   :feedback_a: Not true! Sometimes loops are clearer and more efficient.
-   :feedback_b: Exactly! The best programmers know when to use each tool.
-   :feedback_c: Don't avoid it! Recursion is powerful for the right problems.
-   :feedback_d: Recursion is used in file systems, compilers, games, and much more!
 
    What's the **most important** insight from this chapter?
 

@@ -125,8 +125,6 @@ The power of ``isinstance()`` is that it returns ``True`` for the entire inherit
    print(f"Is buddy an Animal? {isinstance(buddy, Animal)}")
    print(f"Is buddy an object? {isinstance(buddy, object)}")  # Everything inherits from object!
 
-   print(f"\nIs buddy a Cat? {isinstance(buddy, Cat) if 'Cat' in dir() else 'Cat not defined'}")
-
 **Output:**
 
 ::
