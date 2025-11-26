@@ -5,11 +5,14 @@ Advanced Functions
    :caption: Advanced Functions
    :maxdepth: 2
 
-   OptionalParameters.rst
-   KeywordParameters.rst
+   intro-AdvancedFunctions.rst
    Anonymousfunctionswithlambdaexpressions.rst
-   ProgrammingWithStyle.rst
-   MethodInvocations.rst
+   closures-WhatAreClosures.rst
+   closures-CreatingClosures.rst
+   closures-StateAndEncapsulation.rst
+   closures-PracticalPatterns.rst
+   closures-WhenToUseClosures.rst
    FunctionWrappingAndDecorators.rst
+   ProgrammingWithStyle.rst
    Exercises.rst
    ChapterAssessment.rst

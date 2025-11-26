@@ -1,166 +1,411 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
+..  Copyright (C)  Alpha Schools
 
 .. qnum::
-   :prefix: advfuncs-5-
+   :prefix: advfunc-assess-
    :start: 1
 
-Chapter Assessment
-==================
+Chapter Assessment: Advanced Functions
+=======================================
 
-.. activecode:: ac15_5_1
-   :language: python
-   :autograde: unittest
-   :practice: T
+Part 1: Multiple Choice Questions
+----------------------------------
 
-   Create a function called ``mult`` that has two parameters, the first is required and should be an integer, the second is an optional parameter that can either be a number or a string but whose default is 6. The function should return the first parameter multiplied by the second.
+.. mchoice:: advfunc_assess_mc1
+   :answer_a: add = lambda x: x + y
+   :answer_b: add = lambda x, y: x + y
+   :answer_c: add = lambda(x, y): x + y
+   :answer_d: lambda add(x, y): return x + y
+   :correct: b
+   :feedback_a: This lambda only takes one parameter (x). You need two parameters.
+   :feedback_b: Correct! Lambda syntax is: lambda parameters: expression
+   :feedback_c: Parameters should not be in parentheses after lambda
+   :feedback_d: Lambda doesn't use 'def' syntax or 'return' keyword
+
+   Which of the following correctly defines a lambda function that adds two numbers?
+
+
+.. mchoice:: advfunc_assess_mc2
+   :answer_a: The outer function's local variables
+   :answer_b: Only global variables
+   :answer_c: Only its own parameters
+   :answer_d: Nothing - it has no memory
+   :correct: a
+   :feedback_a: Correct! A closure "remembers" variables from its enclosing scope
+   :feedback_b: Closures can access global variables, but more importantly they remember local variables from the enclosing function
+   :feedback_c: Closures can access their own parameters AND variables from the outer function
+   :feedback_d: This is the key feature of closures - they DO remember their environment
+
+   What does a closure "remember" from its enclosing function?
+
+
+.. mchoice:: advfunc_assess_mc3
+   :answer_a: Before the function definition
+   :answer_b: After the function definition
+   :answer_c: Inside the function definition
+   :answer_d: At the function call site
+   :correct: a
+   :feedback_a: Correct! Decorators use @ syntax before the function: @decorator followed by def function()
+   :feedback_b: Decorators must come before the function definition
+   :feedback_c: Decorators are applied outside, not inside the function
+   :feedback_d: Decorators are applied at definition time, not call time
+
+   Where is the ``@decorator`` syntax placed?
+
+
+.. mchoice:: advfunc_assess_mc4
+   :answer_a: lambda x: if x > 0: return x else: return 0
+   :answer_b: lambda x: x if x > 0 else 0
+   :answer_c: lambda x: return x if x > 0 else 0
+   :answer_d: lambda x: (x > 0) ? x : 0
+   :correct: b
+   :feedback_a: Lambda doesn't use if:/else: blocks or return keyword
+   :feedback_b: Correct! Use ternary operator: value_if_true if condition else value_if_false
+   :feedback_c: Lambda doesn't use 'return' keyword
+   :feedback_d: Python uses 'if/else', not '?' ternary operator (that's from C/Java)
+
+   How do you write a conditional in a lambda expression?
+
+
+.. mchoice:: advfunc_assess_mc5
+   :answer_a: To allow functions to modify global state
+   :answer_b: To create data hiding and encapsulation without classes
+   :answer_c: To make functions run faster
+   :answer_d: To avoid using function parameters
+   :correct: b
+   :feedback_a: While closures can access outer variables, their main purpose is encapsulation
+   :feedback_b: Correct! Closures provide a way to create private state and factory functions
+   :feedback_c: Closures don't improve performance; they provide encapsulation
+   :feedback_d: Closures still use parameters; they additionally remember outer scope variables
+
+   What is the primary purpose of using closures in Python?
+
+
+Part 2: Active Code Problems
+-----------------------------
+
+.. activecode:: advfunc_assess_ac1
+   :nocolab:
+
+   **Problem 1:** Write a function ``sort_by_second(tuples)`` that sorts a list of tuples by the second element of each tuple using a lambda expression.
+
+   Example: ``sort_by_second([(1, 3), (4, 1), (2, 2)])`` → ``[(4, 1), (2, 2), (1, 3)]``
+
    ~~~~
-   ====
+   def sort_by_second(tuples):
+       # Your code here
+       pass
 
+   ====
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(mult(2), 12, "Testing that mult returns the correct value on input (2)")
-         self.assertEqual(mult(5,3), 15, "Testing that mult returns the correct value on input (3,5)")
-         self.assertEqual(mult(4,"hello"), "hellohellohellohello", "testing that mult returns the correct value on input (4, 'hello'")
+       def testOne(self):
+           self.assertEqual(sort_by_second([(1, 3), (4, 1), (2, 2)]), [(4, 1), (2, 2), (1, 3)], "Test 1")
+           self.assertEqual(sort_by_second([('a', 5), ('b', 2), ('c', 8)]), [('b', 2), ('a', 5), ('c', 8)], "Test 2")
+           self.assertEqual(sort_by_second([(10, 100), (20, 50), (30, 75)]), [(20, 50), (30, 75), (10, 100)], "Test 3")
 
    myTests().main()
 
 
-.. activecode:: ac15_5_2
-   :language: python
-   :autograde: unittest
-   :practice: T
+.. activecode:: advfunc_assess_ac2
+   :nocolab:
 
-   The following function, ``greeting``, does not work. Please fix the code so that it runs without error. This only requires one change in the definition of the function.
+   **Problem 2:** Create a closure ``make_accumulator(initial=0)`` that returns a function. Each time the returned function is called with a number, it should add that number to the running total and return the new total.
+
+   Example:
+
+   * ``acc = make_accumulator()``
+   * ``acc(5)`` → ``5``
+   * ``acc(3)`` → ``8``
+   * ``acc(2)`` → ``10``
+
    ~~~~
-   def greeting(greeting="Hello ", name, excl="!"):
-       return greeting + name + excl
+   def make_accumulator(initial=0):
+       # Your code here
+       pass
 
-   print(greeting("Bob"))
-   print(greeting(""))
-   print(greeting("Bob", excl="!!!"))
    ====
-
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+       def testOne(self):
+           acc = make_accumulator()
+           self.assertEqual(acc(5), 5, "Test 1")
+           self.assertEqual(acc(3), 8, "Test 2")
+           self.assertEqual(acc(2), 10, "Test 3")
 
-      def testTwo(self):
-         self.assertEqual(greeting("Bob"), "Hello Bob!", "Testing that greeting('Bob') returns 'Hello Bob!'.")
-         self.assertEqual(greeting(""), "Hello !", "Testing that greeting('') return 'Hello !'.")
+           acc2 = make_accumulator(100)
+           self.assertEqual(acc2(10), 110, "Test 4")
+           self.assertEqual(acc2(5), 115, "Test 5")
 
    myTests().main()
 
 
-.. activecode:: ac15_5_3
-   :language: python
-   :autograde: unittest
-   :practice: T
+.. activecode:: advfunc_assess_ac3
+   :nocolab:
 
-   Below is a function, ``sum``, that does not work. Change the function definition so the code works. The function should still have a required parameter, ``intx``, and an optional parameter, ``intz`` with a defualt value of 5.
+   **Problem 3:** Use ``map()`` and a lambda to convert a list of temperatures in Celsius to Fahrenheit. Formula: F = (C * 9/5) + 32
+
+   Write a function ``celsius_to_fahrenheit(temps_c)`` that returns a list of Fahrenheit temperatures.
+
    ~~~~
-   def sum(intz=5, intx):
-       return intz + intx
+   def celsius_to_fahrenheit(temps_c):
+       # Your code here
+       pass
 
    ====
-
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(sum(8, intz = 2), 10, "Testing the function sum on inputs 8, 2.")
-         self.assertEqual(sum(12), 17, "Testing the function sum on input 12.")
+       def testOne(self):
+           self.assertEqual(celsius_to_fahrenheit([0, 100, -40]), [32.0, 212.0, -40.0], "Test 1")
+           self.assertEqual(celsius_to_fahrenheit([20, 25, 30]), [68.0, 77.0, 86.0], "Test 2")
 
    myTests().main()
 
-.. activecode:: ac15_5_4
-   :language: python
-   :autograde: unittest
-   :practice: T
 
-   Write a function, ``test``, that takes in three parameters: a required integer, an optional boolean whose default value is ``True``, and an optional dictionary, called ``dict1``, whose default value is ``{2:3, 4:5, 6:8}``. If the boolean parameter is True, the function should test to see if the integer is a key in the dictionary. The value of that key should then be returned. If the boolean parameter is False, return the boolean value "False".
+.. activecode:: advfunc_assess_ac4
+   :nocolab:
+
+   **Problem 4:** Create a closure ``make_validator(min_val, max_val)`` that returns a function. The returned function should take a number and return ``True`` if it's in range [min_val, max_val], ``False`` otherwise.
+
+   Example:
+
+   * ``check_age = make_validator(18, 65)``
+   * ``check_age(25)`` → ``True``
+   * ``check_age(70)`` → ``False``
+
    ~~~~
+   def make_validator(min_val, max_val):
+       # Your code here
+       pass
 
    ====
-
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-
-      def testThree(self):
-         self.assertEqual(test(2), 3, "Testing that test(2) returns 3")
-         self.assertEqual(test(4, False), False, "Testing that test(4, False) returns False")
-         self.assertEqual(test(5, dict1 = {5:4, 2:1}), 4, "Testing that test(5, dict1 = {5:4, 2:1}) returns 4")
+       def testOne(self):
+           check_age = make_validator(18, 65)
+           self.assertEqual(check_age(25), True, "Test 1")
+           self.assertEqual(check_age(70), False, "Test 2")
+           self.assertEqual(check_age(18), True, "Test 3: boundary")
+           self.assertEqual(check_age(65), True, "Test 4: boundary")
+           self.assertEqual(check_age(17), False, "Test 5")
 
    myTests().main()
 
-.. activecode:: ac15_5_5
-   :language: python
-   :autograde: unittest
-   :practice: T
 
-   Write a function called ``checkingIfIn`` that takes three parameters. The first is a required parameter, which should be a string. The second is an optional parameter called ``direction`` with a default value of ``True``. The third is an optional parameter called ``d`` that has a default value of ``{'apple': 2, 'pear': 1, 'fruit': 19, 'orange': 5, 'banana': 3, 'grapes': 2, 'watermelon': 7}``. Write the function ``checkingIfIn`` so that when the second parameter is ``True``, it checks to see if the first parameter is a key in the third parameter; if it is, return ``True``, otherwise return ``False``.
+.. activecode:: advfunc_assess_ac5
+   :nocolab:
 
-   But if the second paramter is ``False``, then the function should check to see if the first parameter is *not* a key of the third. If it's *not*, the function should return ``True`` in this case, and if it is, it should return ``False``.
+   **Problem 5:** Write a decorator ``ensure_list`` that converts the return value of a function to a list (using ``list()``).
+
+   Example:
+
+   .. code-block:: python
+
+      @ensure_list
+      def get_range(n):
+          return range(n)
+
+      get_range(5)  # Returns [0, 1, 2, 3, 4], not range object
+
    ~~~~
-   ====
+   def ensure_list(func):
+       # Your code here
+       pass
 
+   @ensure_list
+   def get_range(n):
+       return range(n)
+
+   ====
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(checkingIfIn('grapes'), True, "Testing that checkingIfIn returns the correct boolean on input 'grapes'")
-         self.assertEqual(checkingIfIn('carrots'), False, "Testing that checkingIfIn returns the correct boolean on input 'carrots'")
-         self.assertEqual(checkingIfIn('grapes', False), False, "Testing that checkingIfIn returns the correct boolean on input ('grapes', False)")
-         self.assertEqual(checkingIfIn('carrots', False), True, "Testing that checkingIfIn returns the correct boolean on input ('carrots', False)")
-         self.assertEqual(checkingIfIn('grapes', d = {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1}), False, "Testing that checkingIfIn returns the correct boolean on input ('grapes', d = {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1})")
-         self.assertEqual(checkingIfIn('peas', d = {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1}), True, "Testing that checkingIfIn returns the correct boolean on input ('peas', d = {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1})")
-         self.assertEqual(checkingIfIn('peas', False, {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1}), False, "Testing that checkingIfIn returns the correct boolean on input ('peas', False, {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1})")
-         self.assertEqual(checkingIfIn('apples', False, {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1}), True, "Testing that checkingIfIn returns the correct boolean on input ('apples', False, {'carrots': 1, 'peas': 9, 'potatos': 8, 'corn': 32, 'beans': 1})")
+       def testOne(self):
+           result = get_range(5)
+           self.assertEqual(result, [0, 1, 2, 3, 4], "Test 1")
+           self.assertEqual(type(result), list, "Test 2: Should be a list")
 
    myTests().main()
 
-.. activecode:: ac15_5_6
-   :language: python
-   :autograde: unittest
-   :practice: T
 
-   We have provided a function below and the skeleton of three invocations of the function. Fill in the parameters of the invocations to produce the specified outputs
+Part 3: Debugging Exercises
+----------------------------
+
+.. activecode:: advfunc_assess_debug1
+   :nocolab:
+
+   **Debug Exercise 1:** This closure should create a multiplier function, but it's not working correctly. Find and fix the bug.
+
    ~~~~
-   def f(x, y = 3, z = 7):
-      return ("{} {} {}".format(x, y, z))
+   def make_multiplier(factor):
+       def multiply(x):
+           factor = factor * x
+           return factor
+       return multiply
 
-   # fill in just one parameter value to make val1 have the value "Hi 3 7"
-   val1 = f()
-   # fill in two parameter values to make val2 have the value "Hi Hi 7"
-   val2 = f()
-   # fill in two parameters to make vale have the value "Hi 3 Hi"
-   val3 = f()
-
+   times_2 = make_multiplier(2)
+   print(times_2(5))  # Should print 10
    ====
-
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(val1, "Hi 3 7", "Testing that val1 has the correct value")
-      def testTwo(self):
-         self.assertEqual(val2, "Hi Hi 7", "Testing that val2 has the correct value")
-      def testThree(self):
-         self.assertEqual(val3, "Hi 3 Hi", "Testing that val3 has the correct value")
-      ### would be good to define additional tests that check to make sure student is only suppplying minimum number of parameter values
-
+       def testOne(self):
+           times_2 = make_multiplier(2)
+           times_3 = make_multiplier(3)
+           self.assertEqual(times_2(5), 10, "Test 1")
+           self.assertEqual(times_3(4), 12, "Test 2")
 
    myTests().main()
+
+
+.. activecode:: advfunc_assess_debug2
+   :nocolab:
+
+   **Debug Exercise 2:** This decorator should add 10 to the result, but it's broken. Find and fix the bug.
+
+   ~~~~
+   def add_ten(func):
+       def wrapper(a, b):  # Simplified - explicit parameters
+           result = func(a, b)
+           return result
+       return result  # Bug: should return wrapper, not result
+
+   @add_ten
+   def add(a, b):
+       return a + b
+
+   print(add(5, 3))  # Should print 18 (5+3+10)
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(add(5, 3), 18, "Test 1: 5+3+10")
+           self.assertEqual(add(0, 0), 10, "Test 2: 0+0+10")
+
+   myTests().main()
+
+
+.. activecode:: advfunc_assess_debug3
+   :nocolab:
+
+   **Debug Exercise 3:** This lambda should filter out even numbers, but it's doing the opposite. Fix it.
+
+   ~~~~
+   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   odd_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+   print(odd_numbers)  # Should print [1, 3, 5, 7, 9]
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(odd_numbers, [1, 3, 5, 7, 9], "Test: should contain only odd numbers")
+
+   myTests().main()
+
+
+Part 4: Parson's Problems
+--------------------------
+
+.. parsonsprob:: advfunc_assess_parsons1
+   :numbered: left
+   :adaptive:
+
+   Arrange the code blocks to create a closure that makes a function remember a prefix string and adds it to any string passed in.
+
+   Example: ``add_prefix = make_prefix("Hello, ")`` then ``add_prefix("World")`` returns ``"Hello, World"``
+   -----
+   def make_prefix(prefix):
+   =====
+   def make_prefix(prefix) #paired
+   =====
+       def add(text):
+   =====
+       def add(text) #paired
+   =====
+           return prefix + text
+   =====
+           return prefix.text #paired
+   =====
+       return add
+   =====
+       return add() #paired
+
+
+.. parsonsprob:: advfunc_assess_parsons2
+   :numbered: left
+   :adaptive:
+
+   Arrange the code blocks to create a decorator that prints "Starting..." before a function runs and "Done!" after it completes.
+   -----
+   def debug_decorator(func):
+   =====
+       def wrapper(*args, **kwargs):
+   =====
+       def wrapper(func): #paired
+   =====
+           print("Starting...")
+   =====
+           result = func(*args, **kwargs)
+   =====
+           result = func() #paired
+   =====
+           print("Done!")
+   =====
+           return result
+   =====
+       return wrapper
+   =====
+       return wrapper() #paired
+
+
+.. parsonsprob:: advfunc_assess_parsons3
+   :numbered: left
+   :adaptive:
+
+   Arrange the code blocks to use filter() and lambda to keep only strings longer than 5 characters.
+   -----
+   words = ["hi", "hello", "hey", "goodbye", "yo"]
+   =====
+   long_words = list(filter(lambda w: len(w) > 5, words))
+   =====
+   long_words = list(filter(lambda w: len(w) < 5, words)) #paired
+   =====
+   long_words = filter(lambda w: len(w) > 5, words) #paired
+   =====
+   long_words = list(map(lambda w: len(w) > 5, words)) #paired
+
+
+Summary & Self-Check
+---------------------
+
+After completing this assessment, you should be able to:
+
+✅ Write and use lambda expressions for simple operations
+
+✅ Understand when lambda is appropriate vs regular ``def`` functions
+
+✅ Create closures that remember values from their enclosing scope
+
+✅ Explain the difference between closures and global variables
+
+✅ Write decorators that modify function behavior
+
+✅ Use the ``@`` syntax to apply decorators
+
+✅ Combine lambda with ``map()``, ``filter()``, and ``sorted()``
+
+✅ Debug common mistakes with lambda, closures, and decorators
+
+**Struggling with any of these?** Review the relevant sections:
+
+* **Lambda Expressions** - If you struggle with lambda syntax or usage
+* **Closures** (all 5 lessons) - If closures are still unclear
+* **Decorators** - If decorator syntax or mechanics are confusing
+* **Programming Style** - If you're unsure when to use each technique
+
+**Ready to continue?** These advanced function techniques are used throughout professional Python code and are essential for the PCAP certification!

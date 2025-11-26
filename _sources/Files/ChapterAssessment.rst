@@ -227,6 +227,305 @@ Chapter Assessment
    myTests().main()
 
 
+.. mchoice:: pcap_concept_read_large_file
+   :answer_a: read() - load entire file
+   :answer_b: readlines() - load all lines
+   :answer_c: Iterate line by line
+   :answer_d: All methods are equal
+   :correct: c
+   :feedback_a: This loads everything into memory—bad for large files!
+   :feedback_b: This also loads everything into memory.
+   :feedback_c: Correct! Iterate with "for line in file:" to process large files without loading all into memory.
+   :feedback_d: They have very different memory characteristics!
+
+   What's the best way to process a very large file?
+
+
+**CSV Parsing**
+
+.. parsonsprob:: pcap_parsons_csv
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to parse CSV data.
+   -----
+   def parse_csv(data):
+   =====
+       lines = data.strip().splitlines()
+   =====
+       lines = data.strip().split('\n') #distractor
+   =====
+       result = []
+   =====
+       for line in lines:
+   =====
+           fields = [f.strip() for f in line.split(',')]
+   =====
+           fields = line.split(',').strip() #distractor
+   =====
+           result.append(fields)
+   =====
+       return result
+
+**Safe File Reader**
+
+.. activecode:: pcap_code_safe_file_reader
+   :language: python
+   :autograde: unittest
+
+   Create a function ``safe_read_file(filename, default=None)`` that:
+   - Reads and returns file contents
+   - Returns default value if file not found
+   - Handles permission errors appropriately
+   - Always closes the file
+
+   Example::
+
+       content = safe_read_file('data.txt', default='')
+       # Returns file content or '' if not found
+
+   ~~~~
+   def safe_read_file(filename, default=None):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_returns_default_on_missing(self):
+           result = safe_read_file('nonexistent.txt', default='DEFAULT')
+           self.assertEqual(result, 'DEFAULT')
+
+       def test_returns_none_by_default(self):
+           result = safe_read_file('nonexistent.txt')
+           self.assertIsNone(result)
+
+   myTests().main()
+
+.. reveal:: pcap_code_safe_file_reader_solution
+   :showtitle: Show Solution
+   :hidetitle: Hide Solution
+
+   .. code-block:: python
+
+      def safe_read_file(filename, default=None):
+          try:
+              with open(filename, 'r') as f:
+                  return f.read()
+          except FileNotFoundError:
+              return default
+          except PermissionError:
+              return default
+
+---
+
+**Log Parser**
+
+.. activecode:: pcap_code_log_parser
+   :language: python
+   :autograde: unittest
+
+   Create a function ``parse_log_line(line)`` that parses log format:
+   "[LEVEL] message"
+
+   Returns dictionary: {'level': 'LEVEL', 'message': 'message'}
+   Returns None if format is invalid
+
+   Example::
+
+       parse_log_line("[ERROR] File not found")
+       # {'level': 'ERROR', 'message': 'File not found'}
+
+   ~~~~
+   def parse_log_line(line):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_valid_log(self):
+           result = parse_log_line("[ERROR] Test message")
+           self.assertEqual(result, {'level': 'ERROR', 'message': 'Test message'})
+
+       def test_strips_whitespace(self):
+           result = parse_log_line("  [INFO]  Test  ")
+           self.assertEqual(result, {'level': 'INFO', 'message': 'Test'})
+
+       def test_invalid_format(self):
+           result = parse_log_line("Invalid log")
+           self.assertIsNone(result)
+
+   myTests().main()
+
+.. reveal:: pcap_code_log_parser_solution
+   :showtitle: Show Solution
+   :hidetitle: Hide Solution
+
+   .. code-block:: python
+
+      def parse_log_line(line):
+          line = line.strip()
+
+          # Check format
+          if not line.startswith('[') or ']' not in line:
+              return None
+
+          # Find closing bracket
+          close_idx = line.find(']')
+
+          # Extract level and message
+          level = line[1:close_idx]
+          message = line[close_idx + 1:].strip()
+
+          return {'level': level, 'message': message}
+
+---
+
+
+**Debug: Binary Mode Mistake**
+
+.. activecode:: pcap_debug_binary_mode
+   :language: python
+   :autograde: unittest
+
+   This code tries to read a binary file as text. Fix it!
+   ~~~~
+   def read_image_header(filename):
+       with open(filename, 'r') as f:
+           header = f.read(8)
+
+       if header == b'\x89PNG\r\n\x1a\n':
+           return "PNG file"
+       return "Unknown"
+
+   print("Testing binary file handling...")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_binary_mode(self):
+           """Should use 'rb' mode for binary files"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn("'rb'", func_code,
+                        "Should use 'rb' mode for reading binary files")
+
+       def test_not_using_text_mode(self):
+           """Should not use text mode 'r' for binary data"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # Check for 'r' mode (but allow 'rb')
+           if "'r'" in func_code or '"r"' in func_code:
+               self.assertTrue("'rb'" in func_code or '"rb"' in func_code,
+                             "Should use 'rb' not 'r' for binary files")
+
+       def test_compares_with_bytes(self):
+           """Should compare header with bytes literal"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn("b'", func_code,
+                        "Should compare with bytes literal (b'...')")
+
+       def test_reads_correct_amount(self):
+           """Should read 8 bytes for PNG header"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('.read(8)', func_code,
+                        "Should read 8 bytes for PNG header")
+
+       def test_returns_png_file_on_match(self):
+           """Should return 'PNG file' when header matches"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('"PNG file"', func_code,
+                        "Should return 'PNG file' when header matches")
+
+       def test_returns_unknown_on_mismatch(self):
+           """Should return 'Unknown' when header doesn't match"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('"Unknown"', func_code,
+                        "Should return 'Unknown' when header doesn't match")
+
+       def test_uses_with_statement(self):
+           """Should use context manager (with statement)"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           self.assertIn('with open(', func_code,
+                        "Should use 'with open()' for file handling")
+
+       def test_correct_png_signature(self):
+           """Should check for correct PNG signature bytes"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+           # PNG signature: \x89PNG\r\n\x1a\n
+           self.assertIn('\\x89PNG', func_code,
+                        "Should check for PNG signature starting with \\x89PNG")
+
+       def test_binary_mode_format(self):
+           """Binary mode should be properly formatted"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # Should have 'rb' as a string
+           has_rb = ("'rb'" in func_code or '"rb"' in func_code)
+           self.assertTrue(has_rb,
+                         "Should use 'rb' mode (as a string)")
+
+       def test_no_mixed_type_comparison(self):
+           """Code structure should avoid str/bytes comparison issues"""
+           source = self.getEditorText()
+           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
+
+           # If using text mode 'r', can't properly compare to bytes
+           has_text_mode = ("open(filename, 'r')" in func_code or
+                           'open(filename, "r")' in func_code)
+           has_bytes_compare = "b'" in func_code or 'b"' in func_code
+
+           if has_text_mode and has_bytes_compare:
+               self.fail("Can't compare text (from 'r' mode) with bytes literal - use 'rb' mode")
+
+   myTests().main()
+
+.. reveal:: pcap_debug_binary_mode_solution
+   :showtitle: Show Solution
+   :hidetitle: Hide Solution
+
+   **Problems:**
+
+   1. Opening binary file in text mode ('r') instead of binary mode ('rb')
+   2. Text mode returns strings, but comparing with bytes literal
+
+   **Fix:**
+
+   .. code-block:: python
+
+      def read_image_header(filename):
+          with open(filename, 'rb') as f:  # Binary mode!
+              header = f.read(8)
+
+          # header is now bytes, comparison works
+          if header == b'\x89PNG\r\n\x1a\n':
+              return "PNG file"
+          return "Unknown"
+
+   **Key insights:**
+
+   - **Text mode ('r')**: Returns strings, decodes bytes using encoding (usually UTF-8)
+   - **Binary mode ('rb')**: Returns bytes objects, no decoding
+   - **Use 'rb' for**: Images, audio, video, executables, any non-text files
+   - **Use 'r' for**: Text files, CSV, JSON, source code
+   - Can't compare ``str`` with ``bytes`` - types must match
+
+---
+
+
 .. datafile:: SP500.txt
 
     Date,SP500,Dividend,Earnings,Consumer Price Index,Long Interest Rate,Real Price,Real Dividend,Real Earnings,PE10

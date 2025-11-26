@@ -17,6 +17,7 @@ Files
    ReadingCSVFiles.rst
    WritingCSVFiles.rst
    WPTipsHandlingFiles.rst
+   powerTopics-FileIO.rst
    Glossary.rst
    Exercises.rst
    ChapterAssessment.rst

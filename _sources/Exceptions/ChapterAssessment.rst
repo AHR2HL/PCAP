@@ -11,6 +11,79 @@
 Chapter Assessment
 ==================
 
+.. mchoice:: pcap_vocab_stderr
+   :answer_a: Standard input stream
+   :answer_b: Standard output stream
+   :answer_c: Standard error stream
+   :answer_d: A type of exception
+   :correct: c
+   :feedback_a: That's stdin.
+   :feedback_b: That's stdout.
+   :feedback_c: Correct! stderr is the standard error stream for error messages and logging.
+   :feedback_d: It's a stream, not an exception.
+
+   What is ``sys.stderr``?
+
+.. mchoice:: pcap_vocab_finally
+   :answer_a: Runs only if an exception occurs
+   :answer_b: Runs only if no exception occurs
+   :answer_c: Always runs, regardless of exceptions
+   :answer_d: Never runs
+   :correct: c
+   :feedback_a: That's the except clause.
+   :feedback_b: That's the else clause.
+   :feedback_c: Correct! finally ALWAYS runs—perfect for cleanup code.
+   :feedback_d: finally always runs!
+
+   When does the ``finally`` clause execute?
+
+.. mchoice:: pcap_concept_assert_production
+   :answer_a: Always use assert in production
+   :answer_b: Never use assert in production
+   :answer_c: assert is fine for production validation
+   :answer_d: assert is required for error handling
+   :correct: b
+   :feedback_a: assert can be disabled with -O flag!
+   :feedback_b: Correct! Don't use assert in production—it can be disabled and raises AssertionError.
+   :feedback_c: Use proper exceptions for validation, not assert.
+   :feedback_d: Use try/except for error handling, not assert.
+
+   Should you use ``assert`` for production input validation?
+
+**Exception with Finally**
+
+.. parsonsprob:: pcap_parsons_finally
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to create proper exception handling with finally clause.
+   -----
+   def process_file(filename):
+   =====
+       f = None
+   =====
+       try:
+   =====
+           f = open(filename, 'r')
+   =====
+           content = f.read()
+   =====
+           return content
+   =====
+       except FileNotFoundError:
+   =====
+           print("File not found")
+   =====
+           return None
+   =====
+       finally:
+   =====
+           if f is not None:
+   =====
+               f.close()
+
+
 .. activecode:: ac_exceptions_01
    :tags: Exceptions/intro-exceptions.rst
    :practice: T
@@ -225,5 +298,91 @@ Chapter Assessment
               if 'Puppies' in diction:
                   accum += 1
          self.assertEqual(accum, 4, "Testing that every dictionary in di has the key 'Puppies'.")
+
+   myTests().main()
+**Debug: Broken Exception Handling**
+
+.. activecode:: pcap_debug_exception
+   :language: python
+   :autograde: unittest
+
+   This code doesn't handle exceptions properly. Fix it!
+   ~~~~
+   def divide_numbers(a, b):
+       try:
+           result = a / b
+       except:
+           print("Error occurred")
+
+       return result
+
+   print(divide_numbers(10, 2))
+   print(divide_numbers(10, 0))
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_normal_division(self):
+           """Should correctly divide two numbers"""
+           result = divide_numbers(10, 2)
+           self.assertEqual(result, 5.0, "10 / 2 should equal 5.0")
+
+       def test_division_with_floats(self):
+           """Should handle float division"""
+           result = divide_numbers(7, 2)
+           self.assertEqual(result, 3.5, "7 / 2 should equal 3.5")
+
+       def test_zero_division_returns_value(self):
+           """Should return a value (not crash) when dividing by zero"""
+           result = divide_numbers(10, 0)
+           self.assertIsNotNone(result, "Should return None instead of crashing")
+
+       def test_zero_division_does_not_crash(self):
+           """Should not raise exception when dividing by zero"""
+           try:
+               result = divide_numbers(10, 0)
+               crashed = False
+           except:
+               crashed = True
+           self.assertFalse(crashed, "Should handle division by zero without crashing")
+
+       def test_catches_specific_exception(self):
+           """Should catch ZeroDivisionError specifically"""
+           source = self.getEditorText()
+           func_code = source.split('def divide_numbers(')[1].split('\n\n')[0]
+           self.assertIn('ZeroDivisionError', func_code,
+                        "Should catch ZeroDivisionError specifically, not bare except")
+
+       def test_no_bare_except(self):
+           """Should not use bare except:"""
+           source = self.getEditorText()
+           func_code = source.split('def divide_numbers(')[1].split('\n\n')[0]
+
+           # Check for bare except (except: with no exception type)
+           lines = func_code.split('\n')
+           for line in lines:
+               if 'except' in line and ':' in line:
+                   # Make sure there's something between 'except' and ':'
+                   except_part = line.split('except')[1].split(':')[0].strip()
+                   if except_part == '':
+                       self.fail("Should not use bare 'except:' - specify exception type")
+
+       def test_negative_numbers(self):
+           """Should handle negative numbers"""
+           result = divide_numbers(-10, 2)
+           self.assertEqual(result, -5.0)
+
+       def test_type_error_handled(self):
+           """Should handle invalid types gracefully"""
+           result = divide_numbers("10", 2)
+           # Should return None or handle gracefully, not crash
+           self.assertTrue(result is None or isinstance(result, (int, float)),
+                         "Should handle type errors gracefully")
+
+       def test_returns_none_on_error(self):
+           """Should return None when error occurs"""
+           result = divide_numbers(10, 0)
+           self.assertIsNone(result, "Should return None when division by zero occurs")
 
    myTests().main()

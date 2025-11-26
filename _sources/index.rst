@@ -85,7 +85,6 @@ Table of Contents
 
    TransformingSequences/toctree.rst
    Files/toctree.rst
-   Functions/toctree.rst
    AdvancedFunctions/toctree.rst
    Sorting/toctree.rst
    NestedData/toctree.rst
@@ -96,9 +95,7 @@ Table of Contents
    Inheritance/toctree.rst
    AdvancedAccumulation/toctree.rst
    AdvancedModules/toctree.rst
-   Closures/toctree.rst
    AdvancedOOP/toctree.rst
-   PCAPPowerTopics/toctree.rst
 
 
 Appendices

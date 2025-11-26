@@ -12,6 +12,150 @@
 Exercises
 =========
 
+Test your understanding of key terminology:
+
+.. mchoice:: pcap_vocab_assert
+   :answer_a: A statement that always raises an error
+   :answer_b: A debugging statement that checks a condition
+   :answer_c: A way to catch exceptions
+   :answer_d: A type of loop
+   :correct: b
+   :feedback_a: assert only raises an error if the condition is False.
+   :feedback_b: Correct! assert checks conditions during development and can be disabled with -O.
+   :feedback_c: That's try/except, not assert.
+   :feedback_d: assert is not a loop construct.
+
+   What is an ``assert`` statement?
+
+
+.. mchoice:: pcap_vocab_errno
+   :answer_a: A module for handling errors
+   :answer_b: A module providing error code constants
+   :answer_c: A type of exception
+   :answer_d: A debugging tool
+   :correct: b
+   :feedback_a: It provides error codes, not general error handling.
+   :feedback_b: Correct! errno provides standard POSIX error code constants like ENOENT, EACCES.
+   :feedback_c: errno is a module, not an exception type.
+   :feedback_d: It's for error codes, not debugging.
+
+   What is the ``errno`` module?
+
+.. mchoice:: pcap_vocab_exception_chaining
+   :answer_a: Catching multiple exceptions
+   :answer_b: Raising a new exception while preserving the original
+   :answer_c: A chain of try/except blocks
+   :answer_d: Multiple except clauses
+   :correct: b
+   :feedback_a: That's multiple except clauses, not chaining.
+   :feedback_b: Correct! Use "raise NewError() from original" to preserve the original exception.
+   :feedback_c: That's nesting, not chaining.
+   :feedback_d: That's multiple exception handling, not chaining.
+
+   What is exception chaining?
+.. mchoice:: pcap_concept_else_clause
+   :answer_a: Runs if an exception occurs
+   :answer_b: Runs if NO exception occurs
+   :answer_c: Always runs
+   :answer_d: Never runs
+   :correct: b
+   :feedback_a: That's the except clause.
+   :feedback_b: Correct! The else clause runs only if the try block completed without exceptions.
+   :feedback_c: That's finally.
+   :feedback_d: else runs when no exception occurs.
+
+   When does the ``else`` clause in try/except execute?
+
+**Custom Exception**
+
+.. parsonsprob:: pcap_parsons_custom_exception
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to create a custom exception class.
+   -----
+   class ValidationError(Exception):
+   =====
+   class ValidationError: #distractor
+   =====
+       def __init__(self, field, message):
+   =====
+           self.field = field
+   =====
+           self.message = message
+   =====
+           super().__init__(f"{field}: {message}")
+   =====
+           Exception.__init__(f"{field}: {message}") #distractor
+
+
+
+---
+Build complete solutions from scratch!
+
+**Exception Logger**
+
+.. activecode:: pcap_code_exception_logger
+   :language: python
+   :autograde: unittest
+
+   Create a function ``safe_divide(a, b)`` that:
+   - Divides a by b
+   - Returns result on success
+   - Returns None and logs to stderr on error
+   - Uses sys.stderr for error messages
+
+   Example::
+
+       result = safe_divide(10, 2)   # 5.0
+       result = safe_divide(10, 0)   # None (logs error to stderr)
+
+   ~~~~
+   import sys
+
+   def safe_divide(a, b):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_successful_division(self):
+           result = safe_divide(10, 2)
+           self.assertEqual(result, 5.0)
+
+       def test_zero_division(self):
+           result = safe_divide(10, 0)
+           self.assertIsNone(result)
+
+       def test_type_error(self):
+           result = safe_divide("10", 2)
+           self.assertIsNone(result)
+
+   myTests().main()
+
+.. reveal:: pcap_code_exception_logger_solution
+   :showtitle: Show Solution
+   :hidetitle: Hide Solution
+
+   .. code-block:: python
+
+      import sys
+
+      def safe_divide(a, b):
+          try:
+              return a / b
+          except ZeroDivisionError:
+              sys.stderr.write("Error: Division by zero\n")
+              return None
+          except TypeError:
+              sys.stderr.write("Error: Invalid types\n")
+              return None
+
+---
+
 #.
 
     .. tabbed:: q1
