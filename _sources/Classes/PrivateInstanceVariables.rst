@@ -1,5 +1,9 @@
 Public and Private Instance Variables
-========================================
+======================================
+
+**Critical PCAP Topic** (Section 4 - 34% of exam)
+
+Understanding private variables and name mangling is explicitly tested on the PCAP certification exam. This is essential for writing professional, maintainable Python code.
 
 When we define a Python class, any instance's instance variables can be accessed within or outside of the class. For example, suppose we have a class named ``Person`` that represents a person and if they are a "child" (for our purposes, anyone under 18 years old is considered a child):
 
@@ -95,3 +99,177 @@ In the code above, we have made the ``__name`` and ``__age`` instance variables 
     :practice: T
 
     How can we hide implementation details of instance variables in a class from other programmers in Python?
+
+**Comparison: _ vs __ Conventions**
+
+.. list-table::
+   :widths: 30 35 35
+   :header-rows: 1
+
+   * - Convention
+     - Single Underscore ``_var``
+     - Double Underscore ``__var``
+   * - **Purpose**
+     - Protected (internal use)
+     - Private (name mangled)
+   * - **Mangling?**
+     - No
+     - Yes (becomes ``_ClassName__var``)
+   * - **Access Outside Class**
+     - ``obj._var`` (discouraged)
+     - ``obj._ClassName__var`` (very discouraged)
+   * - **When to Use**
+     - Internal helper variables
+     - Avoid name conflicts in subclasses
+   * - **Enforcement**
+     - Convention only
+     - Convention + obfuscation
+
+**Understanding Name Mangling**
+
+While ``__age`` can't be accessed directly, you *can* access the mangled name (but you shouldn't!):
+
+.. activecode:: ac20_11_3
+    :language: python
+
+    class Person:
+        def __init__(self, name, age):
+            self.__name = name
+            self.__age = age
+
+        def get_age(self):
+            return self.__age
+
+    p1 = Person("Ada Lovelace", 42)
+
+    # Correct way - use the public method
+    print(f"Age via method: {p1.get_age()}")
+
+    # This fails (as intended)
+    try:
+        print(f"Direct access: {p1.__age}")
+    except AttributeError as e:
+        print(f"ERROR: {e}")
+
+    # This works but you SHOULDN'T do it!
+    print(f"Mangled access: {p1._Person__age}")
+
+    # See the actual instance variables
+    print(f"Instance variables: {p1.__dict__}")
+
+**Output:**
+::
+
+   Age via method: 42
+   ERROR: 'Person' object has no attribute '__age'
+   Mangled access: 42
+   Instance variables: {'_Person__name': 'Ada Lovelace', '_Person__age': 42}
+
+.. important::
+   **Name Mangling is a Deterrent, Not Security**
+
+   Name mangling makes accidental access difficult, but determined programmers can still access ``_ClassName__varname``. It's a **"gentleman's agreement"** that these variables are private.
+
+   **The real protection** comes from code review, documentation, and professional standards - not language enforcement.
+
+**When to Use Private Variables**
+
+.. activecode:: ac20_11_4
+    :language: python
+
+    class BankAccount:
+        """Bank account with protected balance."""
+
+        def __init__(self, owner, initial_balance=0):
+            self.owner = owner           # Public
+            self.__balance = initial_balance  # Private!
+
+        def deposit(self, amount):
+            """Public method with validation."""
+            if amount > 0:
+                self.__balance += amount
+                return True
+            return False
+
+        def withdraw(self, amount):
+            """Public method with validation."""
+            if 0 < amount <= self.__balance:
+                self.__balance -= amount
+                return True
+            return False
+
+        def get_balance(self):
+            """Public getter - controlled access."""
+            return self.__balance
+
+    # Create account
+    account = BankAccount("Alice", 1000)
+
+    # Public interface works
+    print(f"Initial balance: ${account.get_balance()}")
+    account.deposit(500)
+    print(f"After deposit: ${account.get_balance()}")
+    account.withdraw(200)
+    print(f"After withdrawal: ${account.get_balance()}")
+
+    # Can't accidentally break it!
+    try:
+        print(account.__balance)  # AttributeError
+    except AttributeError:
+        print("Cannot access __balance directly (as intended!)")
+
+**Output:**
+::
+
+   Initial balance: $1000
+   After deposit: $1500
+   After withdrawal: $1300
+   Cannot access __balance directly (as intended!)
+
+**Benefits:**
+- ✅ Prevents accidental modification
+- ✅ Enforces validation rules (can't set negative balance)
+- ✅ Can change implementation without breaking external code
+- ✅ Clear API boundary (public methods vs private data)
+
+.. mchoice:: question20_11_3
+    :answer_a: _Person_age
+    :answer_b: _Person__age
+    :answer_c: __Person_age
+    :answer_d: Person__age
+    :correct: b
+    :feedback_a: Close, but needs TWO underscores before "age"
+    :feedback_b: Correct! __age becomes _ClassName__varname → _Person__age
+    :feedback_c: Wrong order - class name comes first after single underscore
+    :feedback_d: Missing the leading underscore
+    :practice: T
+
+    If a class named ``Person`` has a private variable ``__age``, what is the mangled name?
+
+.. mchoice:: question20_11_4
+    :answer_a: To make variables completely inaccessible
+    :answer_b: To encrypt variable values
+    :answer_c: To prevent accidental access and name conflicts in inheritance
+    :answer_d: To improve performance
+    :correct: c
+    :feedback_a: Mangled names can still be accessed with _ClassName__varname
+    :feedback_b: Name mangling doesn't encrypt values, just renames variables
+    :feedback_c: Correct! It deters accidental access and prevents subclass name conflicts
+    :feedback_d: Name mangling doesn't improve performance
+    :practice: T
+
+    What is the main purpose of name mangling (__ prefix)?
+
+.. mchoice:: question20_11_5
+    :answer_a: Single underscore variables are slower
+    :answer_b: Single underscore is convention only, double underscore triggers name mangling
+    :answer_c: Double underscore variables are completely inaccessible
+    :answer_d: There is no difference
+    :correct: b
+    :feedback_a: Performance is the same for both
+    :feedback_b: Correct! _var is just a convention; __var actually gets renamed by Python
+    :feedback_c: Double underscore variables can still be accessed via mangled name
+    :feedback_d: There's a significant difference in how Python treats them!
+    :practice: T
+
+    What's the difference between ``_variable`` and ``__variable``?

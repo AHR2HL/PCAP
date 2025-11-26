@@ -9,7 +9,11 @@
 .. _class_and_instance_vars:
 
 Class Variables and Instance Variables
---------------------------------------
+---------------------------------------
+
+This is a **critical PCAP topic** (Section 4 - 34% of exam).
+
+Understanding the difference between class and instance variables is essential for professional Python programming and is explicitly tested on the PCAP certification exam.
 
 You have already seen that each instance of a class has its own namespace with its own instance variables. Two instances of the Point class each have their own instance variable x. Setting x in one instance doesn't affect the other instance.
 
@@ -75,3 +79,171 @@ In case you are curious, method definitions also create class variables. Thus, i
     * Because of the () after the word graph, it invokes the function/method object, with the parameter self bound to the object p1 points to.
 
 Try running it in codelens and see if you can follow how it all works.
+
+**Class Variables are Shared Across All Instances**
+
+Class variables are useful when all instances should share the same value:
+
+.. activecode:: classvars_shared
+
+    class Dog:
+        """Dog class with species (class var) and name (instance var)."""
+
+        species = "Canis familiaris"  # Class variable - all dogs share
+
+        def __init__(self, name, age):
+            self.name = name  # Instance variable - unique per dog
+            self.age = age    # Instance variable - unique per dog
+
+        def description(self):
+            return f"{self.name} is {self.age} years old"
+
+        def species_info(self):
+            return f"{self.name} is a {self.species}"
+
+    buddy = Dog("Buddy", 9)
+    miles = Dog("Miles", 4)
+
+    print(buddy.description())
+    print(miles.description())
+    print()
+    print(buddy.species_info())
+    print(miles.species_info())
+    print()
+    print(f"Both share species: {buddy.species == miles.species}")
+
+**Output:**
+::
+
+   Buddy is 9 years old
+   Miles is 4 years old
+
+   Buddy is a Canis familiaris
+   Miles is a Canis familiaris
+
+   Both share species: True
+
+**Common Pattern: Tracking Total Instances**
+
+Class variables are perfect for tracking how many instances have been created:
+
+.. activecode:: classvars_counter
+
+    class Player:
+        """Player class that tracks total players."""
+
+        total_players = 0  # Class variable - shared counter
+
+        def __init__(self, name):
+            self.name = name           # Instance variable
+            Player.total_players += 1  # Increment class variable
+
+        @classmethod
+        def get_player_count(cls):
+            """Return total number of players."""
+            return cls.total_players
+
+    print(f"Players at start: {Player.total_players}")
+
+    p1 = Player("Alice")
+    print(f"After creating Alice: {Player.total_players}")
+
+    p2 = Player("Bob")
+    p3 = Player("Charlie")
+    print(f"After creating Bob and Charlie: {Player.total_players}")
+
+    print(f"Using class method: {Player.get_player_count()}")
+
+**Output:**
+::
+
+   Players at start: 0
+   After creating Alice: 1
+   After creating Bob and Charlie: 3
+   Using class method: 3
+
+**Important: Instance Assignment Creates Instance Variable**
+
+Be careful! Assigning to ``self.class_var`` creates an **instance** variable, not a class variable:
+
+.. activecode:: classvars_warning
+
+    class Example:
+        shared = "I'm shared"  # Class variable
+
+        def __init__(self):
+            pass
+
+    # Both instances share the class variable
+    e1 = Example()
+    e2 = Example()
+
+    print(f"e1.shared: {e1.shared}")
+    print(f"e2.shared: {e2.shared}")
+    print(f"Example.shared: {Example.shared}")
+    print()
+
+    # Modify via instance - creates instance variable!
+    e1.shared = "I'm NOT shared anymore"
+
+    print("After e1.shared = 'I'm NOT shared anymore':")
+    print(f"e1.shared: {e1.shared}")  # Instance variable
+    print(f"e2.shared: {e2.shared}")  # Still class variable
+    print(f"Example.shared: {Example.shared}")  # Class variable unchanged
+    print()
+
+    # Modify via class - affects all instances (that don't have instance var)
+    Example.shared = "New shared value"
+
+    print("After Example.shared = 'New shared value':")
+    print(f"e1.shared: {e1.shared}")  # Still instance variable (not affected)
+    print(f"e2.shared: {e2.shared}")  # Class variable (updated!)
+    print(f"Example.shared: {Example.shared}")  # Class variable (updated!)
+
+**Output:**
+::
+
+   e1.shared: I'm shared
+   e2.shared: I'm shared
+   Example.shared: I'm shared
+
+   After e1.shared = 'I'm NOT shared anymore':
+   e1.shared: I'm NOT shared anymore
+   e2.shared: I'm shared
+   Example.shared: I'm shared
+
+   After Example.shared = 'New shared value':
+   e1.shared: I'm NOT shared anymore
+   e2.shared: New shared value
+   Example.shared: New shared value
+
+**Check Your Understanding**
+
+1. Create a class called ``NumberSet`` that accepts 2 integers as input, and defines two instance variables: ``num1`` and ``num2``, which hold each of the input integers. Then, create an instance of ``NumberSet`` where its num1 is 6 and its num2 is 10. Save this instance to a variable ``t``.
+
+[Keep existing problem]
+
+2. **NEW:** Create a class called ``BankAccount`` with:
+   - Class variable ``bank_name = "Python Bank"``
+   - Instance variables ``owner`` and ``balance``
+   - Create two accounts: ``acc1`` (owner="Alice", balance=1000) and ``acc2`` (owner="Bob", balance=500)
+
+.. activecode:: ee_ch13_classvars_2
+   :tags:Classes/ClassVariablesInstanceVariables.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(BankAccount.bank_name, "Python Bank", "Testing class variable")
+       def testTwo(self):
+           self.assertEqual(acc1.owner, "Alice", "Testing acc1 owner")
+           self.assertEqual(acc1.balance, 1000, "Testing acc1 balance")
+       def testThree(self):
+           self.assertEqual(acc2.owner, "Bob", "Testing acc2 owner")
+           self.assertEqual(acc2.balance, 500, "Testing acc2 balance")
+       def testFour(self):
+           self.assertEqual(acc1.bank_name, acc2.bank_name, "Both should share class variable")
+
+   myTests().main()

@@ -6,7 +6,7 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-Section 2: Advanced File I/O
+Advanced File I/O
 =============================
 
 .. index:: file I/O, binary files, bytearray, errno, streams
@@ -14,7 +14,16 @@ Section 2: Advanced File I/O
 Introduction
 ------------
 
-You've learned basic file operations with ``open()``, ``read()``, and ``write()``. Now it's time to master **advanced file I/O** techniques essential for PCAP certification.
+As a PCEP-certified programmer, you already know how to:
+
+* Open, read, and write text files
+* Use context managers (``with`` statement)
+* Read and write CSV files
+* Handle basic file exceptions
+
+If you need a refresher on these basics, refer to your PCEP course materials.
+
+This section covers **advanced file I/O required for PCAP certification (Section 5 - 22% of exam)**:
 
 Advanced file I/O goes beyond simple text files:
 
@@ -1301,35 +1310,14 @@ Key Takeaways
 
 ---
 
-What's Next?
+Well Done!
 ------------
 
-You now understand advanced file I/O! Next, you'll master **String Methods** — the complete reference to Python's powerful string manipulation methods.
-
-**In Section 3: String Methods Mastery**, you'll learn:
-
-- Comprehensive string method reference
-- Case manipulation methods
-- Search and validation methods
-- Splitting and joining
-- String formatting techniques
-- Common string patterns
-- Performance considerations
-
-Ready to master string methods? Let's go! 🚀
-
----
-
-.. note::
-   **✅ Section 2 Complete!**
-
-   You've learned:
-   - [✓] Text vs binary file modes
-   - [✓] Working with ``bytearray``
-   - [✓] Error handling with ``errno``
-   - [✓] Standard streams (stdin, stdout, stderr)
-   - [✓] Reading methods comparison
-   - [✓] Context managers
-   - [✓] File I/O best practices
-
-   **Ready for advanced string methods?** → Continue to Section 3!
+You've learned:
+- [✓] Text vs binary file modes
+- [✓] Working with ``bytearray``
+- [✓] Error handling with ``errno``
+- [✓] Standard streams (stdin, stdout, stderr)
+- [✓] Reading methods comparison
+- [✓] Context managers
+- [✓] File I/O best practices

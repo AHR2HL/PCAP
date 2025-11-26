@@ -13,23 +13,104 @@
 
 .. _list_comp_chap:
 
-Introduction: Map, Filter, List Comprehensions, and Zip
-=======================================================
+Introduction: Advanced Accumulation with map, filter, and zip
+==============================================================
 
-Let's revisit the :ref:`accumulator pattern <accum_pattern>`. We have frequently taken a list and produced another list 
-from it that contains either a subset of the items or a transformed version of each item. When each item is transformed we 
-say that the operation is a **mapping, or just a map** of the original list. When some items are omitted, we call it a 
-**filter**. 
+As a PCEP-certified programmer, you already know how to use **basic list comprehensions** to transform and filter sequences:
 
-Python provides built-in functions ``map`` and ``filter``. Python also provides a new syntax, called 
-**list comprehensions**, that lets you express a mapping and/or filtering operation. Just as with named functions and 
-lambda expressions, some students seem to find it easier to think in terms of the map and filter functions, while other 
-students find it easier to read and write list comprehensions. You'll learn both ways; one may even help you understand 
-the other. Most python programmers use list comprehensions, so make sure you learn to read those. In this course, you can 
-choose to learn to write list comprehensions or to use map and filter, whichever you prefer. You should learn to read both 
-list comprehensions and map/filter.
+.. code-block:: python
 
-Other common accumulator patterns on lists aggregate all the values into a single value.
+   # Transform
+   squares = [x**2 for x in numbers]
 
-Map, and filter are commands that you would use in high-performance computing on big datasets. 
-See `MapReduce on Wikipedia <http://en.wikipedia.org/wiki/MapReduce>`_. 
+   # Filter
+   evens = [x for x in numbers if x % 2 == 0]
+
+   # Both
+   even_squares = [x**2 for x in numbers if x % 2 == 0]
+
+This chapter introduces three powerful built-in functions that provide alternative ways to accomplish these tasks, plus additional capabilities for working with multiple sequences.
+
+What You'll Learn (PCAP Section 5 - 22%)
+---
+
+**1. The map() Function**
+
+Transform every element in a sequence:
+
+.. code-block:: python
+
+   numbers = [1, 2, 3, 4, 5]
+   squares = list(map(lambda x: x**2, numbers))
+   # [1, 4, 9, 16, 25]
+
+**2. The filter() Function**
+
+Keep only elements that meet a condition:
+
+.. code-block:: python
+
+   numbers = [1, 2, 3, 4, 5, 6]
+   evens = list(filter(lambda x: x % 2 == 0, numbers))
+   # [2, 4, 6]
+
+**3. The zip() Function**
+
+Combine multiple sequences element-by-element:
+
+.. code-block:: python
+
+   names = ['Alice', 'Bob', 'Charlie']
+   ages = [25, 30, 35]
+   combined = list(zip(names, ages))
+   # [('Alice', 25), ('Bob', 30), ('Charlie', 35)]
+
+**4. Advanced List Comprehensions**
+
+We'll also explore advanced comprehension techniques including:
+
+* Nested list comprehensions
+* Dictionary comprehensions
+* Set comprehensions
+* Generator expressions
+
+When to Use Each Technique
+---
+
+**List comprehensions** are often more Pythonic and readable for simple transformations:
+
+.. code-block:: python
+
+   # Clear and readable
+   squares = [x**2 for x in numbers]
+
+**map() and filter()** are useful when:
+
+* You have an existing function to apply
+* You're working with multiple sequences
+* You want to emphasize functional programming style
+
+.. code-block:: python
+
+   # Using existing function
+   strings = ['1', '2', '3']
+   numbers = list(map(int, strings))
+
+**zip()** is essential when:
+
+* Combining data from parallel lists
+* Creating dictionaries from keys and values
+* Iterating over multiple sequences simultaneously
+
+Professional Python developers use all of these techniques. Understanding when to use each is part of writing idiomatic Python code.
+
+Prerequisites
+---
+
+This chapter assumes you're comfortable with:
+
+* Basic list comprehensions (from PCEP)
+* Lambda expressions (from Advanced Functions chapter)
+* Basic iteration with for loops
+
+Let's begin!

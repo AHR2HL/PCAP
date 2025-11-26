@@ -13,9 +13,16 @@
 A Tamagotchi Game
 -----------------
 
-There are also a lot of interesting ways to put user-defined classes to use that don't involve data from the internet. Let's pull all these mechanics together in a slightly more interesting way than we got with the Point class. Remember `Tamagotchis <https://en.wikipedia.org/wiki/Tamagotchi>`_, the little electronic pets? As time passed, they would get hungry or bored. You had to clean up after them or they would get sick. And you did it all with a few buttons on the device.
+**Synthesis Project: Applying All Class Concepts**
 
-We are going to make a simplified, text-based version of that. In your problem set and in the chapter on :ref:`Inheritance <inheritance_chap>` we will extend this further.
+This project demonstrates:
+* Class and instance variables working together
+* Multiple methods with different purposes
+* State management across time
+* Interactive programs with classes
+* The Listener Loop pattern
+
+By studying and modifying this code, you'll see how professional Python programs use classes to manage complex state and behavior.
 
 First, let's start with a class ``Pet``. Each instance of the class will be one electronic pet for the user to take care of. Each instance will have a current state, consisting of three instance variables:
     * hunger, an integer
@@ -183,3 +190,44 @@ No matter what the user does, with each command entered, the clock ticks for all
 
 
     play()
+
+**Reflection Questions**
+
+.. mchoice:: tamagotchi_mc1
+   :answer_a: To track data shared by all pets
+   :answer_b: To track data unique to each pet
+   :answer_c: To make the code faster
+   :answer_d: To make the code shorter
+   :correct: a
+   :feedback_a: Correct! Class variables like boredom_threshold are shared by all pets
+   :feedback_b: That's what instance variables are for
+   :feedback_c: Class variables don't affect performance significantly
+   :feedback_d: Class variables are about design, not code length
+
+   Why does the Pet class use class variables like ``boredom_threshold``?
+
+.. mchoice:: tamagotchi_mc2
+   :answer_a: To save memory
+   :answer_b: To prevent all pets from sharing the same sound list
+   :answer_c: To make the code faster
+   :answer_d: It's not necessary
+   :correct: b
+   :feedback_a: That's not the main reason
+   :feedback_b: Correct! Without copying, teaching a sound to one pet would affect all pets
+   :feedback_c: Performance is not the issue here
+   :feedback_d: It's absolutely necessary! Try removing it and see what happens
+
+   Why does ``__init__`` copy the sounds list with ``self.sounds = self.sounds[:]``?
+
+.. mchoice:: tamagotchi_mc3
+   :answer_a: To prevent negative values
+   :answer_b: To set maximum values
+   :answer_c: To calculate averages
+   :answer_d: To compare two values
+   :correct: a
+   :feedback_a: Correct! max(0, value) ensures the result is never negative
+   :feedback_b: This would be min(), not max()
+   :feedback_c: max() doesn't calculate averages
+   :feedback_d: While max() does compare, the purpose here is to clamp to 0
+
+   What is the purpose of ``max(0, self.hunger - self.hunger_decrement)`` in ``reduce_hunger()``?

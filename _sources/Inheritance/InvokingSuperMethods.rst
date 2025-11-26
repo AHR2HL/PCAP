@@ -9,91 +9,40 @@
 
 
 Invoking the Parent Class's Method
-==================================
+===================================
 
-Sometimes the parent class has a useful method, but you just need to execute a little extra code when running the subclass's method. You can override the parent class's method in the subclass's method with the same name, but also invoke the parent class's method. Here's how.
+**Critical PCAP Topic** (Section 4 - 34% of exam)
 
-Say you wanted the ``Dog`` subclass of ``Pet`` to say "Arf! Thanks!" when the ``feed`` method is called, as well as executing the code in the original method.
+Sometimes you want to **extend** parent behavior, not **replace** it. You want the parent's code PLUS some extra code.
 
-Here's the original ``Pet`` class again.
+**Without super() - Code Duplication:**
 
-.. activecode:: inheritance_pet_class_copy
-    :nocanvas:
+.. code-block:: python
 
-    from random import randrange
+   class Pet:
+       def __init__(self, name):
+           self.name = name
+           self.hunger = 5
+           self.boredom = 3
 
-    # Here's the original Pet class
-    class Pet():
-        boredom_decrement = 4
-        hunger_decrement = 6
-        boredom_threshold = 5
-        hunger_threshold = 10
-        sounds = ['Mrrp']
-        def __init__(self, name = "Kitty"):
-            self.name = name
-            self.hunger = randrange(self.hunger_threshold)
-            self.boredom = randrange(self.boredom_threshold)
-            self.sounds = self.sounds[:]  # copy the class attribute, so that when we make changes to it, we won't affect the other Pets in the class
+   class Dog(Pet):
+       def __init__(self, name, breed):
+           # Must duplicate Pet's initialization! ❌
+           self.name = name
+           self.hunger = 5
+           self.boredom = 3
+           self.breed = breed  # Plus new stuff
 
-        def clock_tick(self):
-            self.boredom += 1
-            self.hunger += 1
+**With super() - No Duplication:**
 
-        def mood(self):
-            if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
-                return "happy"
-            elif self.hunger > self.hunger_threshold:
-                return "hungry"
-            else:
-                return "bored"
+.. code-block:: python
 
-        def __str__(self):
-            state = "     I'm " + self.name + ". "
-            state += " I feel " + self.mood() + ". "
-            # state += "Hunger %d Boredom %d Words %s" % (self.hunger, self.boredom, self.sounds)
-            return state
+   class Dog(Pet):
+       def __init__(self, name, breed):
+           super().__init__(name)  # Call parent! ✅
+           self.breed = breed      # Then add new stuff
 
-        def hi(self):
-            print(self.sounds[randrange(len(self.sounds))])
-            self.reduce_boredom()
-
-        def teach(self, word):
-            self.sounds.append(word)
-            self.reduce_boredom()
-
-        def feed(self):
-            print("Called Pet.feed()")
-            self.reduce_hunger()
-
-        def reduce_hunger(self):
-            self.hunger = max(0, self.hunger - self.hunger_decrement)
-
-        def reduce_boredom(self):
-            self.boredom = max(0, self.boredom - self.boredom_decrement)
-
-And here's a subclass that overrides ``feed()`` by invoking the the parent class's ``feed()`` method; it then also executes an extra line of code. It does this by calling the built-in function ``super()``. The ``super()`` function returns a special object that allows you to invoke the method of the parent class. So to call the parent class's ``feed()`` method (``Pet.feed()``), we say ``super().feed()``.
-
-
-.. activecode:: feed_me_example
-    :nocanvas:
-    :include: inheritance_pet_class_copy
-
-    from random import randrange
-
-    class Dog(Pet):
-        sounds = ['Woof', 'Ruff']
-
-        def feed(self):
-            super().feed()
-            print("Arf! Thanks!")
-
-    d1 = Dog("Astro")
-
-    d1.feed()
-
-.. note::
-    Another way to invoke the parent's method is to explicitly refer to the parent class' method and invoke it on the instance. So, in this case, we could say ``Pet.feed(self)``. This is a little more explicit, but it's also a little less flexible. If we later change the name of the parent class, we'd have to change it in all the subclasses. Also, if we later change the class hierarchy, so that ``Dog`` is a subclass of some other class, we'd have to change the code in all the subclasses. So, it's better to use ``super()``.
-
+Much cleaner!
 
 This technique is very often used with the ``__init__`` method for a subclass. Suppose that some extra instance variables are defined for the subclass. When you invoke the constructor, you pass all the regular parameters for the parent class, plus the extra ones for the subclass. The subclass' ``__init__`` method then stores the extra parameters in instance variables and calls the parent class'   ``__init__`` method to store the common parameters in instance variables and do any other initialization that it normally does.
 
@@ -117,6 +66,113 @@ Let's say we want to create a subclass of ``Pet``, called ``Bird``, and we want 
     b1 = Bird('tweety', 5)
     b1.teach("Polly wanna cracker")
     b1.hi()
+
+Common Patterns with super()
+-----------------------------
+
+**Pattern 1: Extend Method (Add Before)**
+
+.. code-block:: python
+
+   class Pet:
+       def feed(self):
+           self.hunger -= 5
+
+   class Dog(Pet):
+       def feed(self):
+           print("Getting excited!")  # Before
+           super().feed()              # Then parent code
+
+**Pattern 2: Extend Method (Add After)**
+
+.. code-block:: python
+
+   class Dog(Pet):
+       def feed(self):
+           super().feed()              # Parent code first
+           print("Arf! Thanks!")       # Then extra code
+
+**Pattern 3: Extend and Modify**
+
+.. code-block:: python
+
+   class Dog(Pet):
+       def feed(self):
+           super().feed()              # Do parent behavior
+           self.happiness += 2         # Plus extra state change
+
+**Pattern 4: Extend __init__ (Most Common!)**
+
+.. code-block:: python
+
+   class Dog(Pet):
+       def __init__(self, name, breed):
+           super().__init__(name)      # Initialize parent
+           self.breed = breed          # Add child attributes
+
+Why super() Matters: A Cautionary Tale
+---------------------------------------
+
+**Without super() - Must duplicate everything:**
+
+.. activecode:: inheritance_without_super
+
+    from random import randrange
+
+    class Pet:
+        def __init__(self, name):
+            self.name = name
+            self.hunger = randrange(10)
+            self.boredom = randrange(5)
+            print(f"Pet initialized: {self.name}")
+
+    class BadDog(Pet):
+        """Dog that doesn't use super() - BAD!"""
+        def __init__(self, name, breed):
+            # Must duplicate all Pet initialization ❌
+            self.name = name
+            self.hunger = randrange(10)
+            self.boredom = randrange(5)
+            print(f"Pet initialized: {self.name}")  # Duplicated!
+
+            self.breed = breed
+            print(f"Dog initialized: {self.breed}")
+
+    class GoodDog(Pet):
+        """Dog that uses super() - GOOD!"""
+        def __init__(self, name, breed):
+            super().__init__(name)  # No duplication! ✅
+            self.breed = breed
+            print(f"Dog initialized: {self.breed}")
+
+    print("=== Bad Dog (duplicated code) ===")
+    bad = BadDog("Fido", "Poodle")
+
+    print("\n=== Good Dog (using super) ===")
+    good = GoodDog("Rover", "Labrador")
+
+**Output:**
+::
+
+   === Bad Dog (duplicated code) ===
+   Pet initialized: Fido
+   Dog initialized: Poodle
+
+   === Good Dog (using super) ===
+   Pet initialized: Rover
+   Dog initialized: Labrador
+
+**Problems with BadDog:**
+- ❌ Code duplication (violates DRY principle)
+- ❌ If Pet.__init__ changes, BadDog breaks
+- ❌ Must remember all parent initialization steps
+- ❌ Error-prone and hard to maintain
+
+**Benefits of GoodDog:**
+- ✅ No duplication
+- ✅ Automatic updates if parent changes
+- ✅ Clear, maintainable code
+- ✅ Professional Python style
 
 **Check your understanding**
 
@@ -149,3 +205,54 @@ Let's say we want to create a subclass of ``Pet``, called ``Bird``, and we want 
    
    For the ``Dog`` class defined in the earlier activecode window, what would happen when ``d1.feed()`` is run if the ``super().feed()`` line was deleted?
 
+.. mchoice:: question_inheritance_super_1
+   :answer_a: To call the parent class's method
+   :answer_b: To make the method run faster
+   :answer_c: To make the code shorter
+   :answer_d: To avoid using inheritance
+   :correct: a
+   :feedback_a: Correct! super() lets you call the parent class's version of a method
+   :feedback_b: super() doesn't affect performance
+   :feedback_c: While it may be shorter, that's not the main purpose
+   :feedback_d: super() is used WITH inheritance, not to avoid it
+
+   What is the purpose of super()?
+
+.. mchoice:: question_inheritance_super_2
+   :answer_a: super().__init__()
+   :answer_b: super.__init__()
+   :answer_c: super().__init__(self)
+   :answer_d: super().init()
+   :correct: a
+   :feedback_a: Correct! super() is called with (), then you call the method
+   :feedback_b: super itself needs to be called with ()
+   :feedback_c: Don't pass self - super() handles that automatically
+   :feedback_d: The method is __init__ with double underscores
+
+   What's the correct syntax to call the parent's __init__ method using super()?
+
+.. mchoice:: question_inheritance_super_3
+   :answer_a: ParentClass.method(self)
+   :answer_b: super().method()
+   :answer_c: Both work, but super() is preferred
+   :answer_d: Neither works
+   :correct: c
+   :feedback_a: This works but is less flexible
+   :feedback_b: This is the preferred way
+   :feedback_c: Correct! Both work, but super() is better for flexibility
+   :feedback_d: Both actually work!
+
+   Which is the best way to call a parent class method?
+
+.. mchoice:: question_inheritance_super_4
+   :answer_a: To replace parent behavior completely
+   :answer_b: To extend parent behavior with additional code
+   :answer_c: To prevent inheritance
+   :answer_d: To make methods private
+   :correct: b
+   :feedback_a: If you want to replace completely, just override without calling super()
+   :feedback_b: Correct! super() lets you keep parent behavior AND add to it
+   :feedback_c: super() is used WITH inheritance
+   :feedback_d: super() doesn't affect method visibility
+
+   When should you use super() in a subclass method?

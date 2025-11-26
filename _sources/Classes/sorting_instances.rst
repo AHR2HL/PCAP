@@ -124,3 +124,199 @@ If we wanted to sort by names, we could define ``__lt__`` differently. *Note tha
 
 
 Finally, note that if we pass in a function for the ``key`` parameter when we call ``sorted()`` (approach 1), it will use that key function instead of calling the ``__lt__`` method. You can try putting a print statement inside the ``__lt__`` method to see this for yourself: __lt__ will not be called when you provide a key function but it will be called when you don't provide a key function.
+
+**Other Comparison Operators**
+
+Besides ``__lt__`` (less than), you can define other comparison operators:
+
+.. list-table:: Comparison Operator Methods
+   :widths: 30 30 40
+   :header-rows: 1
+
+   * - Operator
+     - Method
+     - Example
+   * - ``<`` (less than)
+     - ``__lt__(self, other)``
+     - ``a < b`` → ``a.__lt__(b)``
+   * - ``<=`` (less or equal)
+     - ``__le__(self, other)``
+     - ``a <= b`` → ``a.__le__(b)``
+   * - ``>`` (greater than)
+     - ``__gt__(self, other)``
+     - ``a > b`` → ``a.__gt__(b)``
+   * - ``>=`` (greater or equal)
+     - ``__ge__(self, other)``
+     - ``a >= b`` → ``a.__ge__(b)``
+   * - ``==`` (equal)
+     - ``__eq__(self, other)``
+     - ``a == b`` → ``a.__eq__(b)``
+   * - ``!=`` (not equal)
+     - ``__ne__(self, other)``
+     - ``a != b`` → ``a.__ne__(b)``
+
+.. activecode:: sort_instances_6
+
+    class Fruit:
+        def __init__(self, name, price):
+            self.name = name
+            self.price = price
+
+        def __lt__(self, other):
+            return self.price < other.price
+
+        def __eq__(self, other):
+            return self.price == other.price
+
+        def __str__(self):
+            return f"{self.name}(${self.price})"
+
+    apple = Fruit("Apple", 5)
+    cherry = Fruit("Cherry", 5)
+    blueberry = Fruit("Blueberry", 10)
+
+    print(f"apple < blueberry: {apple < blueberry}")  # True
+    print(f"apple == cherry: {apple == cherry}")      # True
+    print(f"blueberry > apple: {blueberry > apple}")  # Error! No __gt__ defined
+
+**Output:**
+::
+
+   apple < blueberry: True
+   apple == cherry: True
+   blueberry > apple: Error! No __gt__ defined
+
+.. note::
+   **Use @functools.total_ordering**
+
+   Python provides a decorator that auto-generates missing comparison methods if you define ``__eq__`` and one other (like ``__lt__``):
+
+   .. code-block:: python
+
+      from functools import total_ordering
+
+      @total_ordering
+      class Fruit:
+          def __init__(self, name, price):
+              self.name = name
+              self.price = price
+
+          def __eq__(self, other):
+              return self.price == other.price
+
+          def __lt__(self, other):
+              return self.price < other.price
+
+          # __le__, __gt__, __ge__, __ne__ auto-generated!
+
+**Sorting by Multiple Criteria**
+
+Sometimes you need to sort by multiple attributes:
+
+.. activecode:: sort_instances_7
+
+    class Student:
+        def __init__(self, name, grade, age):
+            self.name = name
+            self.grade = grade
+            self.age = age
+
+        def __str__(self):
+            return f"{self.name} (Grade: {self.grade}, Age: {self.age})"
+
+    students = [
+        Student("Alice", 90, 20),
+        Student("Bob", 85, 19),
+        Student("Charlie", 90, 19),
+        Student("Diana", 85, 20)
+    ]
+
+    # Sort by grade (descending), then by age (ascending)
+    sorted_students = sorted(students, key=lambda s: (-s.grade, s.age))
+
+    print("Sorted by grade (desc), then age (asc):")
+    for s in sorted_students:
+        print(f"  {s}")
+
+**Output:**
+::
+
+   Sorted by grade (desc), then age (asc):
+     Charlie (Grade: 90, Age: 19)
+     Alice (Grade: 90, Age: 20)
+     Bob (Grade: 85, Age: 19)
+     Diana (Grade: 85, Age: 20)
+
+**Explanation:** The lambda returns a tuple ``(-grade, age)``. Python compares tuples element by element, so it sorts by grade first (negated for descending), then by age.
+
+**Check Your Understanding**
+
+1. Create a class ``Book`` with ``title`` and ``pages``. Create a list of 3 books and sort them by number of pages (ascending). Save the title of the book with fewest pages to ``shortest_title``.
+
+.. activecode:: ac_sort_instances_01
+   :tags: Classes/sorting_instances.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           # Should sort by pages ascending
+           self.assertIn("shortest", shortest_title.lower(), "Test hint: shortest book should have fewest pages")
+
+   myTests().main()
+
+2. Create a class ``Person`` with ``name`` and ``age``. Define ``__lt__`` to sort by age. Create a list of 3 people with different ages and sort them. The youngest person should be first.
+
+.. activecode:: ac_sort_instances_02
+   :tags: Classes/sorting_instances.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           # Should be sorted by age
+           ages = [p.age for p in sorted_people]
+           self.assertEqual(ages, sorted(ages), "Should be sorted by age ascending")
+
+   myTests().main()
+
+.. mchoice:: sort_instances_mc1
+   :answer_a: key=len
+   :answer_b: key=len()
+   :answer_c: key=lambda x: len
+   :answer_d: key=lambda: len(x)
+   :correct: a
+   :feedback_a: Correct! Pass the function itself, not a call to it
+   :feedback_b: This would call len() with no arguments and pass the result
+   :feedback_c: This lambda returns the len function, not the length
+   :feedback_d: lambda needs a parameter
+
+   How do you pass the len function as the key parameter?
+
+.. mchoice:: sort_instances_mc2
+   :answer_a: __sort__
+   :answer_b: __cmp__
+   :answer_c: __lt__
+   :answer_d: __compare__
+   :correct: c
+   :feedback_a: There's no __sort__ special method
+   :feedback_b: __cmp__ was used in Python 2, but Python 3 uses __lt__
+   :feedback_c: Correct! __lt__ stands for "less than"
+   :feedback_d: There's no __compare__ special method
+
+   Which special method defines the default sort order for a class?
+
+.. mchoice:: sort_instances_mc3
+   :answer_a: key parameter is ignored
+   :answer_b: __lt__ is ignored
+   :answer_c: Both are used together
+   :answer_d: An error occurs
+   :correct: b
+   :feedback_a: The key parameter is used!
+   :feedback_b: Correct! If you provide a key parameter, __lt__ is not called
+   :feedback_c: Only one is used - the key parameter takes precedence
+   :feedback_d: No error - key parameter just takes precedence
+
+   What happens if a class has __lt__ defined AND you provide a key parameter to sorted()?

@@ -79,6 +79,45 @@ Part 1: Multiple Choice Questions
 
    What is the primary purpose of using closures in Python?
 
+.. mchoice:: advfunc_assess_mc6
+   :answer_a: To capture all positional arguments as a tuple
+   :answer_b: To capture all keyword arguments as a dictionary
+   :answer_c: To pass a list to a function
+   :answer_d: To create a pointer
+   :correct: a
+   :feedback_a: Correct! *args collects extra positional arguments into a tuple
+   :feedback_b: That's **kwargs
+   :feedback_c: *args captures arguments, doesn't pass lists
+   :feedback_d: Python doesn't have pointers like C
+
+   What does ``*args`` do in a function definition?
+
+.. mchoice:: advfunc_assess_mc7
+   :answer_a: To capture all positional arguments
+   :answer_b: To capture all keyword arguments as a dictionary
+   :answer_c: To create a double pointer
+   :answer_d: To multiply arguments
+   :correct: b
+   :feedback_a: That's *args
+   :feedback_b: Correct! **kwargs collects extra keyword arguments into a dict
+   :feedback_c: Python doesn't have pointers
+   :feedback_d: ** in function definition is for keyword arguments
+
+   What does ``**kwargs`` do in a function definition?
+
+.. mchoice:: advfunc_assess_mc8
+   :answer_a: To modify global variables
+   :answer_b: To modify variables in the enclosing scope
+   :answer_c: To create new variables
+   :answer_d: To delete variables
+   :correct: b
+   :feedback_a: That's global keyword
+   :feedback_b: Correct! nonlocal allows modifying variables from outer (not global) scope
+   :feedback_c: You don't need nonlocal to create variables
+   :feedback_d: Use del to delete variables
+
+   What is the ``nonlocal`` keyword used for?
+
 
 Part 2: Active Code Problems
 -----------------------------
@@ -140,6 +179,88 @@ Part 2: Active Code Problems
 
    myTests().main()
 
+
+.. activecode:: advfunc_assess_ac8
+   :nocolab:
+
+   **Problem 8:** Use ``reduce()`` from functools to find the product of all numbers in a list.
+
+   Write ``product(numbers)`` that returns the product of all numbers.
+
+   ~~~~
+   from functools import reduce
+
+   def product(numbers):
+       # Your code here (use reduce and lambda)
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(product([1, 2, 3, 4]), 24, "Test 1: 1*2*3*4")
+           self.assertEqual(product([2, 5, 10]), 100, "Test 2: 2*5*10")
+           self.assertEqual(product([5]), 5, "Test 3: single element")
+
+   myTests().main()
+
+.. activecode:: advfunc_assess_ac9
+   :nocolab:
+
+   **Problem 9:** Create a decorator factory ``repeat(n)`` that makes a function execute n times.
+
+   Example:
+
+   .. code-block:: python
+
+      @repeat(3)
+      def greet(name):
+          print(f"Hello, {name}!")
+
+      greet("Alice")
+      # Prints:
+      # Hello, Alice!
+      # Hello, Alice!
+      # Hello, Alice!
+
+   ~~~~
+   def repeat(n):
+       # Your code here (return a decorator)
+       pass
+
+   @repeat(3)
+   def greet(name):
+       print(f"Hello, {name}!")
+
+   # This should print 3 times
+   greet("Alice")
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           # Test with counter
+           call_count = []
+
+           @repeat(3)
+           def counter():
+               call_count.append(1)
+
+           counter()
+           self.assertEqual(len(call_count), 3, "Should be called 3 times")
+
+       def testTwo(self):
+           @repeat(5)
+           def adder(x):
+               return x + 1
+
+           # Should still return last result
+           result = adder(10)
+           self.assertEqual(result, 11, "Should return result from function")
+
+   myTests().main()
 
 .. activecode:: advfunc_assess_ac3
    :nocolab:
@@ -335,6 +456,42 @@ Part 4: Parson's Problems
    =====
        return add() #paired
 
+
+.. parsonsprob:: advfunc_assess_parsons4
+   :numbered: left
+   :adaptive:
+
+   Arrange the blocks to use reduce() to find the maximum value in a list.
+   -----
+   from functools import reduce
+   =====
+   from itertools import reduce #paired
+   =====
+   numbers = [3, 7, 2, 9, 1]
+   =====
+   max_val = reduce(lambda a, b: a if a > b else b, numbers)
+   =====
+   max_val = reduce(lambda a, b: max(a, b), numbers) #paired
+   =====
+   max_val = map(lambda a, b: a if a > b else b, numbers) #paired
+
+.. parsonsprob:: advfunc_assess_parsons5
+   :numbered: left
+   :adaptive:
+
+   Arrange the blocks to create a function that accepts any arguments with *args and **kwargs.
+   -----
+   def flexible_func(*args, **kwargs):
+   =====
+   def flexible_func(args, kwargs): #paired
+   =====
+       print(f"Positional: {args}")
+   =====
+       print(f"Keyword: {kwargs}")
+   =====
+       return len(args) + len(kwargs)
+   =====
+       return args + kwargs #paired
 
 .. parsonsprob:: advfunc_assess_parsons2
    :numbered: left

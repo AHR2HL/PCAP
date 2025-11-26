@@ -6,7 +6,6 @@ Defining your own Classes
    :maxdepth: 2
 
    intro-ClassesandObjectstheBasics.rst
-   ObjectsRevisited.rst
    UserDefinedClasses.rst
    ImprovingourConstructor.rst
    AddingOtherMethodstoourClass.rst
@@ -20,6 +19,5 @@ Defining your own Classes
    TestingClasses.rst
    Tamagotchi.rst
    ClassDecorators.rst
-   Glossary.rst
    Exercises.rst
    ChapterAssessment.rst

@@ -85,4 +85,110 @@ We *could have* made distance be a method of the Point class. Then, we would hav
     q = Point(0,0)
     print(p.distance(q))
 
+**Functions Can Take Multiple Object Parameters**
 
+.. activecode:: chp13_multiple_objects
+
+    class Point:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+    class Rectangle:
+        def __init__(self, width, height):
+            self.width = width
+            self.height = height
+
+    def point_in_rectangle(point, rect):
+        """Check if point is inside rectangle (assuming rect at origin)"""
+        return 0 <= point.x <= rect.width and 0 <= point.y <= rect.height
+
+    p1 = Point(3, 4)
+    p2 = Point(15, 20)
+    rect = Rectangle(10, 10)
+
+    print(f"Is ({p1.x}, {p1.y}) in rectangle? {point_in_rectangle(p1, rect)}")
+    print(f"Is ({p2.x}, {p2.y}) in rectangle? {point_in_rectangle(p2, rect)}")
+
+**Output:**
+::
+
+   Is (3, 4) in rectangle? True
+   Is (15, 20) in rectangle? False
+
+**Check Your Understanding**
+
+1. Create a class ``Rectangle`` with ``__init__(self, width, height)`` and instance variables ``width`` and ``height``.
+
+   Create a standalone function ``area(rect)`` that takes a Rectangle object and returns its area (width × height).
+
+   Create ``r1 = Rectangle(5, 10)`` and calculate ``area1 = area(r1)``.
+
+.. activecode:: ac_objects_as_params_01
+   :tags: Classes/ObjectsasArgumentsandParameters.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(r1.width, 5, "Testing r1 width")
+           self.assertEqual(r1.height, 10, "Testing r1 height")
+           self.assertEqual(area1, 50, "Testing area calculation")
+
+   myTests().main()
+
+2. Create a standalone function ``are_equal(p1, p2)`` that takes two Point objects and returns True if they have the same x and y coordinates.
+
+   Create ``p1 = Point(3, 4)`` and ``p2 = Point(3, 4)`` and save ``are_equal(p1, p2)`` to ``result``.
+
+.. activecode:: ac_objects_as_params_02
+   :tags: Classes/ObjectsasArgumentsandParameters.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertTrue(result, "Points with same coordinates should be equal")
+
+   myTests().main()
+
+.. mchoice:: objects_params_mc1
+   :answer_a: Functions cannot accept objects as parameters
+   :answer_b: Objects can be passed like any other value
+   :answer_c: Objects must be converted to strings first
+   :answer_d: Only built-in objects can be passed
+   :correct: b
+   :feedback_a: Objects can definitely be passed as parameters!
+   :feedback_b: Correct! Objects are passed to functions just like any other value
+   :feedback_c: No conversion is needed
+   :feedback_d: Custom objects work too!
+
+   How are objects passed as function parameters?
+
+.. mchoice:: objects_params_mc2
+   :answer_a: It's indented inside the class
+   :answer_b: It has self as first parameter
+   :answer_c: It's called with dot notation
+   :answer_d: All of the above
+   :correct: d
+   :feedback_a: True, but there are other indicators too!
+   :feedback_b: True, but there are other indicators too!
+   :feedback_c: True, but there are other indicators too!
+   :feedback_d: Correct! All three are signs it's a method, not a standalone function
+
+   How can you tell if a function is a method of a class?
+
+.. mchoice:: objects_params_mc3
+   :answer_a: If it operates on a single instance
+   :answer_b: If it's symmetric (like distance between two points)
+   :answer_c: If it's used in multiple unrelated classes
+   :answer_d: All are valid reasons
+   :correct: d
+   :feedback_a: Correct reason for standalone function!
+   :feedback_b: Correct reason for standalone function!
+   :feedback_c: Correct reason for standalone function!
+   :feedback_d: Correct! All are good reasons to make it standalone
+
+   When should you make a function standalone instead of a method?

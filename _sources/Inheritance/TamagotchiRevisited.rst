@@ -10,7 +10,48 @@
 Tamagotchi Revisited
 ====================
 
+**Synthesis Project: Applying Inheritance**
+
+This project demonstrates how inheritance simplifies the messy if/elif code from the chapter introduction. You'll see:
+
+* ✅ Multiple pet types with shared behavior
+* ✅ Method overriding for unique behaviors
+* ✅ Using super() to extend parent methods
+* ✅ Multi-level inheritance (Lab and Poodle from Dog)
+* ✅ Polymorphism (treating all pets uniformly)
+
+**Compare this elegant solution to the if/elif version from the introduction!**
+
 Using what we know about class inheritance, we can make a new version of the Tamagotchi game, where you can adopt different types of pets that are slightly different from one another.
+
+Understanding the Code Structure
+---------------------------------
+
+**Class Hierarchy:**
+::
+
+            Pet (base class)
+           /  |  \
+          /   |   \
+       Cat  Dog  Bird
+            / \
+           /   \
+        Lab   Poodle
+
+**What Each Class Adds:**
+
+* **Pet** - Base functionality (hunger, boredom, basic methods)
+* **Cat** - Overrides mood() for cat personality
+* **Dog** - Overrides mood() + extends feed() with "Arf! Thanks!"
+* **Bird** - Overrides __init__ to add chirp_number, overrides hi()
+* **Lab** - Adds fetch() method, overrides hi()
+* **Poodle** - Adds dance() method, overrides hi()
+
+**Key Design Patterns:**
+
+1. **Factory pattern:** ``whichtype()`` creates instances based on string
+2. **Polymorphism:** All pets in one list, same interface
+3. **Extension:** Lab and Poodle extend Dog without modifying it
 
 And now we can play the Tamagotchi game with some small changes, such that we can adopt different types of pets.
 
@@ -196,3 +237,45 @@ And now we can play the Tamagotchi game with some small changes, such that we ca
                 feedback += "\n" + pet.__str__()
 
     play()
+
+Reflection Questions
+--------------------
+
+.. mchoice:: tamagotchi_revisited_mc1
+   :answer_a: Less code duplication, clearer structure
+   :answer_b: Faster execution
+   :answer_c: Uses less memory
+   :answer_d: Easier to debug
+   :correct: a
+   :feedback_a: Correct! Inheritance eliminates if/elif dispatching and puts unique behavior in subclasses
+   :feedback_b: Performance is similar
+   :feedback_c: Memory usage is similar
+   :feedback_d: Debugging complexity is about the same
+
+   What's the main advantage of using inheritance instead of if/elif dispatching (from the intro)?
+
+.. mchoice:: tamagotchi_revisited_mc2
+   :answer_a: So Cat can use it
+   :answer_b: So all pets can use hi()
+   :answer_c: To override Bird's hi()
+   :answer_d: To prevent errors
+   :correct: b
+   :feedback_a: Cat doesn't override hi(), so it uses Pet's version
+   :feedback_b: Correct! Pet.hi() is inherited by all subclasses that don't override it
+   :feedback_c: Bird overrides hi(), so it doesn't use Pet's version
+   :feedback_d: That's not the main purpose
+
+   Why is ``hi()`` defined in the ``Pet`` class instead of in each subclass?
+
+.. mchoice:: tamagotchi_revisited_mc3
+   :answer_a: Lab.hi() only
+   :answer_b: Dog.hi() only
+   :answer_c: Both Lab.hi() and Dog.hi()
+   :answer_d: Pet.hi()
+   :correct: a
+   :feedback_a: Correct! Python finds hi() in Lab first (MRO: Lab → Dog → Pet)
+   :feedback_b: Lab overrides Dog's hi(), so Dog's version isn't used
+   :feedback_c: Only one hi() is called (the first found in MRO)
+   :feedback_d: Lab overrides it, so Pet's version isn't reached
+
+   When you call ``lab_instance.hi()``, which method is invoked?

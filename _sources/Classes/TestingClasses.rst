@@ -67,6 +67,122 @@ Try adding some more tests in the code below, once you understand what's there.
     assert p.x == 1
     assert p.y == 7
 
+**Professional Testing with unittest**
+
+While assertions are good for quick tests, professional Python uses the ``unittest`` module:
+
+.. activecode:: ac19_3_2
+
+    import unittest
+
+    class Point:
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+        def distanceFromOrigin(self):
+            return ((self.x ** 2) + (self.y ** 2)) ** 0.5
+
+        def move(self, dx, dy):
+            self.x += dx
+            self.y += dy
+
+    class TestPoint(unittest.TestCase):
+        """Test suite for Point class"""
+
+        def test_constructor(self):
+            """Test that constructor sets instance variables correctly"""
+            p = Point(3, 4)
+            self.assertEqual(p.x, 3)
+            self.assertEqual(p.y, 4)
+
+        def test_distance_from_origin(self):
+            """Test distance calculation"""
+            p = Point(3, 4)
+            self.assertEqual(p.distanceFromOrigin(), 5.0)
+
+        def test_move(self):
+            """Test that move modifies coordinates correctly"""
+            p = Point(3, 4)
+            p.move(-2, 3)
+            self.assertEqual(p.x, 1)
+            self.assertEqual(p.y, 7)
+
+        def test_move_to_origin(self):
+            """Test moving to origin"""
+            p = Point(5, 5)
+            p.move(-5, -5)
+            self.assertEqual(p.x, 0)
+            self.assertEqual(p.y, 0)
+
+    # Run the tests
+    unittest.main(argv=[''], exit=False, verbosity=2)
+
+**Output:**
+::
+
+   test_constructor (__main__.TestPoint)
+   Test that constructor sets instance variables correctly ... ok
+   test_distance_from_origin (__main__.TestPoint)
+   Test distance calculation ... ok
+   test_move (__main__.TestPoint)
+   Test that move modifies coordinates correctly ... ok
+   test_move_to_origin (__main__.TestPoint)
+   Test moving to origin ... ok
+
+   ----------------------------------------------------------------------
+   Ran 4 tests in 0.001s
+
+   OK
+
+**Test Coverage: What to Test?**
+
+Good tests cover:
+
+✅ **Normal cases** - typical inputs
+✅ **Edge cases** - boundary values (0, negatives, empty)
+✅ **Error cases** - invalid inputs
+
+.. activecode:: ac19_3_3
+
+    class Rectangle:
+        def __init__(self, width, height):
+            if width <= 0 or height <= 0:
+                raise ValueError("Width and height must be positive")
+            self.width = width
+            self.height = height
+
+        def area(self):
+            return self.width * self.height
+
+        def is_square(self):
+            return self.width == self.height
+
+    # Test normal case
+    r = Rectangle(5, 10)
+    assert r.area() == 50
+    assert not r.is_square()
+
+    # Test edge case - square
+    s = Rectangle(5, 5)
+    assert s.area() == 25
+    assert s.is_square()
+
+    # Test edge case - 1x1
+    tiny = Rectangle(1, 1)
+    assert tiny.area() == 1
+    assert tiny.is_square()
+
+    # Test error case
+    try:
+        bad = Rectangle(-5, 10)
+        assert False, "Should have raised ValueError"
+    except ValueError:
+        pass  # Expected
+
+    print("All tests passed!")
+
+
 **Check your understanding**
 
 .. mchoice:: question19_3_1

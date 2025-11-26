@@ -9,9 +9,21 @@
 .. _inheritance_chap:
 
 Introduction: Class Inheritance
-===============================
+================================
 
-Classes can "inherit" methods and class variables from other classes. We'll see the mechanics of how this works in subsequent sections. First, however, let's motivate why this might be valuable. It turns out that inheritance doesn't let you do anything that you couldn't do without it, but it makes some things a lot more elegant. You will also find it's useful when someone else has defined a class in a module or library, and you just want to override a few things without having to reimplement everything they've done.
+**Critical PCAP Topic** (Section 4 - 34% of exam)
+
+Inheritance is one of the most powerful features of object-oriented programming and is explicitly tested on the PCAP certification exam. This chapter covers:
+
+* Basic inheritance syntax
+* Inheriting variables and methods
+* Overriding methods
+* Using `super()` to call parent methods
+* Multiple inheritance
+* Method Resolution Order (MRO)
+* When to use inheritance vs composition
+
+Let's start by understanding WHY inheritance matters...
 
 Consider our Tamagotchi game. Suppose we wanted to make some different kinds of pets that have the same structure as other pets, but have some different attributes or behave a little differently. For example, suppose that dog pets should show their emotional state a little differently than cats or act differently when they are hungry or when they are asked to fetch something.
 

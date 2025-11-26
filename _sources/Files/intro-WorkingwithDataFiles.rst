@@ -1,5 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
+..  Copyright (C)  Adam Roush.  Permission is granted to copy, distribute
     and/or modify this document under the terms of the GNU Free Documentation
     License, Version 1.3 or any later version published by the Free Software
     Foundation; with Invariant Sections being Forward, Prefaces, and
@@ -7,58 +6,126 @@
     the license is included in the section entitled "GNU Free Documentation
     License".
 
-.. qnum::
-   :prefix: files-1-
-   :start: 1
+Introduction: Advanced File I/O
+================================
 
-Introduction: Working with Data Files
-=====================================
+As a PCEP-certified programmer, you already know how to work with files:
 
-.. youtube:: zASE-UA2YKg
-    :divid: filesintrovideo
-    :height: 315
-    :width: 560
-    :align: left
+* Opening and closing files
+* Reading text files (``read()``, ``readline()``, ``readlines()``)
+* Writing text files (``write()``)
+* Using context managers (``with`` statement)
+* Reading and writing CSV files
+* Basic exception handling
 
-So far, the data we have used in this book have all been either coded right into the program, or have been
-entered by the user. In real life data reside in files. For example the images we worked with in the image
-processing unit ultimately live in files on your hard drive. Web pages, and word processing documents, and
-music are other examples of data that live in files. In this short chapter we will introduce the Python
-concepts necessary to use data from files in our programs.
+If you need a refresher on any of these topics, refer to your PCEP course materials.
 
-For our purposes, we will assume that our data files are text files--that is, files filled with characters.
-The Python programs that you write are stored as text files.  We can create these files in any of a number of
-ways. For example, we could use a text editor to type in and save the data.  We could also download the data
-from a website and then save it in a file. Regardless of how the file is created, Python will allow us to
-manipulate the contents.
+This chapter covers **advanced file I/O techniques required for PCAP certification (Section 5 - 22% of exam)**.
 
-In Python, we must **open** files before we can use them and **close** them when we are done with them. As
-you might expect, once a file is opened it becomes a Python object just like all other data.
-:ref:`Table 1<filemethods1a>` shows the functions and methods that can be used to open and close files.
+What You'll Learn
+-----------------
 
-.. _filemethods1a:
+**1. Binary File Operations**
 
-================ ======================== =====================================================
-**Method Name**   **Use**                  **Explanation**
-================ ======================== =====================================================
-``open``          ``open(filename,'r')``    Open a file called filename and use it for reading.  This will return a reference to a file object.
-``open``          ``open(filename,'w')``    Open a file called filename and use it for writing.  This will also return a reference to a file object.
-``close``        ``filevariable.close()``   File use is complete.
-================ ======================== =====================================================
+Work with non-text files (images, audio, executables):
 
-Learning Goals
---------------
+.. code-block:: python
 
-* To understand the structure of file systems
-* To understand opening files with different modes
-* To introduce files as another kind of sequence that one can iterate over
-* To introduce the read/transform/write pattern
-* To introduce parallel assignment to two or three variables
+   # Read binary file
+   with open('image.png', 'rb') as f:
+       data = f.read()
+   
+   # Write binary file
+   with open('output.bin', 'wb') as f:
+       f.write(bytes([0xFF, 0xD8, 0xFF]))
 
-Objectives
-----------
+**2. The bytearray Type**
 
-* Demonstrate that you can read a single value from each line in a file
-* Convert the line to the appropriate value
-* Read a line and convert it into multiple values using split and assignment to multiple variables
+Mutable byte buffers for efficient binary operations:
 
+.. code-block:: python
+
+   buffer = bytearray(b"Hello")
+   buffer[0] = ord('J')  # Modify in place
+   print(buffer)  # bytearray(b'Jello')
+
+**3. Error Handling with errno**
+
+Professional error code checking:
+
+.. code-block:: python
+
+   import errno
+   
+   try:
+       with open('file.txt', 'r') as f:
+           data = f.read()
+   except OSError as e:
+       if e.errno == errno.ENOENT:
+           print("File not found")
+       elif e.errno == errno.EACCES:
+           print("Permission denied")
+
+**4. Standard Streams**
+
+Standard input, output, and error:
+
+.. code-block:: python
+
+   import sys
+   
+   sys.stdout.write("Normal output\n")
+   sys.stderr.write("Error message\n")
+   user_input = sys.stdin.readline()
+
+**5. File Modes Reference**
+
+Complete guide to all file opening modes:
+
+- Basic: 'r', 'w', 'a'
+- Binary: 'rb', 'wb', 'ab'
+- Read/write: 'r+', 'w+', 'a+'
+- All combinations
+
+**6. Reading Methods Comparison**
+
+When to use each method:
+
+- ``read()`` — Small files, need entire content
+- ``readline()`` — Large files, line-by-line processing
+- ``readlines()`` — All lines as list
+- Direct iteration — Most Pythonic
+
+**7. Best Practices**
+
+Professional file handling patterns.
+
+Why This Matters
+-----------------
+
+**For PCAP Certification:**
+* Binary file operations and bytearray are explicitly tested
+* errno and standard streams are required knowledge
+* Understanding file modes is essential
+* These topics comprise Section 5 (22% of exam)
+
+**For Your Career:**
+* Real applications work with binary data (images, databases, network protocols)
+* Professional error handling is critical
+* Standard streams are used in command-line tools
+* Understanding internals makes you a better developer
+
+Prerequisites
+-------------
+
+This chapter assumes you're comfortable with:
+
+* Basic file operations (open, read, write, close)
+* Context managers (``with`` statement)
+* Text file processing
+* CSV file handling
+* Basic exception handling
+
+If these feel unfamiliar, review your PCEP course first.
+
+Let's begin!

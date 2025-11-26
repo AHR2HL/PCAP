@@ -110,3 +110,128 @@ Now let's make two subclasses, Dog and Cat. Dogs are always happy unless they ar
     for i in range(10):
         print(c1.mood())
     print(d1.mood())
+
+Overriding the Constructor (__init__)
+--------------------------------------
+
+A common pattern is overriding ``__init__`` to customize initialization:
+
+.. activecode:: inheritance_override_init
+
+    from random import randrange
+
+    class Pet:
+        def __init__(self, name="Pet"):
+            self.name = name
+            self.hunger = 5
+
+        def __str__(self):
+            return f"{self.name} (hunger: {self.hunger})"
+
+    class Dog(Pet):
+        def __init__(self, name="Dog", breed="Mixed"):
+            self.name = name
+            self.hunger = 5
+            self.breed = breed  # New attribute!
+
+        def __str__(self):
+            return f"{self.name} the {self.breed} (hunger: {self.hunger})"
+
+    # Create instances
+    generic_pet = Pet("Fluffy")
+    print(generic_pet)
+
+    dog = Dog("Fido", "Labrador")
+    print(dog)
+
+**Output:**
+::
+
+   Fluffy (hunger: 5)
+   Fido the Labrador (hunger: 5)
+
+**Notice:** Dog's ``__init__`` overrides Pet's ``__init__``, adding the breed attribute.
+
+**Problem:** We had to duplicate the initialization code! (More on this in the next section with ``super()``.)
+
+Common Patterns for Method Overriding
+--------------------------------------
+
+**Pattern 1: Specialized Behavior**
+
+.. code-block:: python
+
+   class Animal:
+       def speak(self):
+           return "Some sound"
+
+   class Dog(Animal):
+       def speak(self):  # Override with dog-specific sound
+           return "Woof!"
+
+**Pattern 2: Additional Validation**
+
+.. code-block:: python
+
+   class BankAccount:
+       def withdraw(self, amount):
+           self.balance -= amount
+
+   class SavingsAccount(BankAccount):
+       def withdraw(self, amount):  # Override with restriction
+           if self.balance - amount < self.minimum_balance:
+               return False
+           self.balance -= amount
+           return True
+
+**Pattern 3: Extended Functionality**
+
+.. code-block:: python
+
+   class Employee:
+       def calculate_pay(self):
+           return self.hours * self.rate
+
+   class Manager(Employee):
+       def calculate_pay(self):  # Override to add bonus
+           base_pay = self.hours * self.rate
+           return base_pay + self.bonus
+
+.. mchoice:: question_inheritance_override_1
+   :answer_a: The parent class method is called
+   :answer_b: The child class method is called
+   :answer_c: Both methods are called
+   :answer_d: An error occurs
+   :correct: b
+   :feedback_a: The child method overrides the parent method
+   :feedback_b: Correct! When a method is defined in both parent and child, the child's version is used
+   :feedback_c: Only the child method is called (unless you use super())
+   :feedback_d: No error - overriding is normal and expected
+
+   If both a parent class and child class define a method with the same name, which one is called on an instance of the child class?
+
+.. mchoice:: question_inheritance_override_2
+   :answer_a: mood()
+   :answer_b: __init__()
+   :answer_c: __str__()
+   :answer_d: All of the above can be overridden
+   :correct: d
+   :feedback_a: Yes, but others can be too!
+   :feedback_b: Yes, but others can be too!
+   :feedback_c: Yes, but others can be too!
+   :feedback_d: Correct! Any method can be overridden, including special methods
+
+   Which methods can be overridden in a subclass?
+
+.. mchoice:: question_inheritance_override_3
+   :answer_a: To change the parent class
+   :answer_b: To customize behavior in subclasses
+   :answer_c: To make the code run faster
+   :answer_d: To avoid using inheritance
+   :correct: b
+   :feedback_a: Overriding doesn't change the parent, it customizes the child
+   :feedback_b: Correct! Overriding lets subclasses customize inherited behavior
+   :feedback_c: Overriding doesn't affect performance
+   :feedback_d: Overriding is used WITH inheritance, not to avoid it
+
+   What is the main purpose of method overriding?

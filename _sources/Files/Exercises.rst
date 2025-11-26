@@ -1,11 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
+..  Copyright (C)  Alpha Schools
 
 :skipreading:`True`
 
@@ -14,7 +7,10 @@
    :start: 1
 
 Exercises
----------
+=========
+
+Multiple Choice Questions
+-------------------------
 
 .. mchoice:: pcap_vocab_bytearray
    :answer_a: An immutable sequence of bytes
@@ -29,6 +25,7 @@ Exercises
 
    What is a ``bytearray``?
 
+
 .. mchoice:: pcap_concept_binary_mode
    :answer_a: Returns str objects
    :answer_b: Returns bytes objects
@@ -41,6 +38,7 @@ Exercises
    :feedback_d: They're very different!
 
    What does binary file mode return?
+
 
 .. mchoice:: pcap_concept_context_manager
    :answer_a: Makes code faster
@@ -55,7 +53,51 @@ Exercises
 
    What's the main benefit of using context managers (``with`` statement)?
 
-**Binary File Reading**
+
+.. mchoice:: files_ex_mc4
+   :answer_a: 'rb+'
+   :answer_b: 'r+'
+   :answer_c: 'wb'
+   :answer_d: 'rb'
+   :correct: a
+   :feedback_a: Correct! 'rb+' opens binary file for both reading and writing
+   :feedback_b: This is text mode (read and write), not binary
+   :feedback_c: This only allows writing, not reading
+   :feedback_d: This only allows reading, not writing
+
+   Which file mode allows both reading and writing a binary file?
+
+
+.. mchoice:: files_ex_mc5
+   :answer_a: sys.stdin
+   :answer_b: sys.stdout
+   :answer_c: sys.stderr
+   :answer_d: sys.output
+   :correct: c
+   :feedback_a: stdin is for input, not error messages
+   :feedback_b: stdout is for normal output, not errors
+   :feedback_c: Correct! stderr is specifically for error messages and logging
+   :feedback_d: There is no sys.output
+
+   Which standard stream should be used for error messages?
+
+
+.. mchoice:: files_ex_mc6
+   :answer_a: errno.ENOENT
+   :answer_b: errno.EACCES
+   :answer_c: errno.EISDIR
+   :answer_d: errno.ENOTDIR
+   :correct: a
+   :feedback_a: Correct! ENOENT (Error NO ENTry) means "No such file or directory"
+   :feedback_b: EACCES means "Permission denied"
+   :feedback_c: EISDIR means "Is a directory"
+   :feedback_d: ENOTDIR means "Not a directory"
+
+   Which errno constant indicates "file not found"?
+
+
+Parson's Problems
+-----------------
 
 .. parsonsprob:: pcap_parsons_binary_file
    :language: python
@@ -76,13 +118,44 @@ Exercises
    =====
        return bytes(data) #distractor
 
-**Binary Data Checker**
+
+.. parsonsprob:: files_ex_parsons2
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to handle file opening with errno error checking.
+   -----
+   import errno
+   =====
+   def safe_open(filename):
+   =====
+       try:
+   =====
+           with open(filename, 'r') as f:
+   =====
+           with open(filename, 'rb') as f: #distractor
+   =====
+               return f.read()
+   =====
+       except OSError as e:
+   =====
+       except FileNotFoundError as e: #distractor
+   =====
+           if e.errno == errno.ENOENT:
+   =====
+               return None
+
+
+Active Code Problems
+--------------------
 
 .. activecode:: pcap_code_binary_checker
    :language: python
    :autograde: unittest
 
-   Create a function ``is_png_data(data)`` that:
+   **Problem 1:** Create a function ``is_png_data(data)`` that:
+
    - Takes binary data (bytes)
    - Returns True if it's a PNG file signature
    - PNG signature: b'\\x89PNG\\r\\n\\x1a\\n'
@@ -118,40 +191,25 @@ Exercises
 
    myTests().main()
 
-.. reveal:: pcap_code_binary_checker_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
 
-   .. code-block:: python
-
-      def is_png_data(data):
-          png_signature = b'\x89PNG\r\n\x1a\n'
-          if len(data) < len(png_signature):
-              return False
-          return data[:len(png_signature)] == png_signature
-
----
-
-**CSV Parser**
-
-.. activecode:: pcap_code_csv_parser
+.. activecode:: files_ex_ac2
    :language: python
    :autograde: unittest
 
-   Create a function ``parse_csv(text)`` that:
-   - Splits by newlines
-   - Splits each line by commas
-   - Strips whitespace from each field
-   - Returns list of lists
+   **Problem 2:** Create a function ``modify_bytes(data, position, new_byte)`` that:
+
+   - Takes bytes data and converts to bytearray
+   - Modifies the byte at the given position
+   - Returns the modified bytearray
 
    Example::
 
-       csv = "name, age\nAlice, 30\nBob, 25"
-       parse_csv(csv)
-       # [['name', 'age'], ['Alice', '30'], ['Bob', '25']]
+       data = b'Hello'
+       result = modify_bytes(data, 0, ord('J'))
+       print(result)  # bytearray(b'Jello')
 
    ~~~~
-   def parse_csv(text):
+   def modify_bytes(data, position, new_byte):
        # Your code here
        pass
 
@@ -159,45 +217,188 @@ Exercises
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-       def test_basic_parsing(self):
-           csv = "a,b\nc,d"
-           result = parse_csv(csv)
-           self.assertEqual(result, [['a', 'b'], ['c', 'd']])
+       def test_basic_modification(self):
+           result = modify_bytes(b'Hello', 0, ord('J'))
+           self.assertEqual(result, bytearray(b'Jello'))
+           self.assertEqual(type(result), bytearray)
 
-       def test_strips_whitespace(self):
-           csv = " a , b \n c , d "
-           result = parse_csv(csv)
-           self.assertEqual(result, [['a', 'b'], ['c', 'd']])
+       def test_middle_modification(self):
+           result = modify_bytes(b'Python', 2, ord('X'))
+           self.assertEqual(result, bytearray(b'PyXhon'))
 
-       def test_empty_string(self):
-           result = parse_csv("")
-           self.assertEqual(result, [])
+       def test_last_modification(self):
+           result = modify_bytes(b'Test', 3, ord('!'))
+           self.assertEqual(result, bytearray(b'Tes!'))
 
    myTests().main()
 
-.. reveal:: pcap_code_csv_parser_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
 
-   .. code-block:: python
+.. activecode:: files_ex_ac3
+   :language: python
+   :autograde: unittest
 
-      def parse_csv(text):
-          lines = text.split('\n')
-          result = []
-          for line in lines:
-              fields = [field.strip() for field in line.split(',')]
-              result.append(fields)
-          return result
+   **Problem 3:** Create a function ``categorize_error(error_code)`` that takes an errno value and returns a category string:
 
----
+   - errno.ENOENT (2) → "File Not Found"
+   - errno.EACCES (13) → "Permission Denied"
+   - errno.EISDIR (21) → "Is Directory"
+   - Any other → "Unknown Error"
 
-**Debug: File Not Closing**
+   ~~~~
+   import errno
+
+   def categorize_error(error_code):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_enoent(self):
+           self.assertEqual(categorize_error(errno.ENOENT), "File Not Found")
+
+       def test_eacces(self):
+           self.assertEqual(categorize_error(errno.EACCES), "Permission Denied")
+
+       def test_eisdir(self):
+           self.assertEqual(categorize_error(errno.EISDIR), "Is Directory")
+
+       def test_unknown(self):
+           self.assertEqual(categorize_error(999), "Unknown Error")
+
+   myTests().main()
+
+
+.. activecode:: files_ex_ac4
+   :language: python
+   :autograde: unittest
+
+   **Problem 4:** Create a function ``write_to_stream(message, is_error=False)`` that:
+
+   - Writes to sys.stdout if is_error is False
+   - Writes to sys.stderr if is_error is True
+   - Adds a newline to the message
+   - Returns the stream it wrote to
+
+   ~~~~
+   import sys
+
+   def write_to_stream(message, is_error=False):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_normal_output(self):
+           result = write_to_stream("Hello")
+           self.assertEqual(result, sys.stdout)
+
+       def test_error_output(self):
+           result = write_to_stream("Error", is_error=True)
+           self.assertEqual(result, sys.stderr)
+
+   myTests().main()
+
+
+.. activecode:: files_ex_ac5
+   :language: python
+   :autograde: unittest
+
+   **Problem 5:** Create a function ``choose_mode(need_read, need_write, is_binary)`` that returns the appropriate file mode string:
+
+   - read only + text → 'r'
+   - read only + binary → 'rb'
+   - write only + text → 'w'
+   - write only + binary → 'wb'
+   - read and write + text → 'r+'
+   - read and write + binary → 'rb+'
+
+   ~~~~
+   def choose_mode(need_read, need_write, is_binary):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_read_text(self):
+           self.assertEqual(choose_mode(True, False, False), 'r')
+
+       def test_read_binary(self):
+           self.assertEqual(choose_mode(True, False, True), 'rb')
+
+       def test_write_text(self):
+           self.assertEqual(choose_mode(False, True, False), 'w')
+
+       def test_write_binary(self):
+           self.assertEqual(choose_mode(False, True, True), 'wb')
+
+       def test_readwrite_text(self):
+           self.assertEqual(choose_mode(True, True, False), 'r+')
+
+       def test_readwrite_binary(self):
+           self.assertEqual(choose_mode(True, True, True), 'rb+')
+
+   myTests().main()
+
+
+.. activecode:: files_ex_ac6
+   :language: python
+   :autograde: unittest
+
+   **Problem 6:** Create a function ``xor_encrypt(data, key)`` that:
+
+   - Takes bytes data
+   - Converts to bytearray
+   - XORs each byte with the key value
+   - Returns the result as bytes
+
+   Example::
+
+       encrypted = xor_encrypt(b'ABC', 42)
+       # Each byte XORed with 42
+
+   ~~~~
+   def xor_encrypt(data, key):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_basic_encryption(self):
+           original = b'ABC'
+           encrypted = xor_encrypt(original, 42)
+           # XOR twice returns original
+           decrypted = xor_encrypt(encrypted, 42)
+           self.assertEqual(decrypted, original)
+
+       def test_returns_bytes(self):
+           result = xor_encrypt(b'Test', 10)
+           self.assertEqual(type(result), bytes)
+
+       def test_different_key(self):
+           data = b'Hello'
+           result1 = xor_encrypt(data, 5)
+           result2 = xor_encrypt(data, 10)
+           self.assertNotEqual(result1, result2)
+
+   myTests().main()
+
+
+Debugging Exercises
+-------------------
 
 .. activecode:: pcap_debug_file_closing
    :language: python
    :autograde: unittest
 
-   This code doesn't properly close files. Fix it!
+   **Debug Exercise 1:** This code doesn't properly close files. Fix it to use context managers!
    ~~~~
    def read_and_process(filename):
        f = open(filename, 'r')
@@ -217,319 +418,186 @@ Exercises
 
    class myTests(TestCaseGui):
        def test_uses_context_manager(self):
-           """Should use 'with' statement for file handling"""
            source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-           self.assertIn('with open(', func_code,
-                        "Should use 'with open()' context manager")
+           self.assertIn('with open(', source, "Should use 'with open()' context manager")
 
        def test_no_manual_close(self):
-           """Should not manually call f.close() when using context manager"""
            source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-
-           # If using 'with', should not have manual close
-           if 'with open(' in func_code:
-               self.assertNotIn('.close()', func_code,
-                              "Don't need manual .close() when using 'with' statement")
-
-       def test_no_bare_open(self):
-           """Should not use open() without context manager"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-
-           # Check if open is used without 'with'
-           lines = func_code.split('\n')
-           for line in lines:
-               if 'open(' in line and 'with' not in line:
-                   self.fail("Should use 'with open()' not bare 'open()' assignment")
-
-       def test_simulated_normal_file(self):
-           """Test logic with simulated file content"""
-           # Create a mock file-like object
-           class MockFile:
-               def __init__(self, content):
-                   self.content = content
-                   self.closed = False
-
-               def read(self):
-                   return self.content
-
-               def close(self):
-                   self.closed = True
-
-               def __enter__(self):
-                   return self
-
-               def __exit__(self, *args):
-                   self.closed = True
-
-           # Test that logic would work correctly
-           # We can't actually test the function directly in Skulpt,
-           # but we verify the structure is correct
-           source = self.getEditorText()
-           self.assertIn('data.upper()', source,
-                        "Should still convert data to uppercase")
-
-       def test_handles_empty_file_case(self):
-           """Should handle empty file by returning None"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-           self.assertIn('return None', func_code,
-                        "Should return None for empty data")
-           self.assertIn('len(data) == 0', func_code,
-                        "Should check if data is empty")
-
-       def test_returns_uppercase(self):
-           """Should return uppercase version of data"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-           self.assertIn('.upper()', func_code,
-                        "Should convert data to uppercase")
-
-       def test_proper_indentation_with_context_manager(self):
-           """Code inside 'with' block should be properly indented"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-
-           if 'with open(' in func_code:
-               # Find the with statement and check following lines are indented
-               lines = func_code.split('\n')
-               with_line_idx = None
-               for i, line in enumerate(lines):
-                   if 'with open(' in line:
-                       with_line_idx = i
-                       break
-
-               if with_line_idx is not None and with_line_idx + 1 < len(lines):
-                   # Next line should be more indented
-                   with_indent = len(lines[with_line_idx]) - len(lines[with_line_idx].lstrip())
-                   next_indent = len(lines[with_line_idx + 1]) - len(lines[with_line_idx + 1].lstrip())
-                   self.assertGreater(next_indent, with_indent,
-                                    "Code inside 'with' block should be indented")
-
-       def test_returns_result_not_variable(self):
-           """Should return data.upper() directly or store then return"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-           # Should have return statement with upper()
-           has_return = 'return' in func_code and '.upper()' in func_code
-           self.assertTrue(has_return, "Should return the uppercase result")
-
-       def test_as_variable_used_with_context_manager(self):
-           """Should use 'as' to assign file handle in context manager"""
-           source = self.getEditorText()
-           func_code = source.split('def read_and_process(')[1].split('\n\n')[0]
-
-           if 'with open(' in func_code:
-               self.assertIn(' as ', func_code,
-                           "Should use 'as' to assign file handle: 'with open(...) as f:'")
+           if 'with open(' in source:
+               self.assertNotIn('.close()', source, "Don't need manual .close() with 'with' statement")
 
    myTests().main()
 
-.. reveal:: pcap_debug_file_closing_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
 
-   **Problem:** File isn't closed if function returns early (when data is empty). Manual ``f.close()`` is only reached if execution continues to that line.
+.. activecode:: files_ex_debug2
+   :language: python
+   :autograde: unittest
 
-   **Fix:**
+   **Debug Exercise 2:** This code tries to read a binary file as text. Fix the file mode!
+   ~~~~
+   def read_image_header(filename):
+       # Should read first 8 bytes of binary file
+       with open(filename, 'r') as f:
+           header = f.read(8)
+       return header
 
-   .. code-block:: python
+   # Test with simulated PNG signature
+   print("Testing with binary data...")
 
-      def read_and_process(filename):
-          with open(filename, 'r') as f:
-              data = f.read()
+   ====
+   from unittest.gui import TestCaseGui
 
-              if len(data) == 0:
-                  return None
+   class myTests(TestCaseGui):
+       def test_uses_binary_mode(self):
+           source = self.getEditorText()
+           self.assertIn("'rb'", source, "Should use 'rb' mode for binary files")
 
-              return data.upper()
-          # File automatically closed here, even with early return
-
-   **Key insight:** Context managers (``with`` statement) **guarantee** cleanup happens, even with early returns or exceptions. The file is closed when exiting the ``with`` block, regardless of how you exit.
-
----
-
-Below are the datafiles that you have been using so far, and will continue to use for the rest of the chapter.
-
-The file below is ``travel_plans.txt``.
-
-.. raw:: html
-
-    <pre id="travel_plans.txt">
-    This summer I will be travelling.
-    I will go to...
-    Italy: Rome
-    Greece: Athens
-    England: London, Manchester
-    France: Paris, Nice, Lyon
-    Spain: Madrid, Barcelona, Granada
-    Austria: Vienna
-    I will probably not even want to come back!
-    However, I wonder how I will get by with all the different languages.
-    I only know English!
-    </pre>
-
-The file below is ``school_prompt.txt``.
-
-.. raw:: html
-
-    <pre id="school_prompt.txt">
-    Writing essays for school can be difficult but
-    many students find that by researching their topic that they
-    have more to say and are better informed. Here are the university
-    we require many undergraduate students to take a first year writing requirement
-    so that they can
-    have a solid foundation for their writing skills. This comes
-    in handy for many students.
-    Different schools have different requirements, but everyone uses
-    writing at some point in their academic career, be it essays, research papers,
-    technical write ups, or scripts.
-    </pre>
-
-The file below is ``emotion_words.txt``.
-
-.. raw:: html
-
-    <pre id="emotion_words.txt">
-    Sad upset blue down melancholy somber bitter troubled
-    Angry mad enraged irate irritable wrathful outraged infuriated
-    Happy cheerful content elated joyous delighted lively glad
-    Confused disoriented puzzled perplexed dazed befuddled
-    Excited eager thrilled delighted
-    Scared afraid fearful panicked terrified petrified startled
-    Nervous anxious jittery jumpy tense uneasy apprehensive
-    </pre>
+   myTests().main()
 
 
-.. question:: files_ex_1
-   :number: 1
+.. activecode:: files_ex_debug3
+   :language: python
+   :autograde: unittest
 
-    .. tabbed:: q1
+   **Debug Exercise 3:** This error handler checks the wrong errno constant. Fix it!
+   ~~~~
+   import errno
 
-        .. tab:: Question
+   def safe_read(filename):
+       try:
+           with open(filename, 'r') as f:
+               return f.read()
+       except OSError as e:
+           if e.errno == errno.EACCES:  # Wrong constant!
+               print("File not found")
+               return None
+           else:
+               raise
 
-            .. actex:: ac9_9_1
-                :nocodelens:
-                :available_files: studentdata.txt
+   ====
+   from unittest.gui import TestCaseGui
 
-                The following sample file called ``studentdata.txt`` contains one line for each student in an imaginary class.  The
-                students name is the first thing on each line, followed by some exam scores.
-                The number of scores might be different for each student.
+   class myTests(TestCaseGui):
+       def test_uses_enoent(self):
+           source = self.getEditorText()
+           self.assertIn('errno.ENOENT', source, "Should use errno.ENOENT for file not found")
+           self.assertNotIn('errno.EACCES', source.split('if e.errno ==')[1].split('\n')[0],
+                          "EACCES is permission denied, not file not found")
 
-                .. raw:: html
-
-                    <pre id="studentdata.txt">
-                    joe 10 15 20 30 40
-                    bill 23 16 19 22
-                    sue 8 22 17 14 32 17 24 21 2 9 11 17
-                    grace 12 28 21 45 26 10
-                    john 14 32 25 16 89
-                    </pre>
-
-                Using the text file ``studentdata.txt`` write a program that prints out the names of
-                students that have more than six quiz scores.
-                ~~~~
-                # Hint: first see if you can write a program that just prints out the number of scores on each line
-                # Then, make it print the number only if the number is at least six
-                # Then, switch it to printing the name instead of the number
-
-                ====
-                from unittest.gui import TestCaseGui
-                import re
-                class myTests(TestCaseGui):
-                    def testOne(self):
-                        names = []
-                        with open('studentdata.txt', 'r') as fh:
-                            for line in fh:
-                                values = line.split()
-                                name = values[0]
-                                scores = values[1:]
-                                if len(scores) > 6:
-                                    names.append(name)
-                        self.assertEqual(self.getOutput().rstrip(), '\n'.join(names), 'Checking names')
-                        for name in names:
-                            self.assertFalse(re.search(name, self.getEditorText()), 'Checking for hardcoding')
-                        if re.search(r'[^#]+= *open', self.getEditorText(), re.M):
-                            self.assertTrue(re.search(r'[^#]+\.close\(', self.getEditorText(), re.M), 'Checking for matching open and close statements')
-                        else:
-                            self.assertTrue(re.search(r'with[ (] *open', self.getEditorText(), re.M), 'Checking open statement')
-                myTests().main()
+   myTests().main()
 
 
-        .. tab:: Answer
+Active Code Problems
+--------------------
 
-            .. activecode:: ch_files_q1answer
-                :nocodelens:
+.. activecode:: files_ex_ac1
+   :language: python
+   :autograde: unittest
 
-                f = open("studentdata.txt", "r")
+   **Problem 7:** Write a function ``bytes_to_bytearray_upper(data)`` that:
 
-                for aline in f:
-                    items = aline.split()
-                    if len(items[1:]) > 6:
-                        print(items[0])
+   - Takes bytes data
+   - Converts to bytearray
+   - Converts all alphabetic bytes to uppercase
+   - Returns as bytearray
 
-                f.close()
+   ~~~~
+   def bytes_to_bytearray_upper(data):
+       # Your code here
+       pass
 
-.. question:: files_ex_2
-   :number: 2
+   ====
+   from unittest.gui import TestCaseGui
 
-    .. tabbed:: q2
+   class myTests(TestCaseGui):
+       def test_basic(self):
+           result = bytes_to_bytearray_upper(b'hello')
+           self.assertEqual(result, bytearray(b'HELLO'))
 
-        .. tab:: Question
+       def test_mixed_case(self):
+           result = bytes_to_bytearray_upper(b'HeLLo WoRLd')
+           self.assertEqual(result, bytearray(b'HELLO WORLD'))
 
-            .. actex:: ac9_9_2
-               :nocodelens:
-               :available_files: travel_plans.txt
+       def test_returns_bytearray(self):
+           result = bytes_to_bytearray_upper(b'test')
+           self.assertEqual(type(result), bytearray)
 
-               Create a list called ``destination`` using the data stored in ``travel_plans.txt``. Each element of the list should contain a line from the file that lists a country and cities inside that country. Hint: each line that has this information also has a colon ``:`` in it.
-               ~~~~
-
-               ====
-
-               from unittest.gui import TestCaseGui
-
-               class myTests(TestCaseGui):
-
-                  def testFour(self):
-                     self.assertEqual(destination, ['Italy: Rome\n', 'Greece: Athens\n', 'England: London, Manchester\n', 'France: Paris, Nice, Lyon\n', 'Spain: Madrid, Barcelona, Granada\n', 'Austria: Vienna\n'], "Testing that destination is assigned to correct values.")
-
-               myTests().main()
-
-.. question:: files_ex_3
-   :number: 3
-
-    .. tabbed:: q3
-
-        .. tab:: Question
-
-            .. actex:: ac9_9_3
-               :nocodelens:
-               :available_files: emotion_words.txt
-
-               Create a list called ``j_emotions`` that contains every word in ``emotion_words.txt`` that begins with the letter "j".
-               ~~~~
-
-               ====
-
-               from unittest.gui import TestCaseGui
-
-               class myTests(TestCaseGui):
-
-                  def testOne(self):
-                     self.assertEqual(j_emotions, ['joyous', 'jittery', 'jumpy'], "Testing that j_emotions was created correctly.")
-
-               myTests().main()
+   myTests().main()
 
 
-Contributed Exercises
-~~~~~~~~~~~~~~~~~~~~~
+.. activecode:: files_ex_ac8
+   :language: python
+   :autograde: unittest
 
-.. raw:: html
+   **Problem 8 (Challenge):** Create a function ``create_binary_header(file_type, version, size)`` that:
 
-    {% for q in questions: %}
-        <div class='oneq full-width'>
-            {{ q['htmlsrc']|safe }}
-        </div>
-    {% endfor %}
+   - Takes file_type (string, max 4 chars), version (int 0-255), size (int 0-65535)
+   - Returns bytes object with:
+     - First 4 bytes: file_type (padded with spaces if needed)
+     - Byte 5: version number
+     - Bytes 6-7: size as 2-byte big-endian integer
+
+   Example::
+
+       header = create_binary_header('PNG', 1, 1024)
+       # b'PNG \\x01\\x04\\x00'
+       #   ^^^^ = 'PNG '
+       #       ^^ = version 1
+       #         ^^^^ = 1024 as 2 bytes
+
+   ~~~~
+   def create_binary_header(file_type, version, size):
+       # Your code here
+       # Hint: Use .ljust(4) for padding
+       # Hint: size.to_bytes(2, 'big') converts int to 2 bytes
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_basic_header(self):
+           result = create_binary_header('PNG', 1, 1024)
+           self.assertEqual(len(result), 7)
+           self.assertEqual(result[:4], b'PNG ')
+           self.assertEqual(result[4], 1)
+
+       def test_short_type(self):
+           result = create_binary_header('AB', 5, 256)
+           self.assertEqual(result[:4], b'AB  ')
+
+       def test_returns_bytes(self):
+           result = create_binary_header('TEST', 0, 0)
+           self.assertEqual(type(result), bytes)
+
+   myTests().main()
+
+
+Debugging Exercises
+-------------------
+
+[Debug exercises from above already included]
+
+
+Summary
+-------
+
+After completing these exercises, you should be able to:
+
+✅ Understand the difference between bytes and bytearray
+
+✅ Work with binary file modes ('rb', 'wb', 'rb+')
+
+✅ Use bytearray for mutable binary data
+
+✅ Handle file errors with errno constants
+
+✅ Use standard streams appropriately (stdin, stdout, stderr)
+
+✅ Choose the correct file mode for different scenarios
+
+✅ Use context managers for file handling
+
+✅ Debug common file handling mistakes
+
+**Struggling with any of these?** Review the Advanced File I/O section before continuing to the chapter assessment.

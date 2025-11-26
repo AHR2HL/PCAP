@@ -11,6 +11,23 @@
 Chapter Assessment
 ==================
 
+**Introduction**
+
+This comprehensive assessment includes:
+- 8-10 Multiple Choice Questions
+- 4-5 Parsons Problems
+- 10-12 Active Code Challenges
+- 4-5 Debugging Exercises
+- Quick Reference Guide
+
+Total: ~30 problems covering all exception handling topics
+
+**Estimated time:** 2-3 hours
+
+---
+
+Part 1: Vocabulary and Concepts (8-10 MCQs)
+--------------------------------------------
 .. mchoice:: pcap_vocab_stderr
    :answer_a: Standard input stream
    :answer_b: Standard output stream
@@ -49,6 +66,24 @@ Chapter Assessment
    :feedback_d: Use try/except for error handling, not assert.
 
    Should you use ``assert`` for production input validation?
+
+Part 2: Parsons Problems (4-5 problems)
+----------------------------------------
+[Keep 1 existing + add 3-4 new]
+
+Part 3: Active Code Challenges (10-12 problems)
+------------------------------------------------
+[Keep 3-4 existing + add 6-8 new]
+
+Part 4: Debugging Exercises (4-5 problems)
+-------------------------------------------
+[Keep 1 existing + add 3-4 new]
+
+Part 5: Quick Reference Guide
+------------------------------
+[NEW - Exception handling patterns]
+
+
 
 **Exception with Finally**
 

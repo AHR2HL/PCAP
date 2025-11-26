@@ -216,6 +216,350 @@ Here's *all* the code we just saw for our new and improved game, with a few addi
               sys.setExecutionLimit(60000)
               play()
 
+.. activecode:: inheritance_ex_basic_1
+   :autograde: unittest
+
+   Create a class ``Vehicle`` with:
+   - Instance variable ``wheels`` (set in __init__)
+   - Method ``describe()`` that returns "A vehicle with {wheels} wheels"
+
+   Create a class ``Car`` that inherits from ``Vehicle``.
+   - Constructor should call parent's __init__ with wheels=4
+   - Add method ``honk()`` that returns "Beep beep!"
+
+   Create ``my_car = Car()``
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(my_car.wheels, 4)
+           self.assertIn("4 wheels", my_car.describe())
+           self.assertEqual(my_car.honk(), "Beep beep!")
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_basic_2
+   :autograde: unittest
+
+   Create a class ``Animal`` with method ``speak()`` that returns "Some sound".
+
+   Create a class ``Dog`` that inherits from ``Animal`` and overrides ``speak()`` to return "Woof!".
+
+   Create a class ``Cat`` that inherits from ``Animal`` and overrides ``speak()`` to return "Meow!".
+
+   Create ``dog = Dog()`` and ``cat = Cat()``.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(dog.speak(), "Woof!")
+           self.assertEqual(cat.speak(), "Meow!")
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_super_1
+   :autograde: unittest
+
+   Create a class ``Rectangle`` with:
+   - __init__(width, height) that sets self.width and self.height
+   - method area() that returns width * height
+
+   Create a class ``Square`` that inherits from ``Rectangle``:
+   - __init__(side) that uses super().__init__(side, side)
+
+   Create ``sq = Square(5)``. It should have width=5, height=5, area()=25.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(sq.width, 5)
+           self.assertEqual(sq.height, 5)
+           self.assertEqual(sq.area(), 25)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_super_2
+   :autograde: unittest
+
+   Create a class ``Employee`` with:
+   - __init__(name, salary)
+   - method get_info() returns "{name} earns ${salary}"
+
+   Create a class ``Manager`` that inherits from ``Employee``:
+   - __init__(name, salary, department)
+   - Uses super().__init__(name, salary)
+   - Sets self.department
+   - Overrides get_info() to call super().get_info() and add " in {department}"
+
+   Create ``mgr = Manager("Alice", 80000, "Engineering")``.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(mgr.name, "Alice")
+           self.assertEqual(mgr.salary, 80000)
+           self.assertEqual(mgr.department, "Engineering")
+           self.assertIn("Alice earns $80000", mgr.get_info())
+           self.assertIn("Engineering", mgr.get_info())
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_super_3
+   :autograde: unittest
+
+   Create a class ``BankAccount`` with:
+   - __init__(balance=0)
+   - method deposit(amount) that adds to balance
+
+   Create a class ``SavingsAccount`` that inherits from ``BankAccount``:
+   - __init__(balance=0, interest_rate=0.01)
+   - Uses super().__init__(balance)
+   - Adds method add_interest() that multiplies balance by (1 + interest_rate)
+
+   Create ``savings = SavingsAccount(1000, 0.05)``, deposit 500, add interest.
+   Balance should be 1575.0.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(savings.balance, 1000)
+           savings.deposit(500)
+           self.assertEqual(savings.balance, 1500)
+           savings.add_interest()
+           self.assertAlmostEqual(savings.balance, 1575.0, 2)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_isinstance_1
+   :autograde: unittest
+
+   Given:
+
+   class Animal:
+       pass
+
+   class Dog(Animal):
+       pass
+
+   class Cat(Animal):
+       pass
+
+   dog = Dog()
+   cat = Cat()
+
+   Create variables:
+   - is_dog_animal: True if dog is an instance of Animal
+   - is_cat_dog: True if cat is an instance of Dog
+   - is_dog_dog: True if dog is an instance of Dog
+
+   Use isinstance().
+   ~~~~
+   class Animal:
+       pass
+
+   class Dog(Animal):
+       pass
+
+   class Cat(Animal):
+       pass
+
+   dog = Dog()
+   cat = Cat()
+
+   # Your code here:
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertTrue(is_dog_animal)
+           self.assertFalse(is_cat_dog)
+           self.assertTrue(is_dog_dog)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_issubclass_1
+   :autograde: unittest
+
+   Given the same Animal/Dog/Cat hierarchy, create variables:
+   - dog_sub_animal: True if Dog is a subclass of Animal
+   - cat_sub_dog: True if Cat is a subclass of Dog
+   - animal_sub_animal: True if Animal is a subclass of itself
+
+   Use issubclass().
+   ~~~~
+   class Animal:
+       pass
+
+   class Dog(Animal):
+       pass
+
+   class Cat(Animal):
+       pass
+
+   # Your code here:
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertTrue(dog_sub_animal)
+           self.assertFalse(cat_sub_dog)
+           self.assertTrue(animal_sub_animal)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_isinstance_2
+   :autograde: unittest
+
+   Create a function ``count_animals(objects)`` that:
+   - Takes a list of objects
+   - Returns how many are instances of Animal (including subclasses)
+
+   Test with: animals_count = count_animals([Dog(), Cat(), Dog(), "not an animal", Animal()])
+   Should return 4.
+   ~~~~
+   class Animal:
+       pass
+
+   class Dog(Animal):
+       pass
+
+   class Cat(Animal):
+       pass
+
+   def count_animals(objects):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           result = count_animals([Dog(), Cat(), Dog(), "text", Animal()])
+           self.assertEqual(result, 4)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_multilevel_1
+   :autograde: unittest
+
+   Create a 3-level hierarchy:
+
+   class Shape:
+       def __init__(self, color):
+           self.color = color
+
+   class Polygon(Shape):
+       def __init__(self, color, sides):
+           super().__init__(color)
+           self.sides = sides
+
+   class Triangle(Polygon):
+       def __init__(self, color, base, height):
+           super().__init__(color, 3)
+           self.base = base
+           self.height = height
+
+       def area(self):
+           return 0.5 * self.base * self.height
+
+   Create ``tri = Triangle("red", 10, 5)``. Should have color="red", sides=3, area=25.0.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(tri.color, "red")
+           self.assertEqual(tri.sides, 3)
+           self.assertEqual(tri.area(), 25.0)
+
+   myTests().main()
+
+.. activecode:: inheritance_ex_polymorphism_1
+   :autograde: unittest
+
+   Create classes:
+
+   class Shape:
+       def area(self):
+           return 0
+
+   class Circle(Shape):
+       def __init__(self, radius):
+           self.radius = radius
+       def area(self):
+           return 3.14159 * self.radius ** 2
+
+   class Square(Shape):
+       def __init__(self, side):
+           self.side = side
+       def area(self):
+           return self.side ** 2
+
+   Create a function ``total_area(shapes)`` that:
+   - Takes a list of Shape objects
+   - Returns the sum of all their areas
+
+   Test: shapes = [Circle(5), Square(4), Circle(3)]
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           shapes = [Circle(5), Square(4), Circle(3)]
+           result = total_area(shapes)
+           self.assertAlmostEqual(result, 3.14159*25 + 16 + 3.14159*9, 2)
+
+   myTests().main()
+
+.. mchoice:: inheritance_ex_design_1
+   :answer_a: Inheritance
+   :answer_b: Composition
+   :answer_c: Either works equally well
+   :answer_d: Neither - use a single class
+   :correct: b
+   :feedback_a: Car HAS-A engine, not IS-A engine. Use composition.
+   :feedback_b: Correct! A car HAS an engine (composition), not IS an engine.
+   :feedback_c: Composition is clearly better here.
+   :feedback_d: You need both classes.
+
+   A ``Car`` needs to have an ``Engine``. Should ``Car`` inherit from ``Engine`` or contain an Engine instance?
+
+.. mchoice:: inheritance_ex_design_2
+   :answer_a: Inheritance
+   :answer_b: Composition
+   :answer_c: Either works equally well
+   :answer_d: Neither - use a single class
+   :correct: a
+   :feedback_a: Correct! A Dog IS-A Animal. This is a clear inheritance relationship.
+   :feedback_b: Composition doesn't make sense here - a dog doesn't HAVE an animal.
+   :feedback_c: Inheritance is clearly better for "is-a" relationships.
+   :feedback_d: You need the Animal parent class for shared behavior.
+
+   A ``Dog`` is a type of ``Animal``. Should ``Dog`` inherit from ``Animal`` or contain an Animal instance?
 
 Contributed Exercises
 ~~~~~~~~~~~~~~~~~~~~~

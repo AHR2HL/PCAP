@@ -196,6 +196,114 @@ However, for the following, it won't go so well
 
 The Python interpreter looks for an instance variable or method called ``chasing_rats`` on the ``Pet`` class. It doesn't exist. ``Pet`` has no parent classes, so Python signals an error.
 
+Checking Types: isinstance() and issubclass()
+----------------------------------------------
+
+**Critical PCAP Topic:** Python provides built-in functions to check inheritance relationships.
+
+isinstance() - Check if an object is an instance of a class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. activecode:: inheritance_isinstance
+
+    class Pet:
+        def __init__(self, name):
+            self.name = name
+
+    class Cat(Pet):
+        sounds = ['Meow']
+
+    class Cheshire(Cat):
+        def smile(self):
+            print(":D")
+
+    # Create instances
+    p = Pet("Fido")
+    c = Cat("Fluffy")
+    ch = Cheshire("Pumpkin")
+
+    # isinstance() checks if object is instance of class
+    print(f"Is p a Pet? {isinstance(p, Pet)}")        # True
+    print(f"Is c a Cat? {isinstance(c, Cat)}")        # True
+    print(f"Is c a Pet? {isinstance(c, Pet)}")        # True (Cat inherits from Pet!)
+    print(f"Is ch a Cheshire? {isinstance(ch, Cheshire)}")  # True
+    print(f"Is ch a Cat? {isinstance(ch, Cat)}")      # True (Cheshire inherits from Cat)
+    print(f"Is ch a Pet? {isinstance(ch, Pet)}")      # True (Cheshire → Cat → Pet)
+
+    # But...
+    print(f"Is p a Cat? {isinstance(p, Cat)}")        # False (Pet is parent, not child)
+
+**Key Insight:** ``isinstance()`` returns ``True`` for the object's class AND all ancestor classes!
+
+issubclass() - Check if a class inherits from another
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. activecode:: inheritance_issubclass
+
+    class Pet:
+        pass
+
+    class Cat(Pet):
+        pass
+
+    class Cheshire(Cat):
+        pass
+
+    class Dog(Pet):
+        pass
+
+    # issubclass() checks class inheritance relationships
+    print(f"Is Cat a subclass of Pet? {issubclass(Cat, Pet)}")  # True
+    print(f"Is Cheshire a subclass of Cat? {issubclass(Cheshire, Cat)}")  # True
+    print(f"Is Cheshire a subclass of Pet? {issubclass(Cheshire, Pet)}")  # True (indirect)
+    print(f"Is Dog a subclass of Cat? {issubclass(Dog, Cat)}")  # False
+    print(f"Is Pet a subclass of Pet? {issubclass(Pet, Pet)}")  # True (every class is subclass of itself)
+
+**Difference:**
+- ``isinstance(obj, Class)`` - checks **objects**
+- ``issubclass(Child, Parent)`` - checks **classes**
+
+Practical Use Cases
+~~~~~~~~~~~~~~~~~~~
+
+.. activecode:: inheritance_practical_use
+
+    class Animal:
+        def speak(self):
+            return "Some sound"
+
+    class Dog(Animal):
+        def speak(self):
+            return "Woof!"
+
+    class Cat(Animal):
+        def speak(self):
+            return "Meow!"
+
+    def make_speak(animal):
+        """Make any animal speak"""
+        if isinstance(animal, Animal):
+            print(animal.speak())
+        else:
+            print("Not an animal!")
+
+    # Works with any Animal subclass
+    dog = Dog()
+    cat = Cat()
+    make_speak(dog)  # Woof!
+    make_speak(cat)  # Meow!
+    make_speak("text")  # Not an animal!
+
+**When to use isinstance():**
+- Checking if an object can use certain methods
+- Validating function parameters
+- Type checking before operations
+
+**When to use issubclass():**
+- Checking class relationships
+- Building frameworks that work with class hierarchies
+- Validating class definitions
+
 **Check your understanding**
 
 .. mchoice:: question_inheritance_1
@@ -257,3 +365,37 @@ The Python interpreter looks for an instance variable or method called ``chasing
      new_cat.song()
 
 
+.. mchoice:: question_inheritance_isinstance_1
+   :answer_a: True
+   :answer_b: False
+   :answer_c: Error
+   :correct: a
+   :feedback_a: Correct! ch is a Cheshire, which inherits from Cat, which inherits from Pet
+   :feedback_b: Remember, isinstance checks the entire inheritance chain
+   :feedback_c: No error - isinstance works with inheritance
+
+   What does ``isinstance(ch, Pet)`` return if ``ch = Cheshire("Fluffy")``?
+
+.. mchoice:: question_inheritance_isinstance_2
+   :answer_a: True
+   :answer_b: False
+   :answer_c: Error
+   :correct: b
+   :feedback_a: Pet is the parent class, not a subclass of Cat
+   :feedback_b: Correct! Pet is the parent, Cat is the child. It doesn't go backward.
+   :feedback_c: No error, just returns False
+
+   What does ``issubclass(Pet, Cat)`` return?
+
+.. mchoice:: question_inheritance_isinstance_3
+   :answer_a: isinstance(obj, ClassName)
+   :answer_b: issubclass(obj, ClassName)
+   :answer_c: isinstance(ClassName, obj)
+   :answer_d: issubclass(ClassName, obj)
+   :correct: a
+   :feedback_a: Correct! isinstance takes an object and a class
+   :feedback_b: issubclass takes two classes, not an object and a class
+   :feedback_c: Wrong order - object comes first
+   :feedback_d: Wrong function - this checks class relationships, not object types
+
+   Which is the correct way to check if an object ``obj`` is an instance of ``ClassName``?

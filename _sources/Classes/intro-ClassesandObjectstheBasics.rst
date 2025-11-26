@@ -12,30 +12,119 @@
 Introduction: Classes and Objects - the Basics
 ==============================================
 
+As a PCEP-certified programmer, you already understand object-oriented programming from working with Python's Turtle module:
 
-.. index:: object-oriented programming
+.. code-block:: python
 
-Object-oriented programming
----------------------------
+   # You already know objects from PCEP
+   import turtle
 
+   alex = turtle.Turtle()  # Created an instance
+   alex.color("red")       # Used attributes
+   alex.forward(50)        # Called methods
 
+You've been **using** objects. Now you'll learn to **define your own classes**.
 
-Python is an **object-oriented programming language**.  That means it
-provides features that support `object-oriented programming
-<http://en.wikipedia.org/wiki/Object-oriented_programming>`__ (**OOP**).
+What You Already Know
+---------------------
 
-Object-oriented programming has its roots in the 1960s, but it wasn't until the
-mid 1980s that it became the main `programming paradigm
-<http://en.wikipedia.org/wiki/Programming_paradigm>`__ used in the creation
-of new software. It was developed as a way to handle the rapidly increasing
-size and complexity of software systems and to make it easier to modify these
-large and complex systems over time.
+From PCEP, you understand:
 
-Up to now, some of the programs we have been writing use a `procedural programming
-<http://en.wikipedia.org/wiki/Procedural_programming>`__ paradigm. In
-procedural programming the focus is on writing functions or *procedures* which
-operate on data. In object-oriented programming the focus is on the creation of
-**objects** which contain both data and functionality together.
-Usually, each object definition corresponds to some object or concept in the real
-world and the functions that operate on that object correspond to the ways
-real-world objects interact.
+✅ **Objects** are instances of classes
+✅ **Attributes** store object state (data)
+✅ **Methods** define object behavior (functions)
+✅ **Instances** are created from classes
+✅ Different instances can have different attribute values
+
+What You'll Learn (PCAP Section 4 - 34% of exam)
+-------------------------------------------------
+
+This chapter covers class definition required for PCAP certification:
+
+**1. Class Definition Syntax**
+
+.. code-block:: python
+
+   class Point:
+       """Represents a point in 2D space."""
+
+       def __init__(self, x, y):
+           self.x = x
+           self.y = y
+
+**2. The __init__ Constructor**
+
+.. code-block:: python
+
+   p = Point(3, 4)  # __init__ called automatically
+
+**3. Instance vs Class Variables**
+
+.. code-block:: python
+
+   class Counter:
+       total = 0  # Class variable (shared)
+
+       def __init__(self):
+           self.count = 0  # Instance variable (per object)
+
+**4. Special Methods**
+
+.. code-block:: python
+
+   def __str__(self):
+       return f"Point({self.x}, {self.y})"
+
+**5. Class and Static Methods**
+
+.. code-block:: python
+
+   @classmethod
+   def from_tuple(cls, coords):
+       return cls(coords[0], coords[1])
+
+   @staticmethod
+   def distance(p1, p2):
+       return ((p2.x - p1.x)**2 + (p2.y - p1.y)**2)**0.5
+
+**6. Private Variables (Name Mangling)**
+
+.. code-block:: python
+
+   class BankAccount:
+       def __init__(self):
+           self.__balance = 0  # Private!
+
+**7. The __dict__ Attribute**
+
+.. code-block:: python
+
+   print(p.__dict__)  # {'x': 3, 'y': 4}
+
+Why This Matters
+----------------
+
+**For PCAP Certification:**
+* Class definition is Section 4 (34% of exam)
+* Instance vs class variables are explicitly tested
+* Special methods (__init__, __str__) are required
+* Decorators (@classmethod, @staticmethod) are required
+* Private variables (name mangling) are tested
+
+**For Your Career:**
+* Classes are fundamental to professional Python
+* Most real-world code uses custom classes
+* Understanding OOP is essential for frameworks (Django, Flask, etc.)
+* Classes organize complex programs effectively
+
+Prerequisites
+-------------
+
+This chapter assumes you're comfortable with:
+
+* Using objects and calling methods (from Turtle)
+* Functions and parameters
+* Lists and dictionaries
+* Understanding of attributes and methods
+
+Let's define your first class!

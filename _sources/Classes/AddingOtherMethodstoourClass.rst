@@ -82,6 +82,99 @@ Notice that the call of ``distanceFromOrigin`` does not *explicitly*
 supply an argument to match the ``self`` parameter.  This is true of all method calls. The definition will always seem to
 have one additional parameter as compared to the invocation.
 
+**Methods Can Modify State**
+
+Not all methods just return values - many methods modify the object's state:
+
+.. activecode:: chp13_classes6
+
+    class Point:
+        """ Point class for representing and manipulating x,y coordinates. """
+
+        def __init__(self, initX, initY):
+            self.x = initX
+            self.y = initY
+
+        def getX(self):
+            return self.x
+
+        def getY(self):
+            return self.y
+
+        def distanceFromOrigin(self):
+            return ((self.x ** 2) + (self.y ** 2)) ** 0.5
+
+        def move(self, dx, dy):
+            """Move the point by dx and dy"""
+            self.x += dx
+            self.y += dy
+
+        def reset(self):
+            """Move point back to origin"""
+            self.x = 0
+            self.y = 0
+
+    p = Point(7, 6)
+    print(f"Initial: ({p.getX()}, {p.getY()})")
+
+    p.move(3, 4)
+    print(f"After move(3, 4): ({p.getX()}, {p.getY()})")
+
+    p.reset()
+    print(f"After reset: ({p.getX()}, {p.getY()})")
+
+**Output:**
+::
+
+   Initial: (7, 6)
+   After move(3, 4): (10, 10)
+   After reset: (0, 0)
+
+**Methods Can Call Other Methods**
+
+Methods can use ``self`` to call other methods on the same object:
+
+.. activecode:: chp13_classes7
+
+    class Point:
+        def __init__(self, initX, initY):
+            self.x = initX
+            self.y = initY
+
+        def distanceFromOrigin(self):
+            return ((self.x ** 2) + (self.y ** 2)) ** 0.5
+
+        def distanceFromPoint(self, other):
+            """Calculate distance to another point"""
+            dx = other.x - self.x
+            dy = other.y - self.y
+            return (dx ** 2 + dy ** 2) ** 0.5
+
+        def isNearOrigin(self, threshold=10):
+            """Check if point is within threshold of origin"""
+            # Calls distanceFromOrigin method!
+            return self.distanceFromOrigin() < threshold
+
+    p1 = Point(3, 4)
+    p2 = Point(100, 100)
+
+    print(f"p1 distance from origin: {p1.distanceFromOrigin():.2f}")
+    print(f"p1 near origin? {p1.isNearOrigin()}")
+
+    print(f"p2 distance from origin: {p2.distanceFromOrigin():.2f}")
+    print(f"p2 near origin? {p2.isNearOrigin()}")
+
+    print(f"Distance between p1 and p2: {p1.distanceFromPoint(p2):.2f}")
+
+**Output:**
+::
+
+   p1 distance from origin: 5.00
+   p1 near origin? True
+   p2 distance from origin: 141.42
+   p2 near origin? False
+   Distance between p1 and p2: 136.42
+
 **Check Your Understanding**
 
 1. Create a class called ``Animal`` that accepts two numbers as inputs and assigns them respectively to two instance variables: ``arms`` and ``legs``. Create an instance method called ``limbs`` that, when called, returns the total number of limbs the animal has. To the variable name ``spider``, assign an instance of ``Animal`` that has 4 arms and 4 legs. Call the limbs method on the ``spider`` instance and save the result to the variable name ``spidlimbs``.
@@ -102,3 +195,39 @@ have one additional parameter as compared to the invocation.
          self.assertEqual(spidlimbs, 8, "Testing that spidlimbs was assigned correctly.")
 
    myTests().main()
+
+
+2. Create a class ``Rectangle`` with instance variables ``width`` and ``height``.
+   Add a method ``area()`` that returns width × height.
+   Create ``rect`` = Rectangle(5, 10) and save ``rect.area()`` to ``rect_area``.
+
+.. activecode:: ac_chp13_classes_02
+   :tags: Classes/AddingOtherMethodstoourClass.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(rect.width, 5, "Testing rect width")
+           self.assertEqual(rect.height, 10, "Testing rect height")
+           self.assertEqual(rect_area, 50, "Testing area calculation")
+
+   myTests().main()
+
+3. Create a class ``Counter`` with instance variable ``count`` (starts at 0).
+   Add methods: ``increment()`` (adds 1 to count), ``reset()`` (sets count to 0).
+   Create ``c``, call increment 3 times, save ``c.count`` to ``result``.
+
+.. activecode:: ac_chp13_classes_03
+   :tags: Classes/AddingOtherMethodstoourClass.rst
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def testOne(self):
+           self.assertEqual(result, 3, "Testing that count incremented correctly")
+
+   myTests().main()
+

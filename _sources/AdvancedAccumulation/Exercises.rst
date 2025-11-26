@@ -612,6 +612,194 @@ Exercises
 
               myTests().main()
 
+.. question:: q21_6_21
+
+    .. tabbed:: q21
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_21
+              :autograde: unittest
+
+              Create a dictionary comprehension that maps each word to its length. Assign it to the variable ``word_lengths``.
+              ~~~~
+
+              words = ['apple', 'banana', 'cherry', 'date', 'elderberry']
+
+              # Your code here
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(word_lengths, {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4, 'elderberry': 10}, "Testing whether word_lengths has been correctly defined.")
+                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+
+              myTests().main()
+
+.. question:: q21_6_22
+
+    .. tabbed:: q22
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_22
+              :autograde: unittest
+
+              Use a dictionary comprehension to create a new dictionary ``passing_scores`` that only includes students who scored 70 or higher. Keep the name as the key and score as the value.
+              ~~~~
+
+              scores = {'Alice': 85, 'Bob': 62, 'Charlie': 90, 'David': 58, 'Eve': 77}
+
+              # Your code here
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(passing_scores, {'Alice': 85, 'Charlie': 90, 'Eve': 77}, "Testing whether passing_scores has been correctly defined.")
+                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+
+              myTests().main()
+
+.. question:: q21_6_23
+
+    .. tabbed:: q23
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_23
+              :autograde: unittest
+
+              Use a set comprehension to find all unique first letters (lowercase) from the list of words. Assign it to the variable ``first_letters``.
+              ~~~~
+
+              words = ['apple', 'apricot', 'banana', 'blueberry', 'cherry', 'cranberry', 'date']
+
+              # Your code here
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(first_letters, {'a', 'b', 'c', 'd'}, "Testing whether first_letters has been correctly defined.")
+                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+                      self.assertNotIn('list(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+
+              myTests().main()
+
+.. question:: q21_6_24
+
+    .. tabbed:: q24
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_24
+              :autograde: unittest
+
+              Create a generator expression (not a list comprehension!) that generates the squares of numbers from 1 to 1000. Then use it with sum() to find the total. Assign the sum to the variable ``total_squares``.
+
+              **Hint:** Use parentheses ``()`` instead of square brackets ``[]``.
+              ~~~~
+
+              # Your code here - create generator and use sum()
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(total_squares, 333833500, "Testing whether total_squares has been correctly calculated.")
+                      self.assertNotIn('[', self.getEditorText(), "Testing your code - should use generator expression () not list comprehension []")
+                      self.assertIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+
+              myTests().main()
+
+.. question:: q21_6_25
+
+    .. tabbed:: q25
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_25
+              :autograde: unittest
+
+              Use map() with a lambda function to add corresponding elements from three lists together. Assign the result to the variable ``sums``.
+
+              **Hint:** map() can take multiple iterables - ``map(lambda x, y, z: ..., list1, list2, list3)``
+              ~~~~
+
+              list1 = [1, 2, 3, 4]
+              list2 = [10, 20, 30, 40]
+              list3 = [100, 200, 300, 400]
+
+              # Your code here
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(sums, [111, 222, 333, 444], "Testing whether sums has been correctly defined.")
+                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+
+              myTests().main()
+
+.. question:: q21_6_26
+
+    .. tabbed:: q26
+
+        .. tab:: Question
+
+           .. actex:: ac21_6_26
+              :autograde: unittest
+
+              **Challenge:** Given a list of numbers, create three variables:
+
+              1. ``doubled_list`` - Use a LIST COMPREHENSION to double each number
+              2. ``doubled_gen`` - Use a GENERATOR EXPRESSION to double each number
+              3. ``doubled_map`` - Use map() to double each number
+
+              All three should produce equivalent results when converted to lists.
+              ~~~~
+
+              numbers = [1, 2, 3, 4, 5]
+
+              # Your code here - create all three variables
+
+              ====
+
+              from unittest.gui import TestCaseGui
+
+              class myTests(TestCaseGui):
+
+                  def testOne(self):
+                      self.assertEqual(doubled_list, [2, 4, 6, 8, 10], "Testing doubled_list")
+                      self.assertEqual(list(doubled_gen), [2, 4, 6, 8, 10], "Testing doubled_gen")
+                      self.assertEqual(doubled_map, [2, 4, 6, 8, 10], "Testing doubled_map")
+
+                      # Check they used the right techniques
+                      code = self.getEditorText()
+                      self.assertIn('map(', code, "Should use map() for doubled_map")
+
+              myTests().main()
+
 Contributed Exercises
 ~~~~~~~~~~~~~~~~~~~~~
 

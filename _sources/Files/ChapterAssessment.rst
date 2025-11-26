@@ -1,11 +1,4 @@
-..  Copyright (C)  Brad Miller, David Ranum, Jeffrey Elkner, Peter Wentworth, Allen B. Downey, Chris
-    Meyers, and Dario Mitchell.  Permission is granted to copy, distribute
-    and/or modify this document under the terms of the GNU Free Documentation
-    License, Version 1.3 or any later version published by the Free Software
-    Foundation; with Invariant Sections being Forward, Prefaces, and
-    Contributor List, no Front-Cover Texts, and no Back-Cover Texts.  A copy of
-    the license is included in the section entitled "GNU Free Documentation
-    License".
+..  Copyright (C)  Alpha Schools
 
 .. qnum::
    :prefix: files-10-
@@ -14,220 +7,80 @@
 Chapter Assessment
 ==================
 
-.. datafile:: travel_plans.txt
-   :fromfile: travel_plans.txt
-   :hide:
-
-.. datafile:: school_prompt.txt
-   :fromfile: school_prompt.txt
-   :hide:
-
-.. datafile:: emotion_words.txt
-   :fromfile: emotion_words.txt
-   :hide:
-
-.. activecode:: ac9_10_1
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: travel_plans.txt
-   :nocodelens:
-
-   The textfile, ``travel_plans.txt``, contains the summer travel plans for someone with some commentary. Find the total number of characters in the file and save to the variable ``num``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(num, 316, "Testing that num value is assigned to correct value.")
-
-   myTests().main()
-
-.. activecode:: ac9_10_2
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: emotion_words.txt
-   :nocodelens:
-
-   We have provided a file called ``emotion_words.txt`` that contains lines of words that describe emotions. Find the total number of words in the file and assign this value to the variable ``num_words``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(num_words, 48, "Testing that num_words was assigned to the correct value.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_3
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: school_prompt.txt
-   :nocodelens:
-
-   Assign to the variable ``num_lines`` the number of lines in the file ``school_prompt.txt``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(num_lines, 10, "Testing that num_lines has the correct value.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_4
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: school_prompt.txt
-   :nocodelens:
-
-   Assign the first 30 characters of ``school_prompt.txt`` as a string to the variable ``beginning_chars``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(len(beginning_chars), 30, "Testing that beginning_chars has the correct length.")
-         self.assertEqual(beginning_chars, "Writing essays for school can ", "Testing that beginning_chars has the correct string.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_5
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: school_prompt.txt
-   :nocodelens:
-
-   **Challenge:** Using the file ``school_prompt.txt``, assign the third word of every line to a list called ``three``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(three, ['for', 'find', 'to', 'many', 'they', 'solid', 'for', 'have', 'some', 'ups,'], "Testing that three has the correct value.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_6
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: emotion_words.txt
-   :nocodelens:
-
-   **Challenge:** Create a list called ``emotions`` that contains the first word of every line in ``emotion_words.txt``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(emotions, ['Sad', 'Angry', 'Happy', 'Confused', 'Excited', 'Scared', 'Nervous'], "Testing that emotions was created correctly.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_7
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: travel_plans.txt
-   :nocodelens:
-
-   Assign the first 33 characters from the textfile, ``travel_plans.txt`` to the variable ``first_chars``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testFive(self):
-         self.assertEqual(first_chars, "This summer I will be travelling.", "Testing that first_chars is assigned to correct value.")
-
-   myTests().main()
-
-
-.. activecode:: ac9_10_8
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: school_prompt.txt
-   :nocodelens:
-
-   **Challenge:** Using the file ``school_prompt.txt``, if the character 'p' is in a word, then add the word to a list called ``p_words``.
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertEqual(p_words, ['topic', 'point', 'papers,', 'ups,', 'scripts.'], "Testing that p_words has the correct list.")
-
-   myTests().main()
-
-.. activecode:: ac_9_10_9
-   :language: python
-   :autograde: unittest
-   :practice: T
-   :available_files: SP500.txt
-   :topics: Files/ReadingCSVFiles
-
-   Read in the contents of the file ``SP500.txt`` which has monthly data for 2016 and 2017 about the S&P 500 closing prices as well as some other financial indicators, including the "Long Term Interest Rate", which is interest rate paid on 10-year U.S. government bonds.
-
-   Write a program that computes the average closing price (the second column, labeled SP500) and the highest long-term interest rate. Both should be computed only for the period from June 2016 through May 2017. Save the results in the variables ``mean_SP`` and ``max_interest``.
-
-   ~~~~
-
-   ====
-
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-      def testOne(self):
-         self.assertLess(abs(mean_SP - 2237), 0.5, "Testing that mean_SP is within 0.5 of the correct value. Make sure to use only the correct 12 month period.")
-         self.assertEqual(max_interest, 2.49, "Testing the max_interest is correct. Make sure to use only the correct 12 month period.")
-
-   myTests().main()
-
-
-.. mchoice:: pcap_concept_read_large_file
+Part 1: Multiple Choice Questions
+----------------------------------
+
+.. mchoice:: files_assess_mc1
+   :answer_a: Both return str
+   :answer_b: Both return bytes
+   :answer_c: Text returns str, binary returns bytes
+   :answer_d: They return the same type
+   :correct: c
+   :feedback_a: Binary mode returns bytes, not str.
+   :feedback_b: Text mode returns str, not bytes.
+   :feedback_c: Correct! Text mode ('r') returns str, binary mode ('rb') returns bytes.
+   :feedback_d: They return different types!
+
+   What's the difference between text and binary mode return types?
+
+
+.. mchoice:: files_assess_mc2
+   :answer_a: bytes is mutable, bytearray is immutable
+   :answer_b: Both are mutable
+   :answer_c: Both are immutable
+   :answer_d: bytes is immutable, bytearray is mutable
+   :correct: d
+   :feedback_a: You have it backwards!
+   :feedback_b: bytes is immutable.
+   :feedback_c: bytearray is mutable!
+   :feedback_d: Correct! bytes is immutable (like str), bytearray is mutable (like list).
+
+   What's the difference between ``bytes`` and ``bytearray``?
+
+
+.. mchoice:: files_assess_mc3
+   :answer_a: errno.ENOENT
+   :answer_b: errno.EACCES
+   :answer_c: errno.EISDIR
+   :answer_d: errno.EEXIST
+   :correct: a
+   :feedback_a: Correct! ENOENT (Error NO ENTry) means "No such file or directory"
+   :feedback_b: EACCES means "Permission denied"
+   :feedback_c: EISDIR means "Is a directory"
+   :feedback_d: EEXIST means "File exists"
+
+   Which errno constant indicates "file not found"?
+
+
+.. mchoice:: files_assess_mc4
+   :answer_a: sys.stdin
+   :answer_b: sys.stdout
+   :answer_c: sys.stderr
+   :answer_d: sys.output
+   :correct: c
+   :feedback_a: stdin is for input, not error messages
+   :feedback_b: stdout is for normal output, not errors
+   :feedback_c: Correct! stderr is specifically for error messages and logging
+   :feedback_d: There is no sys.output
+
+   Which standard stream should be used for error messages?
+
+
+.. mchoice:: files_assess_mc5
+   :answer_a: 'rb+'
+   :answer_b: 'r+'
+   :answer_c: 'wb'
+   :answer_d: 'rb'
+   :correct: a
+   :feedback_a: Correct! 'rb+' opens binary file for both reading and writing
+   :feedback_b: This is text mode (read and write), not binary
+   :feedback_c: This only allows writing, not reading
+   :feedback_d: This only allows reading, not writing
+
+   Which file mode allows both reading and writing a binary file?
+
+
+.. mchoice:: files_assess_mc6
    :answer_a: read() - load entire file
    :answer_b: readlines() - load all lines
    :answer_c: Iterate line by line
@@ -241,50 +94,125 @@ Chapter Assessment
    What's the best way to process a very large file?
 
 
-**CSV Parsing**
+Part 2: Active Code Problems
+-----------------------------
 
-.. parsonsprob:: pcap_parsons_csv
-   :language: python
-   :adaptive:
-   :numbered: left
-
-   Arrange blocks to parse CSV data.
-   -----
-   def parse_csv(data):
-   =====
-       lines = data.strip().splitlines()
-   =====
-       lines = data.strip().split('\n') #distractor
-   =====
-       result = []
-   =====
-       for line in lines:
-   =====
-           fields = [f.strip() for f in line.split(',')]
-   =====
-           fields = line.split(',').strip() #distractor
-   =====
-           result.append(fields)
-   =====
-       return result
-
-**Safe File Reader**
-
-.. activecode:: pcap_code_safe_file_reader
+.. activecode:: files_assess_ac1
    :language: python
    :autograde: unittest
+   :practice: T
+
+   Create a function ``is_png_data(data)`` that checks if binary data starts with PNG signature.
+
+   PNG signature: b'\\x89PNG\\r\\n\\x1a\\n'
+
+   Returns True if data starts with PNG signature, False otherwise.
+   ~~~~
+   def is_png_data(data):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_valid_png(self):
+           png_sig = b'\x89PNG\r\n\x1a\n'
+           self.assertTrue(is_png_data(png_sig))
+
+       def test_png_with_extra(self):
+           png_sig = b'\x89PNG\r\n\x1a\nEXTRA'
+           self.assertTrue(is_png_data(png_sig))
+
+       def test_not_png(self):
+           self.assertFalse(is_png_data(b'JPEG'))
+
+       def test_too_short(self):
+           self.assertFalse(is_png_data(b'PNG'))
+
+   myTests().main()
+
+
+.. activecode:: files_assess_ac2
+   :language: python
+   :autograde: unittest
+   :practice: T
+
+   Create a function ``modify_byte(data, index, new_value)`` that:
+
+   - Converts bytes to bytearray
+   - Modifies byte at given index
+   - Returns modified bytearray
+   ~~~~
+   def modify_byte(data, index, new_value):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_basic(self):
+           result = modify_byte(b'Hello', 0, ord('J'))
+           self.assertEqual(result, bytearray(b'Jello'))
+
+       def test_middle(self):
+           result = modify_byte(b'Python', 2, ord('X'))
+           self.assertEqual(result, bytearray(b'PyXhon'))
+
+       def test_returns_bytearray(self):
+           result = modify_byte(b'Test', 0, 65)
+           self.assertEqual(type(result), bytearray)
+
+   myTests().main()
+
+
+.. activecode:: files_assess_ac3
+   :language: python
+   :autograde: unittest
+   :practice: T
+
+   Create a function ``get_error_message(error_code)`` that returns appropriate message:
+
+   - 2 (ENOENT) → "File not found"
+   - 13 (EACCES) → "Permission denied"
+   - 21 (EISDIR) → "Is a directory"
+   - Other → "Unknown error"
+   ~~~~
+   def get_error_message(error_code):
+       # Your code here
+       pass
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_enoent(self):
+           self.assertEqual(get_error_message(2), "File not found")
+
+       def test_eacces(self):
+           self.assertEqual(get_error_message(13), "Permission denied")
+
+       def test_eisdir(self):
+           self.assertEqual(get_error_message(21), "Is a directory")
+
+       def test_unknown(self):
+           self.assertEqual(get_error_message(999), "Unknown error")
+
+   myTests().main()
+
+
+.. activecode:: files_assess_ac4
+   :language: python
+   :autograde: unittest
+   :practice: T
 
    Create a function ``safe_read_file(filename, default=None)`` that:
+
    - Reads and returns file contents
-   - Returns default value if file not found
-   - Handles permission errors appropriately
-   - Always closes the file
-
-   Example::
-
-       content = safe_read_file('data.txt', default='')
-       # Returns file content or '' if not found
-
+   - Returns default if FileNotFoundError
+   - Returns default if PermissionError
+   - Uses context manager
    ~~~~
    def safe_read_file(filename, default=None):
        # Your code here
@@ -294,52 +222,32 @@ Chapter Assessment
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-       def test_returns_default_on_missing(self):
+       def test_default_on_missing(self):
            result = safe_read_file('nonexistent.txt', default='DEFAULT')
            self.assertEqual(result, 'DEFAULT')
 
-       def test_returns_none_by_default(self):
+       def test_none_by_default(self):
            result = safe_read_file('nonexistent.txt')
            self.assertIsNone(result)
 
    myTests().main()
 
-.. reveal:: pcap_code_safe_file_reader_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
 
-   .. code-block:: python
-
-      def safe_read_file(filename, default=None):
-          try:
-              with open(filename, 'r') as f:
-                  return f.read()
-          except FileNotFoundError:
-              return default
-          except PermissionError:
-              return default
-
----
-
-**Log Parser**
-
-.. activecode:: pcap_code_log_parser
+.. activecode:: files_assess_ac5
    :language: python
    :autograde: unittest
+   :practice: T
 
-   Create a function ``parse_log_line(line)`` that parses log format:
-   "[LEVEL] message"
+   Create a function ``choose_file_mode(read, write, binary)`` that returns correct mode:
 
-   Returns dictionary: {'level': 'LEVEL', 'message': 'message'}
-   Returns None if format is invalid
-
-   Example::
-
-       parse_log_line("[ERROR] File not found")
-       # {'level': 'ERROR', 'message': 'File not found'}
-
+   - read=True, write=False, binary=False → 'r'
+   - read=True, write=False, binary=True → 'rb'
+   - read=False, write=True, binary=False → 'w'
+   - read=False, write=True, binary=True → 'wb'
+   - read=True, write=True, binary=False → 'r+'
+   - read=True, write=True, binary=True → 'rb+'
    ~~~~
-   def parse_log_line(line):
+   def choose_file_mode(read, write, binary):
        # Your code here
        pass
 
@@ -347,183 +255,25 @@ Chapter Assessment
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-       def test_valid_log(self):
-           result = parse_log_line("[ERROR] Test message")
-           self.assertEqual(result, {'level': 'ERROR', 'message': 'Test message'})
+       def test_read_text(self):
+           self.assertEqual(choose_file_mode(True, False, False), 'r')
 
-       def test_strips_whitespace(self):
-           result = parse_log_line("  [INFO]  Test  ")
-           self.assertEqual(result, {'level': 'INFO', 'message': 'Test'})
+       def test_read_binary(self):
+           self.assertEqual(choose_file_mode(True, False, True), 'rb')
 
-       def test_invalid_format(self):
-           result = parse_log_line("Invalid log")
-           self.assertIsNone(result)
+       def test_write_text(self):
+           self.assertEqual(choose_file_mode(False, True, False), 'w')
 
-   myTests().main()
+       def test_write_binary(self):
+           self.assertEqual(choose_file_mode(False, True, True), 'wb')
 
-.. reveal:: pcap_code_log_parser_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
+       def test_readwrite_text(self):
+           self.assertEqual(choose_file_mode(True, True, False), 'r+')
 
-   .. code-block:: python
-
-      def parse_log_line(line):
-          line = line.strip()
-
-          # Check format
-          if not line.startswith('[') or ']' not in line:
-              return None
-
-          # Find closing bracket
-          close_idx = line.find(']')
-
-          # Extract level and message
-          level = line[1:close_idx]
-          message = line[close_idx + 1:].strip()
-
-          return {'level': level, 'message': message}
-
----
-
-
-**Debug: Binary Mode Mistake**
-
-.. activecode:: pcap_debug_binary_mode
-   :language: python
-   :autograde: unittest
-
-   This code tries to read a binary file as text. Fix it!
-   ~~~~
-   def read_image_header(filename):
-       with open(filename, 'r') as f:
-           header = f.read(8)
-
-       if header == b'\x89PNG\r\n\x1a\n':
-           return "PNG file"
-       return "Unknown"
-
-   print("Testing binary file handling...")
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-       def test_uses_binary_mode(self):
-           """Should use 'rb' mode for binary files"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn("'rb'", func_code,
-                        "Should use 'rb' mode for reading binary files")
-
-       def test_not_using_text_mode(self):
-           """Should not use text mode 'r' for binary data"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-
-           # Check for 'r' mode (but allow 'rb')
-           if "'r'" in func_code or '"r"' in func_code:
-               self.assertTrue("'rb'" in func_code or '"rb"' in func_code,
-                             "Should use 'rb' not 'r' for binary files")
-
-       def test_compares_with_bytes(self):
-           """Should compare header with bytes literal"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn("b'", func_code,
-                        "Should compare with bytes literal (b'...')")
-
-       def test_reads_correct_amount(self):
-           """Should read 8 bytes for PNG header"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn('.read(8)', func_code,
-                        "Should read 8 bytes for PNG header")
-
-       def test_returns_png_file_on_match(self):
-           """Should return 'PNG file' when header matches"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn('"PNG file"', func_code,
-                        "Should return 'PNG file' when header matches")
-
-       def test_returns_unknown_on_mismatch(self):
-           """Should return 'Unknown' when header doesn't match"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn('"Unknown"', func_code,
-                        "Should return 'Unknown' when header doesn't match")
-
-       def test_uses_with_statement(self):
-           """Should use context manager (with statement)"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           self.assertIn('with open(', func_code,
-                        "Should use 'with open()' for file handling")
-
-       def test_correct_png_signature(self):
-           """Should check for correct PNG signature bytes"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-           # PNG signature: \x89PNG\r\n\x1a\n
-           self.assertIn('\\x89PNG', func_code,
-                        "Should check for PNG signature starting with \\x89PNG")
-
-       def test_binary_mode_format(self):
-           """Binary mode should be properly formatted"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-
-           # Should have 'rb' as a string
-           has_rb = ("'rb'" in func_code or '"rb"' in func_code)
-           self.assertTrue(has_rb,
-                         "Should use 'rb' mode (as a string)")
-
-       def test_no_mixed_type_comparison(self):
-           """Code structure should avoid str/bytes comparison issues"""
-           source = self.getEditorText()
-           func_code = source.split('def read_image_header(')[1].split('\n\n')[0]
-
-           # If using text mode 'r', can't properly compare to bytes
-           has_text_mode = ("open(filename, 'r')" in func_code or
-                           'open(filename, "r")' in func_code)
-           has_bytes_compare = "b'" in func_code or 'b"' in func_code
-
-           if has_text_mode and has_bytes_compare:
-               self.fail("Can't compare text (from 'r' mode) with bytes literal - use 'rb' mode")
+       def test_readwrite_binary(self):
+           self.assertEqual(choose_file_mode(True, True, True), 'rb+')
 
    myTests().main()
-
-.. reveal:: pcap_debug_binary_mode_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problems:**
-
-   1. Opening binary file in text mode ('r') instead of binary mode ('rb')
-   2. Text mode returns strings, but comparing with bytes literal
-
-   **Fix:**
-
-   .. code-block:: python
-
-      def read_image_header(filename):
-          with open(filename, 'rb') as f:  # Binary mode!
-              header = f.read(8)
-
-          # header is now bytes, comparison works
-          if header == b'\x89PNG\r\n\x1a\n':
-              return "PNG file"
-          return "Unknown"
-
-   **Key insights:**
-
-   - **Text mode ('r')**: Returns strings, decodes bytes using encoding (usually UTF-8)
-   - **Binary mode ('rb')**: Returns bytes objects, no decoding
-   - **Use 'rb' for**: Images, audio, video, executables, any non-text files
-   - **Use 'r' for**: Text files, CSV, JSON, source code
-   - Can't compare ``str`` with ``bytes`` - types must match
-
----
 
 
 .. datafile:: SP500.txt
@@ -553,3 +303,209 @@ Chapter Assessment
     10/1/2017,2557,48.42,108.01,246.66,2.36,2589.89,49.05,109.4,30.92
     11/1/2017,2593.61,48.68,108.95,246.67,2.35,2626.9,49.3,110.35,31.3
     12/1/2017,2664.34,48.93,109.88,246.52,2.4,2700.13,49.59,111.36,32.09
+
+.. activecode:: files_assess_ac6
+   :language: python
+   :autograde: unittest
+   :practice: T
+   :available_files: SP500.txt
+
+   **PCEP Review:** Read ``SP500.txt`` which has monthly S&P 500 data for 2016-2017.
+
+   Compute the average closing price (column 2) and highest long-term interest rate (column 6) for June 2016 through May 2017 only.
+
+   Save results in ``mean_SP`` and ``max_interest``.
+   ~~~~
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+      def testOne(self):
+         self.assertLess(abs(mean_SP - 2237), 0.5, "Testing mean_SP is correct for June 2016-May 2017.")
+         self.assertEqual(max_interest, 2.49, "Testing max_interest is correct for June 2016-May 2017.")
+
+   myTests().main()
+
+
+Part 3: Debugging Exercises
+----------------------------
+
+.. activecode:: files_assess_debug1
+   :language: python
+   :autograde: unittest
+
+   **Debug 1:** This code tries to read binary file as text. Fix the mode!
+   ~~~~
+   def read_image_header(filename):
+       with open(filename, 'r') as f:
+           header = f.read(8)
+
+       if header == b'\x89PNG\r\n\x1a\n':
+           return "PNG file"
+       return "Unknown"
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_binary_mode(self):
+           source = self.getEditorText()
+           self.assertIn("'rb'", source, "Should use 'rb' mode for binary files")
+
+   myTests().main()
+
+
+.. activecode:: files_assess_debug2
+   :language: python
+   :autograde: unittest
+
+   **Debug 2:** File not closing on early return. Fix it!
+   ~~~~
+   def process_file(filename):
+       f = open(filename, 'r')
+       data = f.read()
+
+       if not data:
+           return None
+
+       result = data.upper()
+       f.close()
+       return result
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_context_manager(self):
+           source = self.getEditorText()
+           self.assertIn('with open(', source, "Should use context manager")
+           self.assertNotIn('.close()', source, "Don't need manual close with 'with'")
+
+   myTests().main()
+
+
+.. activecode:: files_assess_debug3
+   :language: python
+   :autograde: unittest
+
+   **Debug 3:** Wrong errno constant for "file not found". Fix it!
+   ~~~~
+   import errno
+
+   def safe_open(filename):
+       try:
+           with open(filename, 'r') as f:
+               return f.read()
+       except OSError as e:
+           if e.errno == errno.EACCES:
+               print("File not found")
+               return None
+           raise
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+       def test_uses_enoent(self):
+           source = self.getEditorText()
+           self.assertIn('errno.ENOENT', source, "Should use ENOENT for file not found")
+
+   myTests().main()
+
+
+Part 4: Parson's Problems
+--------------------------
+
+.. parsonsprob:: files_assess_parsons1
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to read a binary file.
+   -----
+   def read_binary(filename):
+   =====
+       with open(filename, 'rb') as f:
+   =====
+       with open(filename, 'r') as f: #distractor
+   =====
+           data = f.read()
+   =====
+       return data
+   =====
+       return bytes(data) #distractor
+
+
+.. parsonsprob:: files_assess_parsons2
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to handle file errors with errno.
+   -----
+   import errno
+   =====
+   def safe_read(filename):
+   =====
+       try:
+   =====
+           with open(filename, 'r') as f:
+   =====
+               return f.read()
+   =====
+       except OSError as e:
+   =====
+       except FileNotFoundError as e: #distractor
+   =====
+           if e.errno == errno.ENOENT:
+   =====
+               return None
+
+
+.. parsonsprob:: files_assess_parsons3
+   :language: python
+   :adaptive:
+   :numbered: left
+
+   Arrange blocks to modify bytearray.
+   -----
+   def uppercase_bytes(data):
+   =====
+       buffer = bytearray(data)
+   =====
+       buffer = bytes(data) #distractor
+   =====
+       for i in range(len(buffer)):
+   =====
+           if 97 <= buffer[i] <= 122:
+   =====
+           if 'a' <= buffer[i] <= 'z': #distractor
+   =====
+               buffer[i] -= 32
+   =====
+       return buffer
+
+
+Summary & Self-Check
+---------------------
+
+After completing this assessment, you should be able to:
+
+✅ Distinguish between text and binary file modes
+
+✅ Work with bytes and bytearray types
+
+✅ Handle file errors using errno constants
+
+✅ Use standard streams (stdin, stdout, stderr)
+
+✅ Choose appropriate file modes for different scenarios
+
+✅ Use context managers for file handling
+
+✅ Process large files efficiently
+
+✅ Work with binary data (file signatures, headers)
+
+**Struggling with any of these?** Review the Advanced File I/O sections before continuing.

@@ -14,9 +14,18 @@
 User Defined Classes
 --------------------
 
-We've already seen classes like ``str``, ``int``,  ``float`` and ``list``.  These were defined by Python and
-made available for us to use.  However, in many cases when we are solving problems we need to create data objects
-that are related to the problem we are trying to solve.  We need to create our own classes.
+As a PCEP-certified programmer, you've used many Python classes:
+
+* Built-in types: ``str``, ``int``, ``float``, ``list``, ``dict``
+* The Turtle class for graphics
+* File objects from ``open()``
+
+You know how to:
+* Create instances (``t = turtle.Turtle()``)
+* Call methods (``t.forward(100)``)
+* Access attributes (``t.color``)
+
+Now you'll learn to **define your own classes** - a core PCAP requirement (Section 4 - 34% of exam).
 
 As an example, consider the concept of a mathematical point. In two dimensions, a point is two
 numbers (coordinates) that are treated collectively as a single object. 
