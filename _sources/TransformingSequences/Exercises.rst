@@ -8,7 +8,6 @@ Exercises: Advanced String Operations
 ======================================
 
 .. activecode:: advstrings_ex_01
-   :nocolab:
    :practice: T
 
    **Exercise 1:** Write a function ``title_case(text)`` that converts text to title case, but ensures that small words like "a", "an", "the", "in", "on", "at" remain lowercase unless they're the first word.
@@ -37,7 +36,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_02
-   :nocolab:
    :practice: T
 
    **Exercise 2:** Write a function ``is_valid_variable_name(name)`` that returns ``True`` if the string is a valid Python variable name, ``False`` otherwise.
@@ -74,7 +72,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_03
-   :nocolab:
    :practice: T
 
    **Exercise 3:** Write a function ``clean_whitespace(text)`` that:
@@ -104,7 +101,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_04
-   :nocolab:
    :practice: T
 
    **Exercise 4:** Write a function ``format_table_row(items, width=15)`` that takes a list of strings and formats them into a table row where each item is centered in a field of the given width.
@@ -138,7 +134,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_05
-   :nocolab:
    :practice: T
 
    **Exercise 5:** Write a function ``parse_name_email(text)`` that extracts a name and email from a string formatted as "Name <email@domain.com>".
@@ -169,7 +164,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_06
-   :nocolab:
    :practice: T
 
    **Exercise 6:** Write a function ``is_strong_password(password)`` that returns ``True`` if a password meets these criteria:
@@ -204,7 +198,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_07
-   :nocolab:
    :practice: T
 
    **Exercise 7:** Write a function ``extract_domain(url)`` that extracts the domain name from a URL.
@@ -239,7 +232,6 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_08
-   :nocolab:
    :practice: T
 
    **Exercise 8 (Challenge):** Write a function ``normalize_phone(phone)`` that takes a phone number in various formats and returns it in the standard format: ``(XXX) XXX-XXXX``

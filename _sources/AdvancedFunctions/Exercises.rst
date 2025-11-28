@@ -11,7 +11,6 @@ Lambda Expressions
 ------------------
 
 .. activecode:: advfunc_ex_lambda1
-   :nocolab:
    :practice: T
 
    **Exercise 1:** Write a function ``sort_by_last_letter(words)`` that takes a list of words and returns them sorted by their last letter (not alphabetically).
@@ -39,7 +38,6 @@ Lambda Expressions
 
 
 .. activecode:: advfunc_ex_lambda2
-   :nocolab:
    :practice: T
 
    **Exercise 2:** Write a function ``filter_long_strings(strings, min_length)`` that returns a new list containing only strings that are at least ``min_length`` characters long.
@@ -69,7 +67,6 @@ Closures
 --------
 
 .. activecode:: advfunc_ex_closure1
-   :nocolab:
    :practice: T
 
    **Exercise 3:** Create a closure function ``make_greeter(greeting)`` that returns a function. The returned function should take a name and return a greeting message.
@@ -101,7 +98,6 @@ Closures
 
 
 .. activecode:: advfunc_ex_closure2
-   :nocolab:
    :practice: T
 
    **Exercise 4:** Create a closure ``make_counter(start=0)`` that returns a function. Each time the returned function is called, it should return the next number in sequence.
@@ -139,7 +135,6 @@ Closures
 
 
 .. activecode:: advfunc_ex_closure3
-   :nocolab:
    :practice: T
 
    **Exercise 5:** Create a closure ``make_power(exponent)`` that returns a function. The returned function should take a number and raise it to the specified exponent.
@@ -175,7 +170,6 @@ Decorators
 ----------
 
 .. activecode:: advfunc_ex_decorator1
-   :nocolab:
    :practice: T
 
    **Exercise 6:** Write a decorator ``uppercase_result`` that converts the return value of a function to uppercase.
@@ -211,7 +205,6 @@ Decorators
 
 
 .. activecode:: advfunc_ex_decorator2
-   :nocolab:
    :practice: T
 
    **Exercise 7:** Write a decorator ``double_result`` that doubles the numeric return value of a function.
@@ -248,7 +241,6 @@ Decorators
 
 
 .. activecode:: advfunc_ex_decorator3
-   :nocolab:
    :practice: T
 
    **Exercise 8 (Challenge):** Write a decorator ``call_counter`` that counts how many times a function has been called. The decorator should add a ``.call_count`` attribute to the function.

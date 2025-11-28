@@ -13,7 +13,7 @@ sys.path.append(os.getcwd())
 home_dir = os.getcwd()
 
 ####################
-project_name ='fopp'
+project_name ='PCAP'
 ####################
 
 master_url = None
@@ -21,7 +21,7 @@ if not master_url:
     master_url = get_master_url()
 
 master_app = 'runestone'
-serving_dir = "./build/fopp"
+serving_dir = "./build/PCAP"
 dynamic_pages = True
 if dynamic_pages:
     dest = "./published"
@@ -33,13 +33,13 @@ options(
     sphinx = Bunch(docroot=".",),
 
     build = Bunch(
-        builddir="./build/fopp",
+        builddir="./build/PCAP",
         sourcedir="_sources",
-        outdir="./build/fopp",
+        outdir="./build/PCAP",
 #        warnerror=True,
         confdir=".",
-        project_name = "fopp",
-        template_args={'course_id': 'fopp',
+        project_name = "PCAP",
+        template_args={'course_id': 'PCAP',
                        'login_required':'false',
                        'course_title': project_name,
                        'appname':master_app,
@@ -50,7 +50,7 @@ options(
                        'python3': 'true',
                        'dburl': 'postgresql://user:password@localhost/runestone',
                        'default_ac_lang': 'python',
-                       'basecourse': 'fopp',
+                       'basecourse': 'PCAP',
                        'downloads_enabled': 'false',
                        'enable_chatcodes': 'false',
                        'allow_pairs': 'false'

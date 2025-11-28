@@ -142,6 +142,71 @@ Test your understanding of OOP terminology:
 
    What is a **Protocol** in Python 3.8+?
 
+.. mchoice:: advfunc_assess_mc7
+   :answer_a: To capture all positional arguments
+   :answer_b: To capture all keyword arguments as a dictionary
+   :answer_c: To create a double pointer
+   :answer_d: To multiply arguments
+   :correct: b
+   :feedback_a: That's *args
+   :feedback_b: Correct! **kwargs collects extra keyword arguments into a dict
+   :feedback_c: Python doesn't have pointers
+   :feedback_d: ** in function definition is for keyword arguments
+
+   What does ``**kwargs`` do in a function definition?
+
+.. mchoice:: advfunc_assess_mc8
+   :answer_a: To modify global variables
+   :answer_b: To modify variables in the enclosing scope
+   :answer_c: To create new variables
+   :answer_d: To delete variables
+   :correct: b
+   :feedback_a: That's global keyword
+   :feedback_b: Correct! nonlocal allows modifying variables from outer (not global) scope
+   :feedback_c: You don't need nonlocal to create variables
+   :feedback_d: Use del to delete variables
+
+   What is the ``nonlocal`` keyword used for?
+
+.. mchoice:: advfunc_assess_mc9
+   :answer_a: Functions can be passed as arguments
+   :answer_b: Functions can be returned from other functions
+   :answer_c: Functions can be assigned to variables
+   :answer_d: All of the above
+   :correct: d
+   :feedback_a: True, but there's more!
+   :feedback_b: True, but there's more!
+   :feedback_c: True, but there's more!
+   :feedback_d: Correct! First-class functions can be passed, returned, and assigned like any other value
+
+   What does "first-class functions" mean in Python?
+
+.. mchoice:: advfunc_assess_mc10
+   :answer_a: from functools import reduce
+   :answer_b: from itertools import reduce
+   :answer_c: from operators import reduce
+   :answer_d: reduce is built-in
+   :correct: a
+   :feedback_a: Correct! reduce was moved to functools in Python 3
+   :feedback_b: reduce is in functools, not itertools
+   :feedback_c: There's no operators module with reduce
+   :feedback_d: reduce was built-in in Python 2, but moved to functools in Python 3
+
+   How do you import ``reduce()`` in Python 3?
+
+.. mchoice:: advfunc_assess_mc11
+   :answer_a: A decorator that takes parameters
+   :answer_b: A decorator inside another decorator
+   :answer_c: Multiple decorators on one function
+   :answer_d: A class-based decorator
+   :correct: a
+   :feedback_a: Correct! Decorator factories create decorators with custom parameters
+   :feedback_b: That's nested decorators
+   :feedback_c: That's decorator stacking
+   :feedback_d: That's a different concept
+
+   What is a decorator factory?
+
 ---
 
 Part 2: Conceptual Understanding
@@ -1842,6 +1907,44 @@ Find and fix the bugs in these broken OOP systems!
 
 ---
 
+.. parsonsprob:: advfunc_assess_parsons4
+   :numbered: left
+   :adaptive:
+
+   Arrange the blocks to use reduce() to find the maximum value in a list.
+   -----
+   from functools import reduce
+   =====
+   from itertools import reduce #paired
+   =====
+   numbers = [3, 7, 2, 9, 1]
+   =====
+   max_val = reduce(lambda a, b: a if a > b else b, numbers)
+   =====
+   max_val = reduce(lambda a, b: max(a, b), numbers) #paired
+   =====
+   max_val = map(lambda a, b: a if a > b else b, numbers) #paired
+
+.. parsonsprob:: advfunc_assess_parsons5
+   :numbered: left
+   :adaptive:
+
+   Arrange the blocks to create a function that accepts any arguments with *args and **kwargs.
+   -----
+   def flexible_func(*args, **kwargs):
+   =====
+   def flexible_func(args, kwargs): #paired
+   =====
+       print(f"Positional: {args}")
+   =====
+       print(f"Keyword: {kwargs}")
+   =====
+       return len(args) + len(kwargs)
+   =====
+       return args + kwargs #paired
+
+---
+
 Part 6: Self-Assessment Checklist
 ----------------------------------
 
@@ -2183,8 +2286,6 @@ Lesson Complete!
    - ✅ Polymorphism (duck typing, inheritance, protocols)
    - ✅ Abstract base classes
    - ✅ Mixin pattern
-   - ✅ 10 coding challenges
-   - ✅ 5 debugging challenges
    - ✅ Comprehensive self-assessment
 
    **You're now an Advanced OOP master!** 🚀

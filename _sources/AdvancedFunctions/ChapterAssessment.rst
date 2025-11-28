@@ -123,7 +123,6 @@ Part 2: Active Code Problems
 -----------------------------
 
 .. activecode:: advfunc_assess_ac1
-   :nocolab:
 
    **Problem 1:** Write a function ``sort_by_second(tuples)`` that sorts a list of tuples by the second element of each tuple using a lambda expression.
 
@@ -147,7 +146,6 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac2
-   :nocolab:
 
    **Problem 2:** Create a closure ``make_accumulator(initial=0)`` that returns a function. Each time the returned function is called with a number, it should add that number to the running total and return the new total.
 
@@ -181,7 +179,6 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac8
-   :nocolab:
 
    **Problem 8:** Use ``reduce()`` from functools to find the product of all numbers in a list.
 
@@ -206,7 +203,6 @@ Part 2: Active Code Problems
    myTests().main()
 
 .. activecode:: advfunc_assess_ac9
-   :nocolab:
 
    **Problem 9:** Create a decorator factory ``repeat(n)`` that makes a function execute n times.
 
@@ -263,7 +259,6 @@ Part 2: Active Code Problems
    myTests().main()
 
 .. activecode:: advfunc_assess_ac3
-   :nocolab:
 
    **Problem 3:** Use ``map()`` and a lambda to convert a list of temperatures in Celsius to Fahrenheit. Formula: F = (C * 9/5) + 32
 
@@ -286,7 +281,6 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac4
-   :nocolab:
 
    **Problem 4:** Create a closure ``make_validator(min_val, max_val)`` that returns a function. The returned function should take a number and return ``True`` if it's in range [min_val, max_val], ``False`` otherwise.
 
@@ -317,7 +311,6 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac5
-   :nocolab:
 
    **Problem 5:** Write a decorator ``ensure_list`` that converts the return value of a function to a list (using ``list()``).
 
@@ -356,7 +349,6 @@ Part 3: Debugging Exercises
 ----------------------------
 
 .. activecode:: advfunc_assess_debug1
-   :nocolab:
 
    **Debug Exercise 1:** This closure should create a multiplier function, but it's not working correctly. Find and fix the bug.
 
@@ -383,7 +375,6 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advfunc_assess_debug2
-   :nocolab:
 
    **Debug Exercise 2:** This decorator should add 10 to the result, but it's broken. Find and fix the bug.
 
@@ -411,7 +402,6 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advfunc_assess_debug3
-   :nocolab:
 
    **Debug Exercise 3:** This lambda should filter out even numbers, but it's doing the opposite. Fix it.
 
@@ -479,7 +469,7 @@ Part 4: Parson's Problems
    :numbered: left
    :adaptive:
 
-   Arrange the blocks to create a function that accepts any arguments with *args and **kwargs.
+   Arrange the blocks to create a function that accepts any arguments with ``*args`` and ``**kwargs``.
    -----
    def flexible_func(*args, **kwargs):
    =====
