@@ -769,6 +769,7 @@ Coding Challenges
 ~~~~~~~~~~~~~~~~~
 
 .. activecode:: math_statistics_challenge
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``calculate_statistics(numbers)`` that takes a list of
@@ -814,6 +815,7 @@ Coding Challenges
    MyTests().main()
 
 .. activecode:: module_analyzer_challenge
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``analyze_module(module_name)`` that takes a module name
@@ -853,6 +855,7 @@ Coding Challenges
    MyTests().main()
 
 .. activecode:: package_structure_validator
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``validate_package_structure(structure)`` that takes
@@ -954,36 +957,8 @@ Coding Challenges
 
    myTests().main()
 
-.. reveal:: package_structure_validator_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def validate_package_structure(structure):
-          errors = []
-
-          # Check package name
-          if not structure.get('name'):
-              errors.append('Package name is empty')
-
-          # Check __init__.py
-          if not structure.get('has_init'):
-              errors.append('Missing __init__.py')
-
-          # Check module extensions
-          for module in structure.get('modules', []):
-              if not module.endswith('.py'):
-                  errors.append(f'Module {module} must end with .py')
-
-          # Recursively check subpackages
-          for subpkg in structure.get('subpackages', []):
-              sub_errors = validate_package_structure(subpkg)
-              errors.extend(sub_errors)
-
-          return errors
-
 .. activecode:: requirements_parser_challenge
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``parse_and_categorize_requirements(req_text)`` that parses

@@ -191,25 +191,25 @@ Active Code Problems
 
    myTests().main()
 
-
 .. activecode:: files_ex_ac2
    :language: python
    :autograde: unittest
 
-   **Problem 2:** Create a function ``modify_bytes(data, position, new_byte)`` that:
+   **Problem 2:** Create a function ``modify_string(text, position, new_char)`` that:
 
-   - Takes bytes data and converts to bytearray
-   - Modifies the byte at the given position
-   - Returns the modified bytearray
+   - Takes a string and converts it to a list (since strings are immutable)
+   - Modifies the character at the given position
+   - Returns the modified string
+
+   Remember: strings are immutable in Python, so you need to convert to a list, modify, then convert back!
 
    Example::
 
-       data = b'Hello'
-       result = modify_bytes(data, 0, ord('J'))
-       print(result)  # bytearray(b'Jello')
+       result = modify_string('Hello', 0, 'J')
+       print(result)  # 'Jello'
 
    ~~~~
-   def modify_bytes(data, position, new_byte):
+   def modify_string(text, position, new_char):
        # Your code here
        pass
 
@@ -217,18 +217,24 @@ Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def test_basic_modification(self):
-           result = modify_bytes(b'Hello', 0, ord('J'))
-           self.assertEqual(result, bytearray(b'Jello'))
-           self.assertEqual(type(result), bytearray)
+           result = modify_string('Hello', 0, 'J')
+           self.assertEqual(result, 'Jello', "Testing modification at start")
+           self.assertEqual(type(result), str, "Result should be a string")
 
        def test_middle_modification(self):
-           result = modify_bytes(b'Python', 2, ord('X'))
-           self.assertEqual(result, bytearray(b'PyXhon'))
+           result = modify_string('Python', 2, 'X')
+           self.assertEqual(result, 'PyXhon', "Testing modification in middle")
 
        def test_last_modification(self):
-           result = modify_bytes(b'Test', 3, ord('!'))
-           self.assertEqual(result, bytearray(b'Tes!'))
+           result = modify_string('Test', 3, '!')
+           self.assertEqual(result, 'Tes!', "Testing modification at end")
+
+       def test_uses_list(self):
+           # Check that they converted to list
+           code = self.getEditorText()
+           self.assertTrue('list(' in code or '[' in code, "Make sure you convert the string to a list for modification")
 
    myTests().main()
 
@@ -237,16 +243,17 @@ Active Code Problems
    :language: python
    :autograde: unittest
 
-   **Problem 3:** Create a function ``categorize_error(error_code)`` that takes an errno value and returns a category string:
+   **Problem 3:** Create a function ``categorize_error(error_code)`` that takes an error code number and returns a category string:
 
-   - errno.ENOENT (2) → "File Not Found"
-   - errno.EACCES (13) → "Permission Denied"
-   - errno.EISDIR (21) → "Is Directory"
+   - Error code 2 → "File Not Found"
+   - Error code 13 → "Permission Denied"
+   - Error code 21 → "Is Directory"
+   - Error code 17 → "File Exists"
    - Any other → "Unknown Error"
 
-   ~~~~
-   import errno
+   These error codes simulate common file system errors you might encounter when working with files.
 
+   ~~~~
    def categorize_error(error_code):
        # Your code here
        pass
@@ -255,17 +262,24 @@ Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
-       def test_enoent(self):
-           self.assertEqual(categorize_error(errno.ENOENT), "File Not Found")
 
-       def test_eacces(self):
-           self.assertEqual(categorize_error(errno.EACCES), "Permission Denied")
+       def test_file_not_found(self):
+           self.assertEqual(categorize_error(2), "File Not Found", "Testing error code 2")
 
-       def test_eisdir(self):
-           self.assertEqual(categorize_error(errno.EISDIR), "Is Directory")
+       def test_permission_denied(self):
+           self.assertEqual(categorize_error(13), "Permission Denied", "Testing error code 13")
+
+       def test_is_directory(self):
+           self.assertEqual(categorize_error(21), "Is Directory", "Testing error code 21")
+
+       def test_file_exists(self):
+           self.assertEqual(categorize_error(17), "File Exists", "Testing error code 17")
 
        def test_unknown(self):
-           self.assertEqual(categorize_error(999), "Unknown Error")
+           self.assertEqual(categorize_error(999), "Unknown Error", "Testing unknown error code")
+
+       def test_another_unknown(self):
+           self.assertEqual(categorize_error(42), "Unknown Error", "Testing another unknown code")
 
    myTests().main()
 
@@ -350,20 +364,27 @@ Active Code Problems
    :language: python
    :autograde: unittest
 
-   **Problem 6:** Create a function ``xor_encrypt(data, key)`` that:
+   **Problem 6:** Create a function ``xor_encrypt(text, key)`` that implements simple XOR encryption:
 
-   - Takes bytes data
-   - Converts to bytearray
-   - XORs each byte with the key value
-   - Returns the result as bytes
+   - Takes a string and a key (integer 0-255)
+   - XORs each character's ASCII value with the key
+   - Returns the encrypted string
+
+   **How XOR encryption works:**
+
+   - Convert each character to its ASCII value using ``ord()``
+   - XOR it with the key: ``ord(char) ^ key``
+   - Convert back to a character using ``chr()``
+
+   **Fun fact:** XOR encryption is reversible - encrypting twice with the same key returns the original!
 
    Example::
 
-       encrypted = xor_encrypt(b'ABC', 42)
-       # Each byte XORed with 42
+       encrypted = xor_encrypt('ABC', 42)
+       decrypted = xor_encrypt(encrypted, 42)  # Back to 'ABC'!
 
    ~~~~
-   def xor_encrypt(data, key):
+   def xor_encrypt(text, key):
        # Your code here
        pass
 
@@ -371,22 +392,34 @@ Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def test_basic_encryption(self):
-           original = b'ABC'
+           original = 'ABC'
            encrypted = xor_encrypt(original, 42)
            # XOR twice returns original
            decrypted = xor_encrypt(encrypted, 42)
-           self.assertEqual(decrypted, original)
+           self.assertEqual(decrypted, original, "XOR encryption should be reversible")
 
-       def test_returns_bytes(self):
-           result = xor_encrypt(b'Test', 10)
-           self.assertEqual(type(result), bytes)
+       def test_returns_string(self):
+           result = xor_encrypt('Test', 10)
+           self.assertEqual(type(result), str, "Should return a string")
 
        def test_different_key(self):
-           data = b'Hello'
+           data = 'Hello'
            result1 = xor_encrypt(data, 5)
            result2 = xor_encrypt(data, 10)
-           self.assertNotEqual(result1, result2)
+           self.assertNotEqual(result1, result2, "Different keys should produce different results")
+
+       def test_reversible(self):
+           original = 'Python123'
+           key = 77
+           encrypted = xor_encrypt(original, key)
+           decrypted = xor_encrypt(encrypted, key)
+           self.assertEqual(decrypted, original, "Double encryption should return original")
+
+       def test_empty_string(self):
+           result = xor_encrypt('', 42)
+           self.assertEqual(result, '', "Empty string should return empty string")
 
    myTests().main()
 
@@ -494,15 +527,17 @@ Active Code Problems
    :language: python
    :autograde: unittest
 
-   **Problem 7:** Write a function ``bytes_to_bytearray_upper(data)`` that:
+   **Problem 7:** Write a function ``string_to_list_upper(text)`` that demonstrates working with mutable data:
 
-   - Takes bytes data
-   - Converts to bytearray
-   - Converts all alphabetic bytes to uppercase
-   - Returns as bytearray
+   - Takes a string
+   - Converts to a list of characters (since strings are immutable)
+   - Converts all alphabetic characters to uppercase
+   - Returns as a string
+
+   This demonstrates the concept of converting immutable data (strings) to mutable data (lists) for modification!
 
    ~~~~
-   def bytes_to_bytearray_upper(data):
+   def string_to_list_upper(text):
        # Your code here
        pass
 
@@ -510,17 +545,26 @@ Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def test_basic(self):
-           result = bytes_to_bytearray_upper(b'hello')
-           self.assertEqual(result, bytearray(b'HELLO'))
+           result = string_to_list_upper('hello')
+           self.assertEqual(result, 'HELLO', "Should convert 'hello' to 'HELLO'")
 
        def test_mixed_case(self):
-           result = bytes_to_bytearray_upper(b'HeLLo WoRLd')
-           self.assertEqual(result, bytearray(b'HELLO WORLD'))
+           result = string_to_list_upper('HeLLo WoRLd')
+           self.assertEqual(result, 'HELLO WORLD', "Should handle mixed case")
 
-       def test_returns_bytearray(self):
-           result = bytes_to_bytearray_upper(b'test')
-           self.assertEqual(type(result), bytearray)
+       def test_returns_string(self):
+           result = string_to_list_upper('test')
+           self.assertEqual(type(result), str, "Should return a string")
+
+       def test_with_numbers(self):
+           result = string_to_list_upper('test123')
+           self.assertEqual(result, 'TEST123', "Should keep numbers unchanged")
+
+       def test_with_punctuation(self):
+           result = string_to_list_upper('hello, world!')
+           self.assertEqual(result, 'HELLO, WORLD!', "Should keep punctuation unchanged")
 
    myTests().main()
 

@@ -473,26 +473,30 @@ Use list comprehensions when:
 Comparing Comprehension Types
 ------------------------------
 
-.. index:: comprehension comparison
+.. list-table:: Comparing Comprehension Types
+   :header-rows: 1
+   :widths: 15 20 15 50
 
-Here's a quick comparison of all comprehension types:
-
-+---+---+---+---+
-| Type          | Syntax          | Result     | Use Case                    |
-+===============+=================+============+=============================+
-| **List**      | ``[x for ...]`` | list       | Ordered collection, need    |
-|               |                 |            | multiple iterations         |
-+---+---+---+---+
-| **Dict**      | ``{k: v for     | dict       | Key-value pairs, lookups    |
-|               | ...}``          |            |                             |
-+---+---+---+---+
-| **Set**       | ``{x for ...}`` | set        | Unique values, membership   |
-|               |                 |            | testing                     |
-+---+---+---+---+
-| **Generator** | ``(x for ...)`` | generator  | Large datasets, single      |
-|               |                 |            | iteration, memory           |
-|               |                 |            | efficiency                  |
-+---+---+---+---+
+   * - Type
+     - Syntax
+     - Result
+     - Use Case
+   * - **List**
+     - ``[x for ...]``
+     - list
+     - Ordered collection, need multiple iterations
+   * - **Dict**
+     - ``{k: v for ...}``
+     - dict
+     - Key-value pairs, lookups
+   * - **Set**
+     - ``{x for ...}``
+     - set
+     - Unique values, membership testing
+   * - **Generator**
+     - ``(x for ...)``
+     - generator
+     - Large datasets, single iteration, memory efficiency
 
 Example: Same Data, Different Comprehensions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

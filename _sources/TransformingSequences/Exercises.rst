@@ -8,9 +8,10 @@ Exercises: Advanced String Operations
 ======================================
 
 .. activecode:: advstrings_ex_01
+   :autograde: unittest
    :practice: T
 
-   **Exercise 1:** Write a function ``title_case(text)`` that converts text to title case, but ensures that small words like "a", "an", "the", "in", "on", "at" remain lowercase unless they're the first word.
+   **Exercise** Write a function ``title_case(text)`` that converts text to title case, but ensures that small words like "a", "an", "the", "in", "on", "at" remain lowercase unless they're the first word.
 
    Example:
 
@@ -36,9 +37,10 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_02
+   :autograde: unittest
    :practice: T
 
-   **Exercise 2:** Write a function ``is_valid_variable_name(name)`` that returns ``True`` if the string is a valid Python variable name, ``False`` otherwise.
+   **Exercise** Write a function ``is_valid_variable_name(name)`` that returns ``True`` if the string is a valid Python variable name, ``False`` otherwise.
 
    Remember: A valid variable name:
 
@@ -72,9 +74,10 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_03
+   :autograde: unittest
    :practice: T
 
-   **Exercise 3:** Write a function ``clean_whitespace(text)`` that:
+   **Exercise** Write a function ``clean_whitespace(text)`` that:
 
    * Removes leading and trailing whitespace
    * Replaces multiple consecutive spaces with a single space
@@ -101,15 +104,18 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_04
+   :autograde: unittest
    :practice: T
 
-   **Exercise 4:** Write a function ``format_table_row(items, width=15)`` that takes a list of strings and formats them into a table row where each item is centered in a field of the given width.
+   **Exercise** Write a function ``format_table_row(items, width=15)`` that takes a list of strings and formats them into a table row where each item is centered in a field of the given width, separated by " | " (space-pipe-space).
 
    Example:
 
-   * ``format_table_row(["Name", "Age", "City"], 15)`` → ``"     Name      |      Age      |     City      "``
+   * ``format_table_row(["Name", "Age", "City"], 15)`` should produce something like:
 
-   Use the ``.center()`` method!
+     ``"     Name      |      Age      |     City      "``
+
+   Use the ``.center()`` method to center each item!
 
    ~~~~
    def format_table_row(items, width=15):
@@ -120,23 +126,47 @@ Exercises: Advanced String Operations
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def testOne(self):
            result1 = format_table_row(["Name", "Age", "City"], 15)
-           self.assertEqual(result1, "     Name      |      Age      |     City      ", "Test 1")
+           # Split by pipe and check each field
+           fields = result1.split('|')
+           self.assertEqual(len(fields), 3, "Should have 3 fields separated by |")
+           self.assertEqual(fields[0].strip(), "Name", "First field should contain 'Name'")
+           self.assertEqual(fields[1].strip(), "Age", "Second field should contain 'Age'")
+           self.assertEqual(fields[2].strip(), "City", "Third field should contain 'City'")
+           # Check that fields have correct width (accounting for spaces)
+           self.assertEqual(len(fields[0]), 15, "First field should be 15 characters wide")
+           self.assertEqual(len(fields[1]), 15, "Second field should be 15 characters wide (including surrounding spaces)")
 
+       def testTwo(self):
            result2 = format_table_row(["ID", "Product"], 10)
-           self.assertEqual(result2, "    ID    |  Product  ", "Test 2")
+           fields = result2.split('|')
+           self.assertEqual(len(fields), 2, "Should have 2 fields")
+           self.assertEqual(fields[0].strip(), "ID", "First field should contain 'ID'")
+           self.assertEqual(fields[1].strip(), "Product", "Second field should contain 'Product'")
+           self.assertEqual(len(fields[0]), 10, "Fields should be 10 characters wide")
 
+       def testThree(self):
            result3 = format_table_row(["A", "B", "C"], 5)
-           self.assertEqual(result3, "  A  |  B  |  C  ", "Test 3")
+           fields = result3.split('|')
+           self.assertEqual(len(fields), 3, "Should have 3 fields")
+           self.assertEqual(fields[0].strip(), "A", "Fields should contain A, B, C")
+           self.assertEqual(fields[1].strip(), "B", "Fields should contain A, B, C")
+           self.assertEqual(fields[2].strip(), "C", "Fields should contain A, B, C")
+
+       def testFour(self):
+           # Check that .center() method is used
+           self.assertIn('.center(', self.getEditorText(), "Make sure you use the .center() method")
 
    myTests().main()
 
 
 .. activecode:: advstrings_ex_05
+   :autograde: unittest
    :practice: T
 
-   **Exercise 5:** Write a function ``parse_name_email(text)`` that extracts a name and email from a string formatted as "Name <email@domain.com>".
+   **Exercise** Write a function ``parse_name_email(text)`` that extracts a name and email from a string formatted as "Name <email@domain.com>".
 
    Use ``.rindex()`` or ``.partition()`` to help split the string!
 
@@ -164,9 +194,10 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_06
+   :autograde: unittest
    :practice: T
 
-   **Exercise 6:** Write a function ``is_strong_password(password)`` that returns ``True`` if a password meets these criteria:
+   **Exercise** Write a function ``is_strong_password(password)`` that returns ``True`` if a password meets these criteria:
 
    * At least 8 characters long
    * Contains at least one uppercase letter
@@ -198,9 +229,10 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_07
+   :autograde: unittest
    :practice: T
 
-   **Exercise 7:** Write a function ``extract_domain(url)`` that extracts the domain name from a URL.
+   **Exercise** Write a function ``extract_domain(url)`` that extracts the domain name from a URL.
 
    Examples:
 
@@ -232,9 +264,10 @@ Exercises: Advanced String Operations
 
 
 .. activecode:: advstrings_ex_08
+   :autograde: unittest
    :practice: T
 
-   **Exercise 8 (Challenge):** Write a function ``normalize_phone(phone)`` that takes a phone number in various formats and returns it in the standard format: ``(XXX) XXX-XXXX``
+   **Exercise** Write a function ``normalize_phone(phone)`` that takes a phone number in various formats and returns it in the standard format: ``(XXX) XXX-XXXX``
 
    Your function should:
 

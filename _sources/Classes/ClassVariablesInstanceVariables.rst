@@ -219,17 +219,16 @@ Be careful! Assigning to ``self.class_var`` creates an **instance** variable, no
 
 **Check Your Understanding**
 
-1. Create a class called ``NumberSet`` that accepts 2 integers as input, and defines two instance variables: ``num1`` and ``num2``, which hold each of the input integers. Then, create an instance of ``NumberSet`` where its num1 is 6 and its num2 is 10. Save this instance to a variable ``t``.
+.. activecode:: ee_ch13_classvars_1
+   :tags:Classes/ClassVariablesInstanceVariables.rst
 
-[Keep existing problem]
+   Create a class called ``BankAccount`` with:
 
-2. **NEW:** Create a class called ``BankAccount`` with:
-   - Class variable ``bank_name = "Python Bank"``
-   - Instance variables ``owner`` and ``balance``
+   - A class variable ``bank_name`` set to ``"Python Bank"``
+   - An ``__init__`` method that takes ``owner`` and ``balance`` parameters and sets them as instance variables
    - Create two accounts: ``acc1`` (owner="Alice", balance=1000) and ``acc2`` (owner="Bob", balance=500)
 
-.. activecode:: ee_ch13_classvars_2
-   :tags:Classes/ClassVariablesInstanceVariables.rst
+   ~~~~
 
    ====
    from unittest.gui import TestCaseGui

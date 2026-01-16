@@ -123,8 +123,9 @@ Part 2: Active Code Problems
 -----------------------------
 
 .. activecode:: advfunc_assess_ac1
+   :autograde: unittest
 
-   **Problem 1:** Write a function ``sort_by_second(tuples)`` that sorts a list of tuples by the second element of each tuple using a lambda expression.
+   Write a function ``sort_by_second(tuples)`` that sorts a list of tuples by the second element of each tuple using a lambda expression.
 
    Example: ``sort_by_second([(1, 3), (4, 1), (2, 2)])`` → ``[(4, 1), (2, 2), (1, 3)]``
 
@@ -146,8 +147,9 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac2
+   :autograde: unittest
 
-   **Problem 2:** Create a closure ``make_accumulator(initial=0)`` that returns a function. Each time the returned function is called with a number, it should add that number to the running total and return the new total.
+   Create a closure ``make_accumulator(initial=0)`` that returns a function. Each time the returned function is called with a number, it should add that number to the running total and return the new total.
 
    Example:
 
@@ -179,8 +181,9 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac8
+   :autograde: unittest
 
-   **Problem 8:** Use ``reduce()`` from functools to find the product of all numbers in a list.
+   Use ``reduce()`` from functools to find the product of all numbers in a list.
 
    Write ``product(numbers)`` that returns the product of all numbers.
 
@@ -203,8 +206,9 @@ Part 2: Active Code Problems
    myTests().main()
 
 .. activecode:: advfunc_assess_ac9
+   :autograde: unittest
 
-   **Problem 9:** Create a decorator factory ``repeat(n)`` that makes a function execute n times.
+   Create a decorator factory ``repeat(n)`` that makes a function execute n times.
 
    Example:
 
@@ -259,8 +263,9 @@ Part 2: Active Code Problems
    myTests().main()
 
 .. activecode:: advfunc_assess_ac3
+   :autograde: unittest
 
-   **Problem 3:** Use ``map()`` and a lambda to convert a list of temperatures in Celsius to Fahrenheit. Formula: F = (C * 9/5) + 32
+   Use ``map()`` and a lambda to convert a list of temperatures in Celsius to Fahrenheit. Formula: F = (C * 9/5) + 32
 
    Write a function ``celsius_to_fahrenheit(temps_c)`` that returns a list of Fahrenheit temperatures.
 
@@ -281,8 +286,9 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac4
+   :autograde: unittest
 
-   **Problem 4:** Create a closure ``make_validator(min_val, max_val)`` that returns a function. The returned function should take a number and return ``True`` if it's in range [min_val, max_val], ``False`` otherwise.
+   Create a closure ``make_validator(min_val, max_val)`` that returns a function. The returned function should take a number and return ``True`` if it's in range [min_val, max_val], ``False`` otherwise.
 
    Example:
 
@@ -311,8 +317,9 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advfunc_assess_ac5
+   :autograde: unittest
 
-   **Problem 5:** Write a decorator ``ensure_list`` that converts the return value of a function to a list (using ``list()``).
+   Write a decorator ``ensure_list`` that converts the return value of a function to a list (using ``list()``).
 
    Example:
 
@@ -349,8 +356,9 @@ Part 3: Debugging Exercises
 ----------------------------
 
 .. activecode:: advfunc_assess_debug1
+   :autograde: unittest
 
-   **Debug Exercise 1:** This closure should create a multiplier function, but it's not working correctly. Find and fix the bug.
+   **Debug Exercise:** This closure should create a multiplier function, but it's not working correctly. Find and fix the bug.
 
    ~~~~
    def make_multiplier(factor):
@@ -375,8 +383,9 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advfunc_assess_debug2
+   :autograde: unittest
 
-   **Debug Exercise 2:** This decorator should add 10 to the result, but it's broken. Find and fix the bug.
+   **Debug Exercise:** This decorator should add 10 to the result, but it's broken. Find and fix the bug.
 
    ~~~~
    def add_ten(func):
@@ -402,8 +411,9 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advfunc_assess_debug3
+   :autograde: unittest
 
-   **Debug Exercise 3:** This lambda should filter out even numbers, but it's doing the opposite. Fix it.
+   **Debug Exercise :** This lambda should filter out even numbers, but it's doing the opposite. Fix it.
 
    ~~~~
    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

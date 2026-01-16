@@ -125,6 +125,7 @@ Chapter Assessment - Test Cases
 **Active Code Problems**
 
 .. activecode:: tc_ex_ac1
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``is_valid_age(age)`` that returns True if age is between 0 and 150 (inclusive), 
@@ -151,6 +152,7 @@ Chapter Assessment - Test Cases
    myTests().main()
 
 .. activecode:: tc_ex_ac2
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``find_max(numbers)`` that returns the maximum value in a list. Include an 
@@ -182,6 +184,7 @@ Chapter Assessment - Test Cases
    myTests().main()
 
 .. activecode:: tc_ex_ac3
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``classify_temperature(temp)`` that returns "Cold" if temp < 50, "Moderate" if 
@@ -209,6 +212,7 @@ Chapter Assessment - Test Cases
    myTests().main()
 
 .. activecode:: tc_ex_ac4
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``filter_numbers(numbers, threshold=10)`` with an optional threshold parameter. 
@@ -243,6 +247,7 @@ Chapter Assessment - Test Cases
    myTests().main()
 
 .. activecode:: tc_ex_ac5
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``add_to_dict(d, key, value)`` that adds a key-value pair to dictionary d. 
@@ -277,6 +282,7 @@ Chapter Assessment - Test Cases
    myTests().main()
 
 .. activecode:: tc_ex_ac6
+   :autograde: unittest
    :nocodelens:
 
    Write a function ``sum_positive(numbers)`` that sums only the positive numbers in a list. 
@@ -307,8 +313,9 @@ Chapter Assessment - Test Cases
 
 .. activecode:: tc_ex_debug1
    :nocodelens:
+   :autograde: unittest
 
-   This function should check if all elements in a list are positive, but the tests are failing. 
+   This function should check if all elements in a list are positive, but the tests are failing.
    Fix the function and add appropriate assertions.
    ~~~~
    def all_positive(numbers):
@@ -317,15 +324,43 @@ Chapter Assessment - Test Cases
            if num < 0:
                return True
        return False
-   
+
    assert all_positive([1, 2, 3]) == True
    assert all_positive([1, -2, 3]) == False
    assert all_positive([-1, -2]) == False
 
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+
+       def testOne(self):
+           self.assertEqual(all_positive([1, 2, 3]), True, "Testing all_positive([1, 2, 3])")
+
+       def testTwo(self):
+           self.assertEqual(all_positive([1, -2, 3]), False, "Testing all_positive([1, -2, 3])")
+
+       def testThree(self):
+           self.assertEqual(all_positive([-1, -2]), False, "Testing all_positive([-1, -2])")
+
+       def testFour(self):
+           self.assertEqual(all_positive([5, 10, 15, 20]), True, "Testing with all positive numbers")
+
+       def testFive(self):
+           self.assertEqual(all_positive([0, 1, 2]), False, "Testing with zero (should be False)")
+
+       def testSix(self):
+           # Test that assertion fires for empty list
+           with self.assertRaises(AssertionError):
+               all_positive([])
+
+   myTests().main()
+
 .. activecode:: tc_ex_debug2
    :nocodelens:
+   :autograde: unittest
 
-   This function should calculate the average but doesn't handle edge cases properly. 
+   This function should calculate the average but doesn't handle edge cases properly.
    Add the missing assertion and fix the logic.
    ~~~~
    def calculate_average(scores):
@@ -334,13 +369,43 @@ Chapter Assessment - Test Cases
        for score in scores:
            total = total + score
        return total / len(scores)
-   
+
    assert calculate_average([80, 90, 85]) == 85.0
    # This should fail without the assertion:
    # calculate_average([])
 
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+
+       def testOne(self):
+           self.assertAlmostEqual(calculate_average([80, 90, 85]), 85.0, 1, "Testing calculate_average([80, 90, 85])")
+
+       def testTwo(self):
+           self.assertAlmostEqual(calculate_average([100, 100, 100]), 100.0, 1, "Testing with all same scores")
+
+       def testThree(self):
+           self.assertAlmostEqual(calculate_average([70, 80, 90]), 80.0, 1, "Testing calculate_average([70, 80, 90])")
+
+       def testFour(self):
+           self.assertAlmostEqual(calculate_average([50]), 50.0, 1, "Testing with single score")
+
+       def testFive(self):
+           # Test that assertion fires for empty list
+           with self.assertRaises(AssertionError):
+               calculate_average([])
+
+       def testSix(self):
+           code = self.getEditorText()
+           self.assertIn('assert', code.split('def calculate_average')[1].split('total = 0')[0],
+                        "Testing that an assertion was added at the beginning of the function")
+
+   myTests().main()
+
 .. activecode:: tc_ex_debug3
    :nocodelens:
+   :autograde: unittest
 
    This function has incorrect type checking. Fix the assertions and the logic.
    ~~~~
@@ -348,10 +413,41 @@ Chapter Assessment - Test Cases
        assert type(a) == int
        assert type(b) == int
        return a * b
-   
+
    # Should work with floats too
    result = multiply_numbers(2.5, 4.0)
    assert result == 10.0
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+
+       def testOne(self):
+           result = multiply_numbers(2.5, 4.0)
+           self.assertAlmostEqual(result, 10.0, 1, "Testing multiply_numbers(2.5, 4.0)")
+
+       def testTwo(self):
+           result = multiply_numbers(3, 4)
+           self.assertEqual(result, 12, "Testing multiply_numbers(3, 4)")
+
+       def testThree(self):
+           result = multiply_numbers(5.5, 2)
+           self.assertAlmostEqual(result, 11.0, 1, "Testing multiply_numbers(5.5, 2)")
+
+       def testFour(self):
+           result = multiply_numbers(0, 100)
+           self.assertEqual(result, 0, "Testing multiply_numbers(0, 100)")
+
+       def testFive(self):
+           result = multiply_numbers(-3, 4)
+           self.assertEqual(result, -12, "Testing with negative numbers")
+
+       def testSix(self):
+           result = multiply_numbers(1.5, 1.5)
+           self.assertAlmostEqual(result, 2.25, 2, "Testing multiply_numbers(1.5, 1.5)")
+
+   myTests().main()
 
 
 **Parsons Problems**

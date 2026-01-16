@@ -84,9 +84,10 @@ Part 2: Active Code Problems
 -----------------------------
 
 .. activecode:: advstrings_assess_ac1
+   :autograde: unittest
    :nocolab:
 
-   **Problem 1:** Write a function ``mask_credit_card(card_number)`` that takes a credit card number as a string and returns it with all but the last 4 digits replaced by asterisks (*).
+   **Problem** Write a function ``mask_credit_card(card_number)`` that takes a credit card number as a string and returns it with all but the last 4 digits replaced by asterisks (*).
 
    Example: ``mask_credit_card("1234567812345678")`` → ``"************5678"``
 
@@ -108,9 +109,10 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advstrings_assess_ac2
+   :autograde: unittest
    :nocolab:
 
-   **Problem 2:** Write a function ``has_balanced_case(password)`` that returns ``True`` if a password contains at least one uppercase letter AND at least one lowercase letter, ``False`` otherwise.
+   **Problem** Write a function ``has_balanced_case(password)`` that returns ``True`` if a password contains at least one uppercase letter AND at least one lowercase letter, ``False`` otherwise.
 
    Use the ``.isupper()`` and ``.islower()`` methods!
 
@@ -134,9 +136,10 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advstrings_assess_ac3
+   :autograde: unittest
    :nocolab:
 
-   **Problem 3:** Write a function ``create_username(full_name)`` that creates a username from a full name by:
+   **Problem** Write a function ``create_username(full_name)`` that creates a username from a full name by:
 
    * Converting to lowercase
    * Replacing spaces with underscores
@@ -163,9 +166,10 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advstrings_assess_ac4
+   :autograde: unittest
    :nocolab:
 
-   **Problem 4:** Write a function ``extract_initials(full_name)`` that extracts the initials from a full name and returns them in uppercase with periods.
+   **Problem** Write a function ``extract_initials(full_name)`` that extracts the initials from a full name and returns them in uppercase with periods.
 
    Example: ``extract_initials("john fitzgerald kennedy")`` → ``"J.F.K."``
 
@@ -188,9 +192,10 @@ Part 2: Active Code Problems
 
 
 .. activecode:: advstrings_assess_ac5
+   :autograde: unittest
    :nocolab:
 
-   **Problem 5 (Challenge):** Write a function ``format_currency(amount)`` that takes a number (as a string) and formats it as a currency with:
+   **Problem** Write a function ``format_currency(amount)`` that takes a number (as a string) and formats it as a currency with:
 
    * Comma separators for thousands
    * Exactly 2 decimal places
@@ -222,9 +227,10 @@ Part 3: Debugging Exercises
 ----------------------------
 
 .. activecode:: advstrings_assess_debug1
+   :autograde: unittest
    :nocolab:
 
-   **Debug Exercise 1:** This function should check if a string contains only alphabetic characters and spaces (no numbers or special characters). Find and fix the bug.
+   **Debug Exercise** This function should check if a string contains only alphabetic characters and spaces (no numbers or special characters). Find and fix the bug.
 
    ~~~~
    def is_alpha_with_spaces(text):
@@ -252,9 +258,10 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advstrings_assess_debug2
+   :autograde: unittest
    :nocolab:
 
-   **Debug Exercise 2:** This function should capitalize the first letter of each word in a sentence, but it's not working correctly. Find and fix the bug.
+   **Debug Exercise** This function should capitalize the first letter of each word in a sentence, but it's not working correctly. Find and fix the bug.
 
    ~~~~
    def capitalize_words(sentence):
@@ -279,9 +286,10 @@ Part 3: Debugging Exercises
 
 
 .. activecode:: advstrings_assess_debug3
+   :autograde: unittest
    :nocolab:
 
-   **Debug Exercise 3:** This function should remove all vowels from a string, but it's not working correctly. Find and fix the bug.
+   **Debug Exercise** This function should remove all vowels from a string, but it's not working correctly. Find and fix the bug.
 
    ~~~~
    def remove_vowels(text):

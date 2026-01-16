@@ -15,206 +15,201 @@ For exercises, you can expand the Tamagotchi game even further. Try these out.
 
 Here's *all* the code we just saw for our new and improved game, with a few additions. You can run this and play the game again.
 
-#.
+.. activecode:: tamagotchi_exercises
+   :nocanvas:
+   :autograde: unittest
 
-    .. tabbed:: q1
+   Complete the following tasks to extend the Tamagotchi pet game:
 
-        .. tab:: Question
+   1. Define a new class ``Tiger`` that inherits from the ``Cat`` class. Its default meow count should be ``5`` (not ``3``), and it should have an extra instance method ``roar`` that prints out the string ``"ROOOOOAR!"``.
 
-           .. actex:: tamagotchi_exercises
-              :nocanvas:
+   2. Modify the ``Tiger`` class so that when the ``hi`` method is called, it calls the ``roar`` method (override the ``hi`` method).
 
-              #. Change the above code to allow you to adopt a Tiger pet (that you're about to create). HINT: look at the ``whichtype`` function, and think about what's happening in the code for that function.
+   3. Define another new class ``Retriever`` that inherits from ``Lab``. When its ``fetch`` method is called, it should return ``"I found the tennis ball! I can fetch anything!"`` instead of just ``"I found the tennis ball!"``.
 
-              #. Now, modify the code to define a new class, ``Tiger``. The ``Tiger`` class should inherit from the ``Cat`` class, but its default meow count should be ``5``, not ``3``, and it should have an extra instance method, ``roar``, that prints out the string ``ROOOOOAR!``. 
+   4. Update the ``pet_types`` dictionary to include ``'tiger': Tiger`` and ``'retriever': Retriever`` so they can be adopted in the game.
 
-              #. Next, modify the code so that when the ``hi`` method is called for the ``Tiger`` class, the ``roar`` method is called. HINT: You'll have to call one instance method inside another, and you'll have to redefine a method for the ``Tiger`` class. See the **overriding methods** section. 
+   The base classes are provided below. Add your Tiger and Retriever classes after the existing class definitions.
+   ~~~~
+   from random import randrange
 
-              #. Now, modify the code to define another new class, ``Retriever``. This class should inherit from ``Lab``. It should be exactly like ``Lab``, except instead of printing just ``I found the tennis ball!`` when the ``fetch`` method is called, it should say ``I found the tennis ball! I can fetch anything!``.
+   class Pet():
+       boredom_decrement = 4
+       hunger_decrement = 6
+       boredom_threshold = 5
+       hunger_threshold = 10
+       sounds = ['Mrrp']
 
-              #. Add your own new pets and modifications as you like -- remember, to use them in the game, you'll also have to alter the ``whichtype`` function so they can be used in game play. Otherwise, you'll have different classes that may work just fine, but you won't see the effects in the game, since the code that actually makes the game play is found in the second half of the provided code (look for the ``while`` loop!).
-              ~~~~
-              from random import randrange
+       def __init__(self, name = "Kitty"):
+           self.name = name
+           self.hunger = randrange(self.hunger_threshold)
+           self.boredom = randrange(self.boredom_threshold)
+           self.sounds = self.sounds[:]
 
-              class Pet():
-                  boredom_decrement = 4
-                  hunger_decrement = 6
-                  boredom_threshold = 5
-                  hunger_threshold = 10
-                  sounds = ['Mrrp']
+       def clock_tick(self):
+           self.boredom += 1
+           self.hunger += 1
 
-                  def __init__(self, name = "Kitty"):
-                      self.name = name
-                      self.hunger = randrange(self.hunger_threshold)
-                      self.boredom = randrange(self.boredom_threshold)
-                      self.sounds = self.sounds[:]  # copy the class attribute, so that when we make changes to it, we won't affect the other Pets in the class
+       def mood(self):
+           if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
+               return "happy"
+           elif self.hunger > self.hunger_threshold:
+               return "hungry"
+           else:
+               return "bored"
 
-                  def clock_tick(self):
-                      self.boredom += 1
-                      self.hunger += 1
+       def __str__(self):
+           state = "     I'm " + self.name + ". "
+           state += " I feel " + self.mood() + ". "
+           return state
 
-                  def mood(self):
-                      if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
-                          return "happy"
-                      elif self.hunger > self.hunger_threshold:
-                          return "hungry"
-                      else:
-                          return "bored"
+       def hi(self):
+           print(self.sounds[randrange(len(self.sounds))])
+           self.reduce_boredom()
 
-                  def __str__(self):
-                      state = "     I'm " + self.name + ". "
-                      state += " I feel " + self.mood() + ". "
-                      # state += "Hunger %d Boredom %d Words %s" % (self.hunger, self.boredom, self.sounds)
-                      return state
+       def teach(self, word):
+           self.sounds.append(word)
+           self.reduce_boredom()
 
-                  def hi(self):
-                      print(self.sounds[randrange(len(self.sounds))])
-                      self.reduce_boredom()
+       def feed(self):
+           self.reduce_hunger()
 
-                  def teach(self, word):
-                      self.sounds.append(word)
-                      self.reduce_boredom()
+       def reduce_hunger(self):
+           self.hunger = max(0, self.hunger - self.hunger_decrement)
 
-                  def feed(self):
-                      self.reduce_hunger()
+       def reduce_boredom(self):
+           self.boredom = max(0, self.boredom - self.boredom_decrement)
 
-                  def reduce_hunger(self):
-                      self.hunger = max(0, self.hunger - self.hunger_decrement)
+   class Dog(Pet):
+       def mood(self):
+           if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
+               return "happy, arf! Happy"
+           elif self.hunger > self.hunger_threshold:
+               return "hungry already, arrrf"
+           else:
+               return "bored, so you should play with me"
 
-                  def reduce_boredom(self):
-                      self.boredom = max(0, self.boredom - self.boredom_decrement)
+   class Cat(Pet):
+       def __init__(self, name="Fluffy", meow_count=3):
+           Pet.__init__(self, name)
+           self.meow_count = meow_count
 
-              class Dog(Pet):
-                  # in the Dog class, Dog pets should express their hunger and boredom differently than generic Pets
-                  def mood(self):
-                      if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
-                          return "happy, arf! Happy"
-                      elif self.hunger > self.hunger_threshold:
-                          return "hungry already, arrrf"
-                      else:
-                          return "bored, so you should play with me"
+       def hi(self):
+           for i in range(self.meow_count):
+               print(self.sounds[randrange(len(self.sounds))])
+           self.reduce_boredom()
 
-              class Cat(Pet):
-                  # in the Cat class, cats express their hunger and boredom a little differently, too. They also have an extra instance, variable meow_count.
-                  def __init__(self, name="Fluffy", meow_count=3):
-                      Pet.__init__(self, name)
-                      self.meow_count = meow_count
+       def mood(self):
+           if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
+               return "happy, I suppose"
+           elif self.hunger > self.hunger_threshold:
+               return "mmmm...hungry"
+           else:
+               return "a bit bored"
 
-                  def hi(self):
-                      for i in range(self.meow_count):
-                          print(self.sounds[randrange(len(self.sounds))])
-                      self.reduce_boredom()
+   class Lab(Dog):
+       def fetch(self):
+           return "I found the tennis ball!"
 
-                  def mood(self):
-                      if self.hunger <= self.hunger_threshold and self.boredom <= self.boredom_threshold:
-                          return "happy, I suppose"
-                      elif self.hunger > self.hunger_threshold:
-                          return "mmmm...hungry"
-                      else:
-                          return "a bit bored"
+       def hi(self):
+           print(self.sounds[randrange(len(self.sounds))] + self.fetch())
 
-              class Lab(Dog):
-                  def fetch(self):
-                      return "I found the tennis ball!"
+   class Poodle(Dog):
+       def dance(self):
+           return "Dancin' in circles like poodles do."
 
-                  def hi(self):
-                      print(self.sounds[randrange(len(self.sounds))] + self.fetch())
+       def hi(self):
+           print(self.dance())
+           Dog.hi(self)
 
-              class Poodle(Dog):
-                  def dance(self):
-                      return "Dancin' in circles like poodles do."
+   class Bird(Pet):
+       sounds = ["chirp"]
+       def __init__(self, name="Kitty", chirp_number=2):
+           Pet.__init__(self, name)
+           self.chirp_number = chirp_number
 
-                  def hi(self):
-                      print(self.dance())
-                      Dog.hi(self)
+       def hi(self):
+           for i in range(self.chirp_number):
+               print(self.sounds[randrange(len(self.sounds))])
+           self.reduce_boredom()
 
-              class Bird(Pet):
-                  sounds = ["chirp"]
-                  def __init__(self, name="Kitty", chirp_number=2):
-                      Pet.__init__(self, name) # call the parent class's constructor
-                      # basically, call the SUPER -- the parent version -- of the constructor, with all the parameters that it needs.
-                      self.chirp_number = chirp_number # now, also assign the new instance variable
-
-                  def hi(self):
-                      for i in range(self.chirp_number):
-                          print(self.sounds[randrange(len(self.sounds))])
-                      self.reduce_boredom()
+   # TODO: Define your Tiger class here
 
 
-              def whichone(petlist, name):
-                  for pet in petlist:
-                      if pet.name == name:
-                          return pet
-                  return None # no pet matched
+   # TODO: Define your Retriever class here
 
-              pet_types = {'dog': Dog, 'lab': Lab, 'poodle': Poodle, 'cat': Cat, 'bird': Bird}
-              def whichtype(adopt_type="general pet"):
-                  return pet_types.get(adopt_type.lower(), Pet)
 
-              def play():
-                  animals = []
+   def whichone(petlist, name):
+       for pet in petlist:
+           if pet.name == name:
+               return pet
+       return None
 
-                  option = ""
-                  base_prompt = """
-                      Quit
-                      Adopt <petname_with_no_spaces> <adopt_type - choose dog, cat, lab, poodle, or another unknown pet type>
-                      Greet <petname>
-                      Teach <petname> <word>
-                      Feed <petname>
+   # TODO: Update this dictionary to include 'tiger' and 'retriever'
+   pet_types = {'dog': Dog, 'lab': Lab, 'poodle': Poodle, 'cat': Cat, 'bird': Bird}
 
-                      Choice: """
-                  feedback = ""
-                  while True:
-                      action = input(feedback + "\n" + base_prompt)
-                      feedback = ""
-                      words = action.split()
-                      if len(words) > 0:
-                          command = words[0]
-                      else:
-                          command = None
-                      if command == "Quit":
-                          print("Exiting...")
-                          return
-                      elif command == "Adopt" and len(words) > 1:
-                          if whichone(animals, words[1]):
-                              feedback += "You already have a pet with that name\n"
-                          else:
-                              # figure out which class it should be
-                              if len(words) > 2:
-                                  Cl = whichtype(words[2])
-                              else:
-                                  Cl = Pet
-                              # Make an instance of that class and append it
-                              animals.append(Cl(words[1]))
-                      elif command == "Greet" and len(words) > 1:
-                          pet = whichone(animals, words[1])
-                          if not pet:
-                              feedback += "I didn't recognize that pet name. Please try again.\n"
-                              print()
-                          else:
-                              pet.hi()
-                      elif command == "Teach" and len(words) > 2:
-                          pet = whichone(animals, words[1])
-                          if not pet:
-                              feedback += "I didn't recognize that pet name. Please try again."
-                          else:
-                              pet.teach(words[2])
-                      elif command == "Feed" and len(words) > 1:
-                          pet = whichone(animals, words[1])
-                          if not pet:
-                              feedback += "I didn't recognize that pet name. Please try again."
-                          else:
-                              pet.feed()
-                      else:
-                          feedback+= "I didn't understand that. Please try again."
+   def whichtype(adopt_type="general pet"):
+       return pet_types.get(adopt_type.lower(), Pet)
 
-                      for pet in animals:
-                          pet.clock_tick()
-                          feedback += "\n" + pet.__str__()
+   ====
+   from unittest.gui import TestCaseGui
+   import sys
+   from io import StringIO
 
-              import sys
-              sys.setExecutionLimit(60000)
-              play()
+   class myTests(TestCaseGui):
+
+       def testOne(self):
+           self.assertTrue('Tiger' in dir(), "Testing that Tiger class exists")
+
+       def testTwo(self):
+           self.assertTrue(issubclass(Tiger, Cat), "Testing that Tiger inherits from Cat")
+
+       def testThree(self):
+           tiger = Tiger("Tigger")
+           self.assertEqual(tiger.meow_count, 5, "Testing that Tiger's default meow_count is 5")
+
+       def testFour(self):
+           tiger = Tiger("Tigger")
+           self.assertTrue(hasattr(tiger, 'roar'), "Testing that Tiger has a roar method")
+
+       def testFive(self):
+           tiger = Tiger("Tigger")
+           old_stdout = sys.stdout
+           sys.stdout = StringIO()
+           tiger.roar()
+           output = sys.stdout.getvalue()
+           sys.stdout = old_stdout
+           self.assertIn("ROOOOOAR", output, "Testing that roar method prints ROOOOOAR")
+
+       def testSix(self):
+           tiger = Tiger("Tigger")
+           old_stdout = sys.stdout
+           sys.stdout = StringIO()
+           tiger.hi()
+           output = sys.stdout.getvalue()
+           sys.stdout = old_stdout
+           self.assertIn("ROOOOOAR", output, "Testing that Tiger.hi() calls roar method")
+
+       def testSeven(self):
+           self.assertTrue('Retriever' in dir(), "Testing that Retriever class exists")
+
+       def testEight(self):
+           self.assertTrue(issubclass(Retriever, Lab), "Testing that Retriever inherits from Lab")
+
+       def testNine(self):
+           retriever = Retriever("Buddy")
+           result = retriever.fetch()
+           self.assertEqual(result, "I found the tennis ball! I can fetch anything!", "Testing Retriever.fetch() message")
+
+       def testTen(self):
+           self.assertIn('tiger', pet_types, "Testing that 'tiger' is in pet_types dictionary")
+           self.assertEqual(pet_types['tiger'], Tiger, "Testing that pet_types['tiger'] maps to Tiger class")
+
+       def testEleven(self):
+           self.assertIn('retriever', pet_types, "Testing that 'retriever' is in pet_types dictionary")
+           self.assertEqual(pet_types['retriever'], Retriever, "Testing that pet_types['retriever'] maps to Retriever class")
+
+   myTests().main()
 
 .. activecode:: inheritance_ex_basic_1
    :autograde: unittest

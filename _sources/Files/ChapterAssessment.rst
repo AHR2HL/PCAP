@@ -138,13 +138,15 @@ Part 2: Active Code Problems
    :autograde: unittest
    :practice: T
 
-   Create a function ``modify_byte(data, index, new_value)`` that:
+   Create a function ``modify_char(text, index, new_char)`` that:
 
-   - Converts bytes to bytearray
-   - Modifies byte at given index
-   - Returns modified bytearray
+   - Converts string to list (since strings are immutable)
+   - Modifies character at given index
+   - Converts back to string and returns it
+
+   This demonstrates converting immutable data to mutable for modification!
    ~~~~
-   def modify_byte(data, index, new_value):
+   def modify_char(text, index, new_char):
        # Your code here
        pass
 
@@ -152,17 +154,22 @@ Part 2: Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def test_basic(self):
-           result = modify_byte(b'Hello', 0, ord('J'))
-           self.assertEqual(result, bytearray(b'Jello'))
+           result = modify_char('Hello', 0, 'J')
+           self.assertEqual(result, 'Jello', "Testing modification at start")
 
        def test_middle(self):
-           result = modify_byte(b'Python', 2, ord('X'))
-           self.assertEqual(result, bytearray(b'PyXhon'))
+           result = modify_char('Python', 2, 'X')
+           self.assertEqual(result, 'PyXhon', "Testing modification in middle")
 
-       def test_returns_bytearray(self):
-           result = modify_byte(b'Test', 0, 65)
-           self.assertEqual(type(result), bytearray)
+       def test_returns_string(self):
+           result = modify_char('Test', 0, 'B')
+           self.assertEqual(type(result), str, "Should return a string")
+
+       def test_last_char(self):
+           result = modify_char('Code', 3, '!')
+           self.assertEqual(result, 'Cod!', "Testing modification at end")
 
    myTests().main()
 
@@ -207,14 +214,15 @@ Part 2: Active Code Problems
    :autograde: unittest
    :practice: T
 
-   Create a function ``safe_read_file(filename, default=None)`` that:
+   Create a function ``safe_get_data(data_dict, key, default=None)`` that safely retrieves data from a dictionary:
 
-   - Reads and returns file contents
-   - Returns default if FileNotFoundError
-   - Returns default if PermissionError
-   - Uses context manager
+   - Returns the value for the given key if it exists
+   - Returns default value if KeyError occurs (key not found)
+   - Returns default value if TypeError occurs (invalid key type)
+
+   This teaches the same error handling concepts as file operations!
    ~~~~
-   def safe_read_file(filename, default=None):
+   def safe_get_data(data_dict, key, default=None):
        # Your code here
        pass
 
@@ -222,13 +230,26 @@ Part 2: Active Code Problems
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
+       def test_successful_lookup(self):
+           data = {'name': 'Alice', 'age': 30}
+           result = safe_get_data(data, 'name')
+           self.assertEqual(result, 'Alice', "Should return value when key exists")
+
        def test_default_on_missing(self):
-           result = safe_read_file('nonexistent.txt', default='DEFAULT')
-           self.assertEqual(result, 'DEFAULT')
+           data = {'name': 'Alice'}
+           result = safe_get_data(data, 'city', default='Unknown')
+           self.assertEqual(result, 'Unknown', "Should return default when key missing")
 
        def test_none_by_default(self):
-           result = safe_read_file('nonexistent.txt')
-           self.assertIsNone(result)
+           data = {'name': 'Alice'}
+           result = safe_get_data(data, 'city')
+           self.assertIsNone(result, "Should return None by default")
+
+       def test_uses_try_except(self):
+           code = self.getEditorText()
+           self.assertIn('try', code, "Should use try/except for error handling")
+           self.assertIn('except', code, "Should use try/except for error handling")
 
    myTests().main()
 
@@ -308,13 +329,15 @@ Part 2: Active Code Problems
    :language: python
    :autograde: unittest
    :practice: T
-   :available_files: SP500.txt
+   :datafile: SP500.txt
 
    **PCEP Review:** Read ``SP500.txt`` which has monthly S&P 500 data for 2016-2017.
 
    Compute the average closing price (column 2) and highest long-term interest rate (column 6) for June 2016 through May 2017 only.
 
    Save results in ``mean_SP`` and ``max_interest``.
+
+   The ``open()`` command will work here with ``SP500.txt``.
    ~~~~
 
    ====
@@ -335,7 +358,7 @@ Part 3: Debugging Exercises
    :language: python
    :autograde: unittest
 
-   **Debug 1:** This code tries to read binary file as text. Fix the mode!
+   **Debug** This code tries to read binary file as text. Fix the mode!
    ~~~~
    def read_image_header(filename):
        with open(filename, 'r') as f:
@@ -360,7 +383,7 @@ Part 3: Debugging Exercises
    :language: python
    :autograde: unittest
 
-   **Debug 2:** File not closing on early return. Fix it!
+   **Debug** File not closing on early return. Fix it!
    ~~~~
    def process_file(filename):
        f = open(filename, 'r')
@@ -389,7 +412,7 @@ Part 3: Debugging Exercises
    :language: python
    :autograde: unittest
 
-   **Debug 3:** Wrong errno constant for "file not found". Fix it!
+   **Debug** Wrong errno constant for "file not found". Fix it!
    ~~~~
    import errno
 

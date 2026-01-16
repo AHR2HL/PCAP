@@ -136,93 +136,64 @@ Build complete solutions from scratch!
 
    myTests().main()
 
-.. reveal:: pcap_code_exception_logger_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      import sys
-
-      def safe_divide(a, b):
-          try:
-              return a / b
-          except ZeroDivisionError:
-              sys.stderr.write("Error: Division by zero\n")
-              return None
-          except TypeError:
-              sys.stderr.write("Error: Invalid types\n")
-              return None
-
 ---
 
-#.
+.. actex:: assess_ac23_5_1
+    :practice: T
+    :autograde: unittest
+    :topics: Exceptions/intro-exceptions
 
-    .. tabbed:: q1
+    Below, we have provided buggy code. Add a try/except clause so the code runs without errors. If a blog post didn't get any likes, a 'Likes' key should be added to that dictionary with a value of 0.
 
-        .. tab:: Question
+    ~~~~
+    blog_posts = [{'Photos': 3, 'Likes': 21, 'Comments': 2}, {'Likes': 13, 'Comments': 2, 'Shares': 1}, {'Photos': 5, 'Likes': 33, 'Comments': 8, 'Shares': 3}, {'Comments': 4, 'Shares': 2}, {'Photos': 8, 'Comments': 1, 'Shares': 1}, {'Photos': 3, 'Likes': 19, 'Comments': 3}]
 
-            .. actex:: assess_ac23_5_1
-               :practice: T
-               :autograde: unittest
-               :topics: Exceptions/intro-exceptions
+    total_likes = 0
 
-               Below, we have provided buggy code. Add a try/except clause so the code runs without errors. If a blog post didn't get any likes, a 'Likes' key should be added to that dictionary with a value of 0.
+    for post in blog_posts:
+       total_likes = total_likes + post['Likes']
 
-               ~~~~
-               blog_posts = [{'Photos': 3, 'Likes': 21, 'Comments': 2}, {'Likes': 13, 'Comments': 2, 'Shares': 1}, {'Photos': 5, 'Likes': 33, 'Comments': 8, 'Shares': 3}, {'Comments': 4, 'Shares': 2}, {'Photos': 8, 'Comments': 1, 'Shares': 1}, {'Photos': 3, 'Likes': 19, 'Comments': 3}]
+    ====
 
-               total_likes = 0
+    from unittest.gui import TestCaseGui
 
-               for post in blog_posts:
-                   total_likes = total_likes + post['Likes']
+    class myTests(TestCaseGui):
 
-               ====
+       def testA(self):
+           self.assertEqual(total_likes, 86, "Testing that total_likes has the correct value.")
+       def testB(self):
+            accum = 0
+            for d in blog_posts:
+                if 'Likes' in d:
+                    accum +=1
+            self.assertEqual(accum, 6, "Testing that blog_post dictionaries all have a 'Likes' key.")
 
-               from unittest.gui import TestCaseGui
+    myTests().main()
 
-               class myTests(TestCaseGui):
+.. actex:: assess_ac23_5_2
+    :practice: T
+    :autograde: unittest
+    :topics: Exceptions/intro-exceptions
 
-                   def testA(self):
-                       self.assertEqual(total_likes, 86, "Testing that total_likes has the correct value.")
-                   def testB(self):
-                        accum = 0
-                        for d in blog_posts:
-                            if 'Likes' in d:
-                                accum +=1
-                        self.assertEqual(accum, 6, "Testing that blog_post dictionaries all have a 'Likes' key.")
+    The code below assigns the 5th letter of each word in ``food`` to the new list ``fifth``. However, the code currently produces errors. Insert a try/except clause that will allow the code to run and produce of list of the 5th letter in each word. If the word is not long enough, it should not print anything out. Note: The ``pass`` statement is a null operation; nothing will happen when it executes.
+    ~~~~
+    food = ["chocolate", "chicken", "corn", "sandwich", "soup", "potatoes", "beef", "lox", "lemonade"]
+    fifth = []
 
-               myTests().main()
+    for x in food:
+       fifth.append(x[4])
 
-#.
+    ====
 
-    .. tabbed:: q2
+    from unittest.gui import TestCaseGui
 
-        .. tab:: Question
+    class myTests(TestCaseGui):
 
-            .. actex:: assess_ac23_5_2
-               :practice: T
-               :autograde: unittest
-               :topics: Exceptions/intro-exceptions
+       def testOneA(self):
+           self.assertEqual(fifth, ['o', 'k', 'w', 't', 'n'], "Testing that fifth is assigned to correct values.")
 
-               The code below assigns the 5th letter of each word in ``food`` to the new list ``fifth``. However, the code currently produces errors. Insert a try/except clause that will allow the code to run and produce of list of the 5th letter in each word. If the word is not long enough, it should not print anything out. Note: The ``pass`` statement is a null operation; nothing will happen when it executes.
-               ~~~~
-               food = ["chocolate", "chicken", "corn", "sandwich", "soup", "potatoes", "beef", "lox", "lemonade"]
-               fifth = []
+    myTests().main()
 
-               for x in food:
-                   fifth.append(x[4])
-
-               ====
-
-               from unittest.gui import TestCaseGui
-
-               class myTests(TestCaseGui):
-
-                   def testOneA(self):
-                       self.assertEqual(fifth, ['o', 'k', 'w', 't', 'n'], "Testing that fifth is assigned to correct values.")
-
-               myTests().main()
 
 Contributed Exercises
 ~~~~~~~~~~~~~~~~~~~~~

@@ -16,789 +16,634 @@ Exercises
 ---------
 
 
-.. question:: q21_6_1
+.. actex:: ac21_6_1
+  :autograde: unittest
 
-    .. tabbed:: q1
+  Write equivalent code using map instead of the manual accumulation below and assign it to the variable ``test``.
+  ~~~~
+  things = [3, 5, -4, 7]
 
-        .. tab:: Question
+  accum = []
+  for thing in things:
+      accum.append(thing+1)
+  print(accum)
 
-           .. actex:: ac21_6_1
-              :autograde: unittest
+  ====
 
-              Write equivalent code using map instead of the manual accumulation below and assign it to the variable ``test``.
-              ~~~~
-              things = [3, 5, -4, 7]
+  from unittest.gui import TestCaseGui
 
-              accum = []
-              for thing in things:
-                  accum.append(thing+1)
-              print(accum)
+  class myTests(TestCaseGui):
 
-              ====
+      def testOne(self):
+          self.assertEqual(test, [4, 6, -3, 8], "Testing whether test has been correctly defined.")
+          self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              from unittest.gui import TestCaseGui
+  myTests().main()
 
-              class myTests(TestCaseGui):
+.. actex:: ac21_6_2
+  :autograde: unittest
 
-                  def testOne(self):
-                      self.assertEqual(test, [4, 6, -3, 8], "Testing whether test has been correctly defined.")
-                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  Use manual accumulation to define the lengths function below.
+  ~~~~
+  def lengths(strings):
+      """lengths takes a list of strings as input and returns a list of numbers that are the lengths
+      of strings in the input list. Use manual accumulation!"""
+      # fill in this function's definition to make the test pass.
 
-              myTests().main()
+  ====
 
-.. question:: q21_6_2
+  from unittest.gui import TestCaseGui
 
-    .. tabbed:: q2
+  class myTests(TestCaseGui):
 
-        .. tab:: Question
+      def testOne(self):
+          self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-           .. actex:: ac21_6_2
-              :autograde: unittest
+  myTests().main()
 
-              Use manual accumulation to define the lengths function below.
-              ~~~~
-              def lengths(strings):
-                  """lengths takes a list of strings as input and returns a list of numbers that are the lengths
-                  of strings in the input list. Use manual accumulation!"""
-                  # fill in this function's definition to make the test pass.
 
-              ====
+.. actex:: ac21_6_3
+  :autograde: unittest
 
-              from unittest.gui import TestCaseGui
+  Now define lengths using map instead.
+  ~~~~
+  def lengths(strings):
+      """lengths takes a list of strings as input and returns a list of numbers that are the lengths
+       of strings in the input list. Use map!"""
+       # fill in this function's definition to make the test pass.
 
-              class myTests(TestCaseGui):
+  ====
 
-                  def testOne(self):
-                      self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  from unittest.gui import TestCaseGui
 
-              myTests().main()
+  class myTests(TestCaseGui):
 
-.. question:: q21_6_3
+      def testOne(self):
+          self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
+          self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-    .. tabbed:: q3
+  myTests().main()
 
-        .. tab:: Question
+.. actex:: ac21_6_4
+  :autograde: unittest
 
-           .. actex:: ac21_6_3
-              :autograde: unittest
+  Now define lengths using a list comprehension instead.
+  ~~~~
 
-              Now define lengths using map instead.
-              ~~~~
-              def lengths(strings):
-                  """lengths takes a list of strings as input and returns a list of numbers that are the lengths
-                   of strings in the input list. Use map!"""
-                   # fill in this function's definition to make the test pass.
+  def lengths(strings):
+      """lengths takes a list of strings as input and returns a list of numbers that are the lengths
+      of strings in the input list. Use a list comprehension!"""
+      # fill in this function's definition to make the test pass.
 
-              ====
+  ====
 
-              from unittest.gui import TestCaseGui
+  from unittest.gui import TestCaseGui
 
-              class myTests(TestCaseGui):
+  class myTests(TestCaseGui):
 
-                  def testOne(self):
-                      self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
-                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+      def testOne(self):
+          self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              myTests().main()
+  myTests().main()
 
-.. question:: q21_6_4
+.. actex:: ac21_6_5
+  :autograde: unittest
 
-    .. tabbed:: q4
+  Write a function called positives_Acc that receives list of numbers as the input (like [3, -1, 5, 7]) and returns a list of only the positive numbers, [3, 5, 7], via manual accumulation.
+  ~~~~
 
-        .. tab:: Question
+  things = [3, 5, -4, 7]
+  ====
 
-           .. actex:: ac21_6_4
-              :autograde: unittest
+  from unittest.gui import TestCaseGui
 
-              Now define lengths using a list comprehension instead.
-              ~~~~
+  class myTests(TestCaseGui):
 
-              def lengths(strings):
-                  """lengths takes a list of strings as input and returns a list of numbers that are the lengths
-                  of strings in the input list. Use a list comprehension!"""
-                  # fill in this function's definition to make the test pass.
+      def testOne(self):
+          things = [3, 5, -4, 7]
+          self.assertEqual(positives_Acc(things), [3, 5, 7], "Testing whether positives_Acc has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              ====
+  myTests().main()
 
-              from unittest.gui import TestCaseGui
+.. actex:: ac21_6_6
+  :autograde: unittest
 
-              class myTests(TestCaseGui):
+  Write a function called positives_Fil that receives list of things as the input and returns a list of only the positive things, [3, 5, 7], using the filter function.
+  ~~~~
 
-                  def testOne(self):
-                      self.assertEqual(lengths(["Hello", "hi", "bye"]), [5, 2, 3], "Testing whether lengths has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  things = [3, 5, -4, 7]
+  ====
 
-              myTests().main()
+  from unittest.gui import TestCaseGui
 
-.. question:: q21_6_5
+  class myTests(TestCaseGui):
 
-    .. tabbed:: q5
+      def testOne(self):
+          things = [3, 5, -4, 7]
+          self.assertEqual(positives_Fil(things), [3, 5, 7], "Testing whether positives_Fil has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-        .. tab:: Question
+  myTests().main()
 
-           .. actex:: ac21_6_5
-              :autograde: unittest
+.. actex:: ac21_6_7
+  :autograde: unittest
 
-              Write a function called positives_Acc that receives list of numbers as the input (like [3, -1, 5, 7]) and returns a list of only the positive numbers, [3, 5, 7], via manual accumulation.
-              ~~~~
+  Write a function called positives_Li_Com that receives list of things as the input and returns a list of only the positive things, [3, 5, 7], using the list comprehension.
+  ~~~~
 
-              things = [3, 5, -4, 7]
-              ====
+  things = [3, 5, -4, 7]
+  ====
 
-              from unittest.gui import TestCaseGui
+  from unittest.gui import TestCaseGui
 
-              class myTests(TestCaseGui):
+  class myTests(TestCaseGui):
 
-                  def testOne(self):
-                      things = [3, 5, -4, 7]
-                      self.assertEqual(positives_Acc(things), [3, 5, 7], "Testing whether positives_Acc has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+      def testOne(self):
+          things = [3, 5, -4, 7]
+          self.assertEqual(positives_Li_Com(things), [3, 5, 7], "Testing whether positives_Li_Com has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              myTests().main()
+  myTests().main()
 
-.. question:: q21_6_6
+.. actex:: ac21_6_8
+  :autograde: unittest
 
-    .. tabbed:: q6
+  Define longwords using manual accumulation.
+  ~~~~
 
-        .. tab:: Question
+  def longwords(strings):
+      """Return a shorter list of strings containing only the strings with more than four characters. Use manual accumulation."""
+      # write your code here
 
-           .. actex:: ac21_6_6
-              :autograde: unittest
+  ====
 
-              Write a function called positives_Fil that receives list of things as the input and returns a list of only the positive things, [3, 5, 7], using the filter function.
-              ~~~~
+  from unittest.gui import TestCaseGui
 
-              things = [3, 5, -4, 7]
-              ====
+  class myTests(TestCaseGui):
 
-              from unittest.gui import TestCaseGui
+      def testOne(self):
+          self.assertEqual(longwords(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              class myTests(TestCaseGui):
+  myTests().main()
 
-                  def testOne(self):
-                      things = [3, 5, -4, 7]
-                      self.assertEqual(positives_Fil(things), [3, 5, 7], "Testing whether positives_Fil has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+.. actex:: ac21_6_9
+  :autograde: unittest
 
-              myTests().main()
+  Define longwords using filter.
+  ~~~~
 
-.. question:: q21_6_7
+  def longwords_Fil(strings):
+      """Return a shorter list of strings containing only the strings with more than four characters. Use the filter function."""
+      # write your code here
 
-    .. tabbed:: q7
+  ====
 
-        .. tab:: Question
+  from unittest.gui import TestCaseGui
 
-           .. actex:: ac21_6_7
-              :autograde: unittest
+  class myTests(TestCaseGui):
 
-              Write a function called positives_Li_Com that receives list of things as the input and returns a list of only the positive things, [3, 5, 7], using the list comprehension.
-              ~~~~
+      def testOne(self):
+          self.assertEqual(longwords_Fil(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords_Fil has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              things = [3, 5, -4, 7]
-              ====
+  myTests().main()
 
-              from unittest.gui import TestCaseGui
+.. actex:: ac21_6_10
+  :autograde: unittest
 
-              class myTests(TestCaseGui):
+  Define longwords using a list comprehension.
+  ~~~~
 
-                  def testOne(self):
-                      things = [3, 5, -4, 7]
-                      self.assertEqual(positives_Li_Com(things), [3, 5, 7], "Testing whether positives_Li_Com has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  def longwords_Li_Comp(strings):
+      """Return a shorter list of strings containing only the strings with more than four characters. Use a list comprehension."""
+      # write your code here
 
-              myTests().main()
+  ====
 
-.. question:: q21_6_8
+  from unittest.gui import TestCaseGui
 
-    .. tabbed:: q8
+  class myTests(TestCaseGui):
 
-        .. tab:: Question
+       def testOne(self):
+           self.assertEqual(longwords_Li_Comp(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords_Li_Comp has been correctly defined.")
+           self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+           self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-           .. actex:: ac21_6_8
-              :autograde: unittest
+  myTests().main()
 
-              Define longwords using manual accumulation.
-              ~~~~
+.. actex:: ac21_6_11
+  :autograde: unittest
 
-              def longwords(strings):
-                  """Return a shorter list of strings containing only the strings with more than four characters. Use manual accumulation."""
-                  # write your code here
+  Write a function called ``longlengths`` that returns the lengths of those strings that have at least 4 characters. Try it with a list comprehension.
+  ~~~~
 
-              ====
+  def longlengths(strings):
+      return None
 
-              from unittest.gui import TestCaseGui
+  ====
 
-              class myTests(TestCaseGui):
+  from unittest.gui import TestCaseGui
 
-                  def testOne(self):
-                      self.assertEqual(longwords(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  class myTests(TestCaseGui):
 
-              myTests().main()
+      def testOne(self):
+          self.assertEqual(longlengths(["Hello", "hi", "bye", "wonderful"]), [5, 9], "Testing whether longlengths has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-.. question:: q21_6_9
+  myTests().main()
 
-    .. tabbed:: q9
+.. actex:: ac21_6_12
+  :autograde: unittest
 
-        .. tab:: Question
+  Write a function called ``longlengths`` that returns the lengths of those strings that have at least 4 characters. Try it using map and filter.
+  ~~~~
 
-           .. actex:: ac21_6_9
-              :autograde: unittest
+  def longlengths(strings):
+      return None
 
-              Define longwords using filter.
-              ~~~~
+  ====
 
-              def longwords_Fil(strings):
-                  """Return a shorter list of strings containing only the strings with more than four characters. Use the filter function."""
-                  # write your code here
+  from unittest.gui import TestCaseGui
 
-              ====
+  class myTests(TestCaseGui):
 
-              from unittest.gui import TestCaseGui
+      def testOne(self):
+          self.assertEqual(longlengths(["Hello", "hi", "bye", "wonderful"]), [5, 9], "Testing whether longlengths has been correctly defined.")
+          self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              class myTests(TestCaseGui):
+  myTests().main()
 
-                  def testOne(self):
-                      self.assertEqual(longwords_Fil(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords_Fil has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+.. actex:: ac21_6_13
+  :autograde: unittest
 
-              myTests().main()
+  Write a function that takes a list of numbers and returns the sum of the squares of all the numbers. Try it using an accumulator pattern.
+  ~~~~
 
-.. question:: q21_6_10
+  def sumSquares(L):
+      return None
 
-    .. tabbed:: q10
+  nums = [3, 2, 2, -1, 1]
 
-        .. tab:: Question
+  ====
 
-           .. actex:: ac21_6_10
-              :autograde: unittest
+  from unittest.gui import TestCaseGui
 
-              Define longwords using a list comprehension.
-              ~~~~
+  class myTests(TestCaseGui):
 
-              def longwords_Li_Comp(strings):
-                  """Return a shorter list of strings containing only the strings with more than four characters. Use a list comprehension."""
-                  # write your code here
+      def testOne(self):
+           self.assertEqual(sumSquares(nums), 19, "Testing whether sumSquares has been correctly defined.")
+           self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+           self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+           self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              ====
+  myTests().main()
 
-              from unittest.gui import TestCaseGui
+.. actex:: ac21_6_14
+  :autograde: unittest
 
-              class myTests(TestCaseGui):
+  Write a function that takes a list of numbers and returns the sum of the squares of all the numbers. Try it using map and sum.
+  ~~~~
 
-                   def testOne(self):
-                       self.assertEqual(longwords_Li_Comp(["Hello", "hi", "bye", "wonderful"]), ["Hello", "wonderful"], "Testing whether longwords_Li_Comp has been correctly defined.")
-                       self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                       self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  def sumSquares(L):
+      return None
 
-              myTests().main()
+  nums = [3, 2, 2, -1, 1]
 
-.. question:: q21_6_11
+  ====
 
-    .. tabbed:: q11
+  from unittest.gui import TestCaseGui
 
-        .. tab:: Question
+  class myTests(TestCaseGui):
 
-           .. actex:: ac21_6_11
-              :autograde: unittest
+      def testOne(self):
+          self.assertEqual(sumSquares(nums), 19, "Testing whether sumSquares has been correctly defined.")
+          self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              Write a function called ``longlengths`` that returns the lengths of those strings that have at least 4 characters. Try it with a list comprehension.
-              ~~~~
+  myTests().main()
 
-              def longlengths(strings):
-                  return None
+.. actex:: ac21_6_15
+  :autograde: unittest
 
-              ====
+  Use the zip function to take the lists below and turn them into a list of tuples, with all the first items in the first tuple, etc.
+  ~~~~
 
-              from unittest.gui import TestCaseGui
+  L1 = [1, 2, 3, 4]
+  L2 = [4, 3, 2, 3]
+  L3 = [0, 5, 0, 5]
 
-              class myTests(TestCaseGui):
+  tups = []
 
-                  def testOne(self):
-                      self.assertEqual(longlengths(["Hello", "hi", "bye", "wonderful"]), [5, 9], "Testing whether longlengths has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  ====
 
-              myTests().main()
+  from unittest.gui import TestCaseGui
 
-.. question:: q21_6_12
+  class myTests(TestCaseGui):
 
-    .. tabbed:: q12
+      def testOne(self):
+          self.assertEqual(tups, [(1, 4, 0), (2, 3, 5), (3, 2, 0), (4, 3, 5)], "Testing whether tups has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-        .. tab:: Question
+  myTests().main()
 
-           .. actex:: ac21_6_12
-              :autograde: unittest
+.. actex:: ac21_6_16
+  :autograde: unittest
 
-              Write a function called ``longlengths`` that returns the lengths of those strings that have at least 4 characters. Try it using map and filter.
-              ~~~~
+  Use zip and map or a list comprehension to make a list consisting the maximum value for each position. For L1, L2, and L3, you would end up with a list [4, 5, 3, 5].
+  ~~~~
 
-              def longlengths(strings):
-                  return None
+  L1 = [1, 2, 3, 4]
+  L2 = [4, 3, 2, 3]
+  L3 = [0, 5, 0, 5]
 
-              ====
+  maxs = []
 
-              from unittest.gui import TestCaseGui
+  ====
 
-              class myTests(TestCaseGui):
+  from unittest.gui import TestCaseGui
 
-                  def testOne(self):
-                      self.assertEqual(longlengths(["Hello", "hi", "bye", "wonderful"]), [5, 9], "Testing whether longlengths has been correctly defined.")
-                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  class myTests(TestCaseGui):
 
-              myTests().main()
+      def testOne(self):
+          self.assertEqual(maxs, [4, 5, 3, 5], "Testing whether maxs has been correctly defined.")
 
-.. question:: q21_6_13
+  myTests().main()
 
-    .. tabbed:: q13
+.. actex:: ac21_6_17
+  :autograde: unittest
 
-        .. tab:: Question
+  Write code to assign to the variable ``compri_sample`` all the values of the key name in the dictionary ``tester`` if they are Juniors. Do this using list comprehension.
+  ~~~~
 
-           .. actex:: ac21_6_13
-              :autograde: unittest
+  tester = {'info': [{"name": "Lauren", 'class standing': 'Junior', 'major': "Information Science"},{'name': 'Ayo', 'class standing': "Bachelor's", 'major': 'Information Science'}, {'name': 'Kathryn', 'class standing': 'Senior', 'major': 'Sociology'}, {'name': 'Nick', 'class standing': 'Junior', 'major': 'Computer Science'}, {'name': 'Gladys', 'class standing': 'Sophomore', 'major': 'History'}, {'name': 'Adam', 'major': 'Violin Performance', 'class standing': 'Senior'}]}
 
-              Write a function that takes a list of numbers and returns the sum of the squares of all the numbers. Try it using an accumulator pattern.
-              ~~~~
+  ====
 
-              def sumSquares(L):
-                  return None
+  from unittest.gui import TestCaseGui
 
-              nums = [3, 2, 2, -1, 1]
+  class myTests(TestCaseGui):
 
-              ====
+      def testOne(self):
+          self.assertEqual(sorted(compri_sample), sorted(['Lauren', 'Nick']), "Testing that compri_sample has the correct values.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              from unittest.gui import TestCaseGui
+  myTests().main()
 
-              class myTests(TestCaseGui):
+.. actex:: ac21_6_18
+  :autograde: unittest
 
-                  def testOne(self):
-                       self.assertEqual(sumSquares(nums), 19, "Testing whether sumSquares has been correctly defined.")
-                       self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                       self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                       self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  **Challenge** The nested for loop given takes in a list of lists and combines the elements into a single list. Do the same thing using a list comprehension for the list ``L``. Assign it to the variable ``result2``.
+  ~~~~
 
-              myTests().main()
+  def onelist(lst):
+      result = []
+      for each_list in lst:
+          for item in each_list:
+              result.append(item)
+      return result
 
-.. question:: q21_6_14
+  L = [["hi", "bye"], ["hello", "goodbye"], ["hola", "adios", "bonjour", "au revoir"]]
 
-    .. tabbed:: q14
+  ====
 
-        .. tab:: Question
+  from unittest.gui import TestCaseGui
 
-           .. actex:: ac21_6_14
-              :autograde: unittest
+  class myTests(TestCaseGui):
 
-              Write a function that takes a list of numbers and returns the sum of the squares of all the numbers. Try it using map and sum.
-              ~~~~
+      def testSeven(self):
+          self.assertEqual(result2, ['hi', 'bye', 'hello', 'goodbye', 'hola', 'adios', 'bonjour', 'au revoir'], "Testing that result2 is assigned to correct values")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              def sumSquares(L):
-                  return None
+  myTests().main()
 
-              nums = [3, 2, 2, -1, 1]
+.. actex:: ac21_6_19
+  :autograde: unittest
 
-              ====
+  **Challenge:** Write code to assign to the variable ``class_sched`` all the values of the key ``important classes``. Do this using list comprehension.
+  ~~~~
 
-              from unittest.gui import TestCaseGui
+  tester = {'info': [
+           {"name": "Lauren", 'class standing': 'Junior', 'major': "Information Science", 'important classes': ['SI 106', 'ENGLISH 125', 'SI 110', 'AMCULT 202']},
+           {'name': 'Ayo', 'class standing': "Bachelor's", 'major': 'Information Science', "important classes": ['SI 106', 'SI 410', 'PSYCH 111']},
+           {'name': 'Kathryn', 'class standing': 'Senior', 'major': 'Sociology', 'important classes': ['WOMENSTD 220', 'SOC 101', 'ENS 384']},
+           {'name': 'Nick', 'class standing': 'Junior', 'major': 'Computer Science', "important classes": ['SOC 101', 'AMCULT 334', 'EECS 281']},
+           {'name': 'Gladys', 'class standing': 'Sophomore', 'major': 'History', 'important classes': ['ENGLISH 125', 'HIST 259', 'ENGLISH 130']},
+           {'name': 'Adam', 'major': 'Violin Performance', 'class standing': 'Senior', 'important classes': ['PIANO 101', 'STUDIO 300', 'THEORY 229', 'MUSC 356']}]}
 
-              class myTests(TestCaseGui):
 
-                  def testOne(self):
-                      self.assertEqual(sumSquares(nums), 19, "Testing whether sumSquares has been correctly defined.")
-                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  ====
 
-              myTests().main()
+  from unittest.gui import TestCaseGui
 
-.. question:: q21_6_15
+  class myTests(TestCaseGui):
 
-    .. tabbed:: q15
+      def testOne(self):
+          self.assertEqual(sorted(class_sched), sorted(['SI 106', 'ENGLISH 125', 'SI 110', 'AMCULT 202','SI 106', 'SI 410', 'PSYCH 111', 'WOMENSTD 220', 'SOC 101', 'ENS 384', 'SOC 101', 'AMCULT 334', 'EECS 281', 'ENGLISH 125', 'HIST 259', 'ENGLISH 130', 'PIANO 101', 'STUDIO 300', 'THEORY 229', 'MUSC 356']), "Testing that class_sched has the correct list.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-        .. tab:: Question
+  myTests().main()
 
-           .. actex:: ac21_6_15
-              :autograde: unittest
+.. actex:: ac21_6_20
+  :autograde: unittest
 
-              Use the zip function to take the lists below and turn them into a list of tuples, with all the first items in the first tuple, etc.
-              ~~~~
+  **Challenge:** Below, we have provided a list of lists that contain numbers. Using list comprehension, create a new list ``threes`` that contains all the numbers from the original list that are divisible by 3. This can be accomplished in one line of code.
+  ~~~~
 
-              L1 = [1, 2, 3, 4]
-              L2 = [4, 3, 2, 3]
-              L3 = [0, 5, 0, 5]
+  nums = [[4, 3, 12, 10], [8, 7, 6], [5, 18, 15, 7, 11], [9, 4], [24, 20, 17], [3, 5]]
 
-              tups = []
+  ====
 
-              ====
+  from unittest.gui import TestCaseGui
 
-              from unittest.gui import TestCaseGui
+  class myTests(TestCaseGui):
 
-              class myTests(TestCaseGui):
+      def testOne(self):
+          self.assertEqual(threes, [3, 12, 6, 18, 15, 9, 24, 3], "Testing that threes was created correctly.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-                  def testOne(self):
-                      self.assertEqual(tups, [(1, 4, 0), (2, 3, 5), (3, 2, 0), (4, 3, 5)], "Testing whether tups has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  myTests().main()
 
-              myTests().main()
+.. actex:: ac21_6_21
+  :autograde: unittest
 
-.. question:: q21_6_16
+  Create a dictionary comprehension that maps each word to its length. Assign it to the variable ``word_lengths``.
+  ~~~~
 
-    .. tabbed:: q16
+  words = ['apple', 'banana', 'cherry', 'date', 'elderberry']
 
-        .. tab:: Question
+  # Your code here
 
-           .. actex:: ac21_6_16
-              :autograde: unittest
+  ====
 
-              Use zip and map or a list comprehension to make a list consisting the maximum value for each position. For L1, L2, and L3, you would end up with a list [4, 5, 3, 5].
-              ~~~~
+  from unittest.gui import TestCaseGui
 
-              L1 = [1, 2, 3, 4]
-              L2 = [4, 3, 2, 3]
-              L3 = [0, 5, 0, 5]
+  class myTests(TestCaseGui):
 
-              maxs = []
+      def testOne(self):
+          self.assertEqual(word_lengths, {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4, 'elderberry': 10}, "Testing whether word_lengths has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              ====
+  myTests().main()
 
-              from unittest.gui import TestCaseGui
+.. actex:: ac21_6_22
+  :autograde: unittest
 
-              class myTests(TestCaseGui):
+  Use a dictionary comprehension to create a new dictionary ``passing_scores`` that only includes students who scored 70 or higher. Keep the name as the key and score as the value.
+  ~~~~
 
-                  def testOne(self):
-                      self.assertEqual(maxs, [4, 5, 3, 5], "Testing whether maxs has been correctly defined.")
+  scores = {'Alice': 85, 'Bob': 62, 'Charlie': 90, 'David': 58, 'Eve': 77}
 
-              myTests().main()
+  # Your code here
 
-.. question:: q21_6_17
+  ====
 
-    .. tabbed:: q17
+  from unittest.gui import TestCaseGui
 
-        .. tab:: Question
+  class myTests(TestCaseGui):
 
-           .. actex:: ac21_6_17
-              :autograde: unittest
+      def testOne(self):
+          self.assertEqual(passing_scores, {'Alice': 85, 'Charlie': 90, 'Eve': 77}, "Testing whether passing_scores has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              Write code to assign to the variable ``compri_sample`` all the values of the key name in the dictionary ``tester`` if they are Juniors. Do this using list comprehension.
-              ~~~~
+  myTests().main()
 
-              tester = {'info': [{"name": "Lauren", 'class standing': 'Junior', 'major': "Information Science"},{'name': 'Ayo', 'class standing': "Bachelor's", 'major': 'Information Science'}, {'name': 'Kathryn', 'class standing': 'Senior', 'major': 'Sociology'}, {'name': 'Nick', 'class standing': 'Junior', 'major': 'Computer Science'}, {'name': 'Gladys', 'class standing': 'Sophomore', 'major': 'History'}, {'name': 'Adam', 'major': 'Violin Performance', 'class standing': 'Senior'}]}
+.. actex:: ac21_6_23
+  :autograde: unittest
 
-              ====
+  Use a set comprehension to find all unique first letters (lowercase) from the list of words. Assign it to the variable ``first_letters``.
+  ~~~~
 
-              from unittest.gui import TestCaseGui
+  words = ['apple', 'apricot', 'banana', 'blueberry', 'cherry', 'cranberry', 'date']
 
-              class myTests(TestCaseGui):
+  # Your code here
 
-                  def testOne(self):
-                      self.assertEqual(sorted(compri_sample), sorted(['Lauren', 'Nick']), "Testing that compri_sample has the correct values.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+  ====
 
-              myTests().main()
+  from unittest.gui import TestCaseGui
 
-.. question:: q21_6_18
+  class myTests(TestCaseGui):
 
-    .. tabbed:: q18
+      def testOne(self):
+          self.assertEqual(first_letters, {'a', 'b', 'c', 'd'}, "Testing whether first_letters has been correctly defined.")
+          self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+          self.assertNotIn('list(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-        .. tab:: Question
+  myTests().main()
 
-           .. actex:: ac21_6_18
-              :autograde: unittest
+.. actex:: ac21_6_24
+  :autograde: unittest
 
-              **Challenge** The nested for loop given takes in a list of lists and combines the elements into a single list. Do the same thing using a list comprehension for the list ``L``. Assign it to the variable ``result2``.
-              ~~~~
+  Create a generator expression (not a list comprehension!) that generates the squares of numbers from 1 to 1000. Then use it with sum() to find the total. Assign the sum to the variable ``total_squares``.
 
-              def onelist(lst):
-                  result = []
-                  for each_list in lst:
-                      for item in each_list:
-                          result.append(item)
-                  return result
+  **Hint:** Use parentheses ``()`` instead of square brackets ``[]``.
+  ~~~~
 
-              L = [["hi", "bye"], ["hello", "goodbye"], ["hola", "adios", "bonjour", "au revoir"]]
+  # Your code here - create generator and use sum()
 
-              ====
+  ====
 
-              from unittest.gui import TestCaseGui
+  from unittest.gui import TestCaseGui
 
-              class myTests(TestCaseGui):
+  class myTests(TestCaseGui):
 
-                  def testSeven(self):
-                      self.assertEqual(result2, ['hi', 'bye', 'hello', 'goodbye', 'hola', 'adios', 'bonjour', 'au revoir'], "Testing that result2 is assigned to correct values")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+      def testOne(self):
+          self.assertEqual(total_squares, 333833500, "Testing whether total_squares has been correctly calculated.")
+          self.assertNotIn('[', self.getEditorText(), "Testing your code - should use generator expression () not list comprehension []")
+          self.assertIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              myTests().main()
+  myTests().main()
 
-.. question:: q21_6_19
+.. actex:: ac21_6_25
+  :autograde: unittest
 
-    .. tabbed:: q19
+  Use map() with a lambda function to add corresponding elements from three lists together. Assign the result to the variable ``sums``.
 
-        .. tab:: Question
+  **Hint:** map() can take multiple iterables - ``map(lambda x, y, z: ..., list1, list2, list3)``
+  ~~~~
 
-           .. actex:: ac21_6_19
-              :autograde: unittest
+  list1 = [1, 2, 3, 4]
+  list2 = [10, 20, 30, 40]
+  list3 = [100, 200, 300, 400]
 
-              **Challenge:** Write code to assign to the variable ``class_sched`` all the values of the key ``important classes``. Do this using list comprehension.
-              ~~~~
+  # Your code here
 
-              tester = {'info': [
-                       {"name": "Lauren", 'class standing': 'Junior', 'major': "Information Science", 'important classes': ['SI 106', 'ENGLISH 125', 'SI 110', 'AMCULT 202']},
-                       {'name': 'Ayo', 'class standing': "Bachelor's", 'major': 'Information Science', "important classes": ['SI 106', 'SI 410', 'PSYCH 111']},
-                       {'name': 'Kathryn', 'class standing': 'Senior', 'major': 'Sociology', 'important classes': ['WOMENSTD 220', 'SOC 101', 'ENS 384']},
-                       {'name': 'Nick', 'class standing': 'Junior', 'major': 'Computer Science', "important classes": ['SOC 101', 'AMCULT 334', 'EECS 281']},
-                       {'name': 'Gladys', 'class standing': 'Sophomore', 'major': 'History', 'important classes': ['ENGLISH 125', 'HIST 259', 'ENGLISH 130']},
-                       {'name': 'Adam', 'major': 'Violin Performance', 'class standing': 'Senior', 'important classes': ['PIANO 101', 'STUDIO 300', 'THEORY 229', 'MUSC 356']}]}
+  ====
 
+  from unittest.gui import TestCaseGui
 
-              ====
+  class myTests(TestCaseGui):
 
-              from unittest.gui import TestCaseGui
+      def testOne(self):
+          self.assertEqual(sums, [111, 222, 333, 444], "Testing whether sums has been correctly defined.")
+          self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
 
-              class myTests(TestCaseGui):
+  myTests().main()
 
-                  def testOne(self):
-                      self.assertEqual(sorted(class_sched), sorted(['SI 106', 'ENGLISH 125', 'SI 110', 'AMCULT 202','SI 106', 'SI 410', 'PSYCH 111', 'WOMENSTD 220', 'SOC 101', 'ENS 384', 'SOC 101', 'AMCULT 334', 'EECS 281', 'ENGLISH 125', 'HIST 259', 'ENGLISH 130', 'PIANO 101', 'STUDIO 300', 'THEORY 229', 'MUSC 356']), "Testing that class_sched has the correct list.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
+.. actex:: ac21_6_26
+  :autograde: unittest
 
-              myTests().main()
+  **Challenge:** Given a list of numbers, create three variables:
 
-.. question:: q21_6_20
+  1. ``doubled_list`` - Use a LIST COMPREHENSION to double each number
+  2. ``doubled_gen`` - Use a GENERATOR EXPRESSION to double each number
+  3. ``doubled_map`` - Use map() to double each number
 
-    .. tabbed:: q20
+  All three should produce equivalent results when converted to lists.
+  ~~~~
 
-        .. tab:: Question
+  numbers = [1, 2, 3, 4, 5]
 
-           .. actex:: ac21_6_20
-              :autograde: unittest
+  # Your code here - create all three variables
 
-              **Challenge:** Below, we have provided a list of lists that contain numbers. Using list comprehension, create a new list ``threes`` that contains all the numbers from the original list that are divisible by 3. This can be accomplished in one line of code.
-              ~~~~
+  ====
 
-              nums = [[4, 3, 12, 10], [8, 7, 6], [5, 18, 15, 7, 11], [9, 4], [24, 20, 17], [3, 5]]
+  from unittest.gui import TestCaseGui
 
-              ====
+  class myTests(TestCaseGui):
 
-              from unittest.gui import TestCaseGui
+      def testOne(self):
+          self.assertEqual(doubled_list, [2, 4, 6, 8, 10], "Testing doubled_list")
+          self.assertEqual(list(doubled_gen), [2, 4, 6, 8, 10], "Testing doubled_gen")
+          self.assertEqual(doubled_map, [2, 4, 6, 8, 10], "Testing doubled_map")
 
-              class myTests(TestCaseGui):
+          # Check they used the right techniques
+          code = self.getEditorText()
+          self.assertIn('map(', code, "Should use map() for doubled_map")
 
-                  def testOne(self):
-                      self.assertEqual(threes, [3, 12, 6, 18, 15, 9, 24, 3], "Testing that threes was created correctly.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('zip(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_21
-
-    .. tabbed:: q21
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_21
-              :autograde: unittest
-
-              Create a dictionary comprehension that maps each word to its length. Assign it to the variable ``word_lengths``.
-              ~~~~
-
-              words = ['apple', 'banana', 'cherry', 'date', 'elderberry']
-
-              # Your code here
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(word_lengths, {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4, 'elderberry': 10}, "Testing whether word_lengths has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_22
-
-    .. tabbed:: q22
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_22
-              :autograde: unittest
-
-              Use a dictionary comprehension to create a new dictionary ``passing_scores`` that only includes students who scored 70 or higher. Keep the name as the key and score as the value.
-              ~~~~
-
-              scores = {'Alice': 85, 'Bob': 62, 'Charlie': 90, 'David': 58, 'Eve': 77}
-
-              # Your code here
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(passing_scores, {'Alice': 85, 'Charlie': 90, 'Eve': 77}, "Testing whether passing_scores has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_23
-
-    .. tabbed:: q23
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_23
-              :autograde: unittest
-
-              Use a set comprehension to find all unique first letters (lowercase) from the list of words. Assign it to the variable ``first_letters``.
-              ~~~~
-
-              words = ['apple', 'apricot', 'banana', 'blueberry', 'cherry', 'cranberry', 'date']
-
-              # Your code here
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(first_letters, {'a', 'b', 'c', 'd'}, "Testing whether first_letters has been correctly defined.")
-                      self.assertNotIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('filter(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-                      self.assertNotIn('list(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_24
-
-    .. tabbed:: q24
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_24
-              :autograde: unittest
-
-              Create a generator expression (not a list comprehension!) that generates the squares of numbers from 1 to 1000. Then use it with sum() to find the total. Assign the sum to the variable ``total_squares``.
-
-              **Hint:** Use parentheses ``()`` instead of square brackets ``[]``.
-              ~~~~
-
-              # Your code here - create generator and use sum()
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(total_squares, 333833500, "Testing whether total_squares has been correctly calculated.")
-                      self.assertNotIn('[', self.getEditorText(), "Testing your code - should use generator expression () not list comprehension []")
-                      self.assertIn('sum(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_25
-
-    .. tabbed:: q25
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_25
-              :autograde: unittest
-
-              Use map() with a lambda function to add corresponding elements from three lists together. Assign the result to the variable ``sums``.
-
-              **Hint:** map() can take multiple iterables - ``map(lambda x, y, z: ..., list1, list2, list3)``
-              ~~~~
-
-              list1 = [1, 2, 3, 4]
-              list2 = [10, 20, 30, 40]
-              list3 = [100, 200, 300, 400]
-
-              # Your code here
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(sums, [111, 222, 333, 444], "Testing whether sums has been correctly defined.")
-                      self.assertIn('map(', self.getEditorText(), "Testing your code (Don't worry about actual and expected values).")
-
-              myTests().main()
-
-.. question:: q21_6_26
-
-    .. tabbed:: q26
-
-        .. tab:: Question
-
-           .. actex:: ac21_6_26
-              :autograde: unittest
-
-              **Challenge:** Given a list of numbers, create three variables:
-
-              1. ``doubled_list`` - Use a LIST COMPREHENSION to double each number
-              2. ``doubled_gen`` - Use a GENERATOR EXPRESSION to double each number
-              3. ``doubled_map`` - Use map() to double each number
-
-              All three should produce equivalent results when converted to lists.
-              ~~~~
-
-              numbers = [1, 2, 3, 4, 5]
-
-              # Your code here - create all three variables
-
-              ====
-
-              from unittest.gui import TestCaseGui
-
-              class myTests(TestCaseGui):
-
-                  def testOne(self):
-                      self.assertEqual(doubled_list, [2, 4, 6, 8, 10], "Testing doubled_list")
-                      self.assertEqual(list(doubled_gen), [2, 4, 6, 8, 10], "Testing doubled_gen")
-                      self.assertEqual(doubled_map, [2, 4, 6, 8, 10], "Testing doubled_map")
-
-                      # Check they used the right techniques
-                      code = self.getEditorText()
-                      self.assertIn('map(', code, "Should use map() for doubled_map")
-
-              myTests().main()
+  myTests().main()
 
 Contributed Exercises
 ~~~~~~~~~~~~~~~~~~~~~

@@ -142,7 +142,7 @@ Test your understanding of OOP terminology:
 
    What is a **Protocol** in Python 3.8+?
 
-.. mchoice:: advfunc_assess_mc7
+.. mchoice:: advfunc_assess_mc_kwargs
    :answer_a: To capture all positional arguments
    :answer_b: To capture all keyword arguments as a dictionary
    :answer_c: To create a double pointer
@@ -155,7 +155,7 @@ Test your understanding of OOP terminology:
 
    What does ``**kwargs`` do in a function definition?
 
-.. mchoice:: advfunc_assess_mc8
+.. mchoice:: advfunc_assess_mc_nonlocal
    :answer_a: To modify global variables
    :answer_b: To modify variables in the enclosing scope
    :answer_c: To create new variables
@@ -525,20 +525,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_inspector_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def inspect_hierarchy(cls):
-          return {
-              'name': cls.__name__,
-              'bases': [base.__name__ for base in cls.__bases__],
-              'mro': [c.__name__ for c in cls.__mro__],
-              'methods': [attr for attr in dir(cls)
-                          if not attr.startswith('_') and callable(getattr(cls, attr))]
-          }
 
 ---
 
@@ -597,28 +583,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_attr_manager_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      class SafeAttributeManager:
-          def __init__(self):
-              self._attrs = {}
-
-          def set(self, name, value):
-              self._attrs[name] = value
-
-          def get(self, name, default=None):
-              return self._attrs.get(name, default)
-
-          def has(self, name):
-              return name in self._attrs
-
-          def delete(self, name):
-              if name in self._attrs:
-                  del self._attrs[name]
 
 ---
 
@@ -677,28 +641,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_mixins_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      class ReprMixin:
-          def __repr__(self):
-              class_name = self.__class__.__name__
-              attrs = ', '.join(f"{k}={v!r}" for k, v in self.__dict__.items())
-              return f"{class_name}({attrs})"
-
-      class EqualityMixin:
-          def __eq__(self, other):
-              if not isinstance(other, self.__class__):
-                  return False
-              return self.__dict__ == other.__dict__
-
-      class Point(ReprMixin, EqualityMixin):
-          def __init__(self, x, y):
-              self.x = x
-              self.y = y
 
 ---
 
@@ -768,17 +710,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_mro_analyzer_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def find_method_source(cls, method_name):
-          for c in cls.__mro__:
-              if method_name in c.__dict__:
-                  return c.__name__
-          return None
 
 ---
 
@@ -843,19 +774,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_identity_equality_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def compare_objects(obj1, obj2):
-          return {
-              'identical': obj1 is obj2,
-              'equal': obj1 == obj2,
-              'same_type': type(obj1) == type(obj2),
-              'same_id': id(obj1) == id(obj2)
-          }
 
 ---
 
@@ -915,31 +833,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_diamond_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      class Base:
-          def __init__(self):
-              print("Base")
-              super().__init__()
-
-      class A(Base):
-          def __init__(self):
-              print("A")
-              super().__init__()
-
-      class B(Base):
-          def __init__(self):
-              print("B")
-              super().__init__()
-
-      class C(A, B):
-          def __init__(self):
-              print("C")
-              super().__init__()
 
 ---
 
@@ -1002,17 +895,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_duck_typing_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def process_drawable(obj):
-          try:
-              return obj.draw()
-          except AttributeError:
-              return "Object cannot be drawn"
 
 ---
 
@@ -1074,25 +956,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_class_decorator_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      def countable(cls):
-          cls.instance_count = 0
-
-          original_init = cls.__init__
-
-          def new_init(self, *args, **kwargs):
-              cls.instance_count += 1
-              original_init(self, *args, **kwargs)
-
-          cls.__init__ = new_init
-          cls.get_count = classmethod(lambda c: c.instance_count)
-
-          return cls
 
 ---
 
@@ -1166,24 +1029,6 @@ Build these OOP systems from scratch! Each challenge tests different aspects of 
 
    myTests().main()
 
-.. reveal:: oop_practice_code_polymorphic_container_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   .. code-block:: python
-
-      class ProcessorContainer:
-          def __init__(self):
-              self.processors = []
-
-          def add(self, obj):
-              self.processors.append(obj)
-
-          def process_all(self):
-              results = []
-              for processor in self.processors:
-                  results.append(processor.process())
-              return results
 
 ---
 
@@ -1316,29 +1161,6 @@ Find and fix the bugs in these broken OOP systems!
 
    myTests().main()
 
-.. reveal:: oop_practice_debug_introspection_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** The function returns methods in addition to attributes.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      def get_all_attributes(obj):
-          """Get all public attributes of an object."""
-          attributes = {}
-
-          for attr in dir(obj):
-              if not attr.startswith('_'):
-                  value = getattr(obj, attr)
-                  if not callable(value):  # Filter out methods
-                      attributes[attr] = value
-
-          return attributes
-
-   **Key insight:** Use ``callable()`` to check if an attribute is a method. Only include non-callable attributes in the result.
 
 ---
 
@@ -1438,28 +1260,6 @@ Find and fix the bugs in these broken OOP systems!
 
    myTests().main()
 
-.. reveal:: oop_practice_debug_identity_2_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** Using ``is`` instead of ``==`` for string comparison. The ``is`` operator checks object identity, not value equality.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      def find_matching_user(users, target_name):
-          """Find user with matching name."""
-          for user in users:
-              if user['name'] == target_name:  # Use == for value comparison
-                  return user
-          return None
-
-   **Remember:**
-
-   - ``is`` checks if two variables point to the **same object**
-   - ``==`` checks if two values are **equal**
-   - Use ``==`` for comparing strings, numbers, and other values
 
 ---
 
@@ -1559,35 +1359,6 @@ Find and fix the bugs in these broken OOP systems!
 
    myTests().main()
 
-.. reveal:: oop_practice_debug_mi_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** Calling parent ``__init__`` directly breaks the cooperative inheritance chain.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      class A:
-          def __init__(self):
-              self.initialized_a = True
-              print("A")
-              super().__init__()  # Call next in MRO
-
-      class B:
-          def __init__(self):
-              self.initialized_b = True
-              print("B")
-              super().__init__()  # Call next in MRO
-
-      class C(A, B):
-          def __init__(self):
-              self.initialized_c = True
-              print("C")
-              super().__init__()  # Start the chain
-
-   **Key insight:** In multiple inheritance, use ``super()`` in ALL classes (including A and B) to ensure the entire MRO chain is followed. Direct calls like ``A.__init__(self)`` skip parts of the chain.
 
 ---
 
@@ -1700,30 +1471,6 @@ Find and fix the bugs in these broken OOP systems!
 
    myTests().main()
 
-.. reveal:: oop_practice_debug_type_checking_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** Using ``type() ==`` comparison doesn't work with subclasses. ``type(puppy) == Dog`` is ``False`` because ``type(puppy)`` is ``Puppy``.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      def process_animal(animal):
-          """Process animal based on type."""
-          if isinstance(animal, Dog):  # Works with subclasses!
-              return f"Dog {animal.name} says: {animal.speak()}"
-          elif isinstance(animal, Cat):
-              return f"Cat {animal.name} says: {animal.speak()}"
-          else:
-              return f"Unknown animal: {animal.name}"
-
-   **Key insight:**
-
-   - ``type(obj) == SomeClass`` checks for **exact type match** (excludes subclasses)
-   - ``isinstance(obj, SomeClass)`` checks if obj is an instance of SomeClass **or any subclass**
-   - Always use ``isinstance()`` for type checking unless you specifically need exact type
 
 ---
 
@@ -1871,43 +1618,10 @@ Find and fix the bugs in these broken OOP systems!
 
    myTests().main()
 
-.. reveal:: oop_practice_debug_mixin_order_solution
-   :showtitle: Show Solution
-   :hidetitle: Hide Solution
-
-   **Problem:** Base class is listed first, so its ``process()`` method is found first and returns immediately without calling ``super()``, preventing mixins from executing.
-
-   **Fix:**
-
-   .. code-block:: python
-
-      class Base:
-          def process(self):
-              return "Base"
-
-      class LogMixin:
-          def process(self):
-              print("Logging...")
-              return super().process()
-
-      class CacheMixin:
-          def process(self):
-              print("Caching...")
-              return super().process()
-
-      # Correct: Mixins BEFORE Base
-      class Processor(LogMixin, CacheMixin, Base):
-          pass
-
-      p = Processor()
-      result = p.process()
-      # Now prints: Logging... Caching... Base
-
-   **Key insight:** In multiple inheritance, list mixins **before** the base class. This ensures the MRO visits mixins first, allowing them to add behavior via ``super()`` before reaching the base implementation.
 
 ---
 
-.. parsonsprob:: advfunc_assess_parsons4
+.. parsonsprob:: advfunc_assess_parsons_pm_4
    :numbered: left
    :adaptive:
 
@@ -1925,11 +1639,11 @@ Find and fix the bugs in these broken OOP systems!
    =====
    max_val = map(lambda a, b: a if a > b else b, numbers) #paired
 
-.. parsonsprob:: advfunc_assess_parsons5
+.. parsonsprob:: advfunc_assess_parsons_pm_5
    :numbered: left
    :adaptive:
 
-   Arrange the blocks to create a function that accepts any arguments with *args and **kwargs.
+   Arrange the blocks to create a function that accepts any arguments with ``*args`` and ``**kwargs``.
    -----
    def flexible_func(*args, **kwargs):
    =====

@@ -11,6 +11,7 @@ Lambda Expressions
 ------------------
 
 .. activecode:: advfunc_ex_lambda1
+   :autograde: unittest
    :practice: T
 
    **Exercise 1:** Write a function ``sort_by_last_letter(words)`` that takes a list of words and returns them sorted by their last letter (not alphabetically).
@@ -29,15 +30,34 @@ Lambda Expressions
    from unittest.gui import TestCaseGui
 
    class myTests(TestCaseGui):
+
        def testOne(self):
-           self.assertEqual(sort_by_last_letter(['apple', 'banana', 'cherry']), ['banana', 'apple', 'cherry'], "Test 1")
-           self.assertEqual(sort_by_last_letter(['dog', 'cat', 'bird']), ['bird', 'dog', 'cat'], "Test 2")
-           self.assertEqual(sort_by_last_letter(['python', 'java', 'ruby']), ['java', 'ruby', 'python'], "Test 3")
+           result = sort_by_last_letter(['apple', 'banana', 'cherry'])
+           self.assertEqual(result, ['banana', 'apple', 'cherry'], "Test 1: Last letters a, e, y")
+
+       def testTwo(self):
+           result = sort_by_last_letter(['dog', 'cat', 'bird'])
+           self.assertEqual(result, ['bird', 'dog', 'cat'], "Test 2: Last letters d, t, d")
+
+       def testThree(self):
+           result = sort_by_last_letter(['python', 'java', 'ruby'])
+           self.assertEqual(result, ['java', 'python', 'ruby'], "Test 3: Last letters n, a, y")
+
+       def testFour(self):
+           result = sort_by_last_letter(['ant', 'bee', 'wasp'])
+           self.assertEqual(result, ['bee', 'ant', 'wasp'], "Test 4: Last letters t, e, p")
+
+       def testFive(self):
+           # Check that lambda is used
+           code = self.getEditorText()
+           self.assertIn('lambda', code, "Make sure you use a lambda expression")
+           self.assertIn('sorted', code, "Make sure you use the sorted() function")
 
    myTests().main()
 
 
 .. activecode:: advfunc_ex_lambda2
+   :autograde: unittest
    :practice: T
 
    **Exercise 2:** Write a function ``filter_long_strings(strings, min_length)`` that returns a new list containing only strings that are at least ``min_length`` characters long.
@@ -67,6 +87,7 @@ Closures
 --------
 
 .. activecode:: advfunc_ex_closure1
+   :autograde: unittest
    :practice: T
 
    **Exercise 3:** Create a closure function ``make_greeter(greeting)`` that returns a function. The returned function should take a name and return a greeting message.
@@ -98,6 +119,7 @@ Closures
 
 
 .. activecode:: advfunc_ex_closure2
+   :autograde: unittest
    :practice: T
 
    **Exercise 4:** Create a closure ``make_counter(start=0)`` that returns a function. Each time the returned function is called, it should return the next number in sequence.
@@ -135,6 +157,7 @@ Closures
 
 
 .. activecode:: advfunc_ex_closure3
+   :autograde: unittest
    :practice: T
 
    **Exercise 5:** Create a closure ``make_power(exponent)`` that returns a function. The returned function should take a number and raise it to the specified exponent.
@@ -170,6 +193,7 @@ Decorators
 ----------
 
 .. activecode:: advfunc_ex_decorator1
+   :autograde: unittest
    :practice: T
 
    **Exercise 6:** Write a decorator ``uppercase_result`` that converts the return value of a function to uppercase.
@@ -205,6 +229,7 @@ Decorators
 
 
 .. activecode:: advfunc_ex_decorator2
+   :autograde: unittest
    :practice: T
 
    **Exercise 7:** Write a decorator ``double_result`` that doubles the numeric return value of a function.
@@ -241,6 +266,7 @@ Decorators
 
 
 .. activecode:: advfunc_ex_decorator3
+   :autograde: unittest
    :practice: T
 
    **Exercise 8 (Challenge):** Write a decorator ``call_counter`` that counts how many times a function has been called. The decorator should add a ``.call_count`` attribute to the function.

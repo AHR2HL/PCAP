@@ -204,7 +204,7 @@ Part 1: Multiple Choice Questions
            self.assertEqual(p2.score, 150, "Testing p2 score")
 
    myTests().main()
-rst
+
 .. activecode:: ac_ch13_05
    :practice: T
    :autograde: unittest
@@ -377,7 +377,7 @@ Part 3: Debugging Exercises
            self.assertEqual(s.num_students, 1)
 
    myTests().main()
-rst
+
 .. activecode:: ac_ch13_debug2
    :practice: T
    :autograde: unittest

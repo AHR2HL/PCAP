@@ -15,7 +15,7 @@ You can pass an object as an argument to a function, in the usual way.
 Here is a simple function called ``distance`` involving our new ``Point`` objects.  The job of this function is to figure out the 
 distance between two points.
  
-.. activecode:: chp13_classes6
+.. activecode:: chp13_classes6aa
 
     import math
     
@@ -53,7 +53,7 @@ can know that ``distance`` is not a method of Point is that ``self`` is not incl
 
 We *could have* made distance be a method of the Point class. Then, we would have called the first parameter self, and would have invoked it using the dot notation, as in the following code. Which way to implement it is a matter of coding style. Both work correctly. Most programmers choose whether to make functions be stand-alone or methods of a class based on whether the function semantically seems to be an operation that is performed on instances of the class. In this case, because distance is really a property of a pair of points and is symmetric (the distance from a to b is the same as that from b to a) it makes more sense to have it be a standalone function and not a method. Many heated discussions have occurred between programmers about such style decisions.
 
-.. activecode:: chp13_classes6a
+.. activecode:: chp13_classes6b
 
     import math
     

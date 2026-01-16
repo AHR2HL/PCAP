@@ -108,19 +108,40 @@ representation in codelens.
 
 Try practicing some operations to get or set values in a list of dictionaries.
 
-.. actex:: ac17_1_3
+.. activecode:: ac17_1_3
+   :language: python
 
+   **Practice with Nested Dictionaries**
+
+   Below is a list called ``nested2`` that contains three dictionaries. Complete the following tasks:
+
+   **Task 1:** Write code to print the value associated with key ``'c'`` in the **second** dictionary.
+
+   - Remember: list indices start at 0, so the second dictionary is at index 1
+   - Expected output: 90
+
+   **Task 2:** Write code to print the value associated with key ``'b'`` in the **third** dictionary.
+
+   - Expected output: 3
+
+   **Task 3:** Add a fourth dictionary at the end of the list. It should have at least two key-value pairs. Print the entire list or the new dictionary to verify.
+
+   **Task 4:** Change the value associated with ``'c'`` in the **third** dictionary from ``"yes"`` to ``"no"``. Print the third dictionary to verify the change.
+
+   **Reminder:** Dictionaries can have different types of keys and values. Notice that the second dictionary has both string keys and an integer key!
+   ~~~~
    nested2 = [{'a': 1, 'b': 3}, {'a': 5, 'c': 90, 5: 50}, {'b': 3, 'c': "yes"}]
 
-   #write code to print the value associated with key 'c' in the second dictionary (90)
+   # Task 1: Print nested2[1]['c']
 
-   #write code to print the value associated with key 'b' in the third dictionary
 
-   #add a fourth dictionary add the end of the list; print something to check your work.
+   # Task 2: Print nested2[2]['b']
 
-   #change the value associated with 'c' in the third dictionary from "yes" to "no"; print something to check your work
 
-You can even have a list of functions (!).
+   # Task 3: Add fourth dictionary (hint: use .append())
+
+
+   # Task 4: Modify nested2[2]['c']
 
 .. activecode:: ac17_1_4
 
